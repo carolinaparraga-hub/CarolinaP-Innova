@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informe Médico - Dra. Carolina Párraga</title>
     <style>
-        /* Estilos generales y de página */
         * {
             box-sizing: border-box;
             font-family: 'Times New Roman', Times, serif;
@@ -21,7 +20,7 @@
             color: #000;
         }
 
-        /* Hoja de tamaño carta / A4 centrada */
+        /* Hoja A4 / Carta */
         .page {
             background: #ffffff;
             width: 210mm;
@@ -42,8 +41,8 @@
         }
 
         .header-logo {
-            max-width: 180px;
-            max-height: 80px;
+            max-width: 170px;
+            max-height: 85px;
             object-fit: contain;
         }
 
@@ -54,21 +53,20 @@
 
         .header-info h2 {
             margin: 0;
-            font-size: 16pt;
+            font-size: 15pt;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .header-info h3 {
-            margin: 2px 0 6px 0;
-            font-size: 12pt;
+            margin: 2px 0 4px 0;
+            font-size: 11.5pt;
             font-weight: normal;
         }
 
         .header-info p {
             margin: 1px 0;
-            font-size: 9.5pt;
+            font-size: 9pt;
         }
 
         /* Datos del Paciente */
@@ -88,7 +86,7 @@
         .patient-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr;
-            row-gap: 3px;
+            row-gap: 4px;
             column-gap: 20px;
         }
 
@@ -97,7 +95,7 @@
         }
 
         .divider {
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #ccc;
             margin: 10px 0 15px 0;
         }
 
@@ -125,18 +123,12 @@
             font-weight: bold;
         }
 
-        .diagnostics-list {
-            margin: 4px 0 10px 0;
-            padding-left: 0;
-            list-style: none;
+        /* Estilo para preservar saltos de línea cargados desde la base de datos */
+        .multiline-text {
+            white-space: pre-wrap;
         }
 
-        .diagnostics-list li {
-            margin-bottom: 2px;
-            font-weight: normal;
-        }
-
-        /* Botones de acción inferiores */
+        /* Botones de acción */
         .action-buttons {
             margin-top: 25px;
             margin-bottom: 30px;
@@ -163,7 +155,7 @@
             background-color: #14436d;
         }
 
-        /* Reglas CSS para Impresión / Guardar en PDF */
+        /* Reglas de Impresión / Guardar en PDF */
         @media print {
             body {
                 background: none;
@@ -189,34 +181,34 @@
     <div class="page" id="informe-content">
         <!-- Encabezado Membrete -->
         <div class="header">
-    <div style="width: 180px; text-align: left;">
-        <!-- Logo del Centro Médico desde Google Drive -->
-        <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" 
-             alt="Centro de Salud y Rehabilitación El Marqués" 
-             class="header-logo" 
-             id="logo-centro">
-    </div>
-    <div class="header-info">
-        <h2>Consultorio Médico Dermatológico</h2>
-        <h3>Dra. Carolina Párraga - Dermatólogo UCV</h3>
-        <p>Torre Cavendes - Caracas. Teléfono: 0414-9172983</p>
-        <p>Whatsapp: 04269198665 / @dracarolinaparraga</p>
-    </div>
-</div>
+            <div style="width: 170px;">
+                <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" 
+                     alt="Centro de Salud y Rehabilitación El Marqués" 
+                     class="header-logo" 
+                     id="logo-centro">
+            </div>
+            <div class="header-info">
+                <h2>Consultorio Médico Dermatológico</h2>
+                <h3 id="field-Medico-tratante">Dra. Carolina Párraga - <span id="field-Especialidad-Medica">Dermatología</span></h3>
+                <p>Torre Cavendes - Caracas. Teléfono: 0414-9172983</p>
+                <p>Whatsapp: 04269198665 / @dracarolinaparraga</p>
+            </div>
+        </div>
 
         <!-- Información del Paciente -->
         <div class="patient-info">
-            <div class="date-row">
-                Fecha: <span id="val-fecha">13/08/2026</span>
+            <div class="date-row" id="sec-Fecha">
+                Fecha: <span id="val-Fecha"></span>
             </div>
             <div class="patient-grid">
-                <div><strong>Paciente:</strong> <span id="val-paciente">Yeinibeth Torres</span></div>
-                <div><strong>Edad:</strong> <span id="val-edad">30</span></div>
-                <div><strong>C.I:</strong> <span id="val-ci">25386373</span></div>
-                <div><strong>Ocupación:</strong> <span id="val-ocupacion">Diseñador Web / Publicista</span></div>
-                <div><strong>Telf:</strong> <span id="val-telf">04242865320</span></div>
+                <div id="sec-Nombre-y-Apellido"><strong>Paciente:</strong> <span id="val-Nombre-y-Apellido"></span></div>
+                <div id="sec-Edad"><strong>Edad:</strong> <span id="val-Edad"></span></div>
+                <div id="sec-Cedula"><strong>C.I:</strong> <span id="val-Cedula"></span></div>
+                <div id="sec-FN"><strong>F / N:</strong> <span id="val-FN"></span></div>
+                <div id="sec-Telefono"><strong>Telf:</strong> <span id="val-Telefono"></span></div>
+                <div id="sec-Ocupacion"><strong>Ocupación:</strong> <span id="val-Ocupacion"></span></div>
+                <div id="sec-Aseguradora"><strong>Aseguradora:</strong> <span id="val-Aseguradora"></span></div>
                 <div></div>
-                <div><strong>Dirección:</strong> <span id="val-direccion">Petare</span></div>
             </div>
         </div>
 
@@ -225,56 +217,39 @@
         <!-- Título -->
         <div class="report-title">Informe Médico</div>
 
-        <!-- Contenido del Informe -->
+        <!-- Contenido Dinámico del Informe -->
         <div class="report-body">
-            <div class="section-item">
-                <strong>Motivo de consulta:</strong> <span id="val-motivo">Paciente femenina quien presenta pápula pigmentada en región malar izquierda a nivel paranasal que en ocasiones se hace queratósica con descamación y resuelve espontáneamente, con aumento leve de tamaño.</span>
+
+            <div class="section-item" id="sec-Enfermedad-Actual">
+                <strong>Enfermedad Actual / Motivo de consulta:</strong> 
+                <span id="val-Enfermedad-Actual" class="multiline-text"></span>
             </div>
 
-            <div class="section-item">
-                <strong>Antecedentes personales:</strong> <span id="val-antecedentes">Laberintitis, migraña, gastritis crónica aguda, gastritis crónica por Helicobacter pylori (sin tratamiento actual), y trastorno depresivo en tratamiento con tríptico.</span>
+            <div class="section-item" id="sec-Antecedentes-Personales">
+                <strong>Antecedentes Personales:</strong> 
+                <span id="val-Antecedentes-Personales" class="multiline-text"></span>
             </div>
 
-            <div class="section-item">
-                <strong>Alergias:</strong> <span id="val-alergias">No especificado</span>
+            <div class="section-item" id="sec-Antecedentes-Familiares">
+                <strong>Antecedentes Familiares:</strong> 
+                <span id="val-Antecedentes-Familiares" class="multiline-text"></span>
             </div>
 
-            <div class="section-item">
-                <strong>Quirúrgicos:</strong> <span id="val-quirurgicos">No especificado</span>
+            <div class="section-item" id="sec-Examen-Fisico">
+                <strong>Examen Físico:</strong> 
+                <span id="val-Examen-Fisico" class="multiline-text"></span>
             </div>
 
-            <div class="section-item">
-                <strong>Fototipo:</strong> <span id="val-fototipo">II</span> | <strong>Piel:</strong> <span id="val-piel">Piel fototipo II con turgor y elasticidad acordes. Pápula pigmentada de 3x2 mm localizada en región malar izquierda a nivel paranasal (dermatoscopia con múltiples glóbulos de pigmento de pequeño tamaño, impresión nevus compuesto versus otro). Múltiples léntigos solares en áreas fotoexpuestas (espalda superior, pecho y menor cantidad en región malar derecha). Un nevo intradérmico y dos nevos comunes en región intermamaria.</span>
+            <div class="section-item" id="sec-IDX-Impresion-Diagnostica">
+                <strong>Impresión Diagnóstica (IDX):</strong> 
+                <span id="val-IDX-Impresion-Diagnostica" class="multiline-text"></span>
             </div>
 
-            <div class="section-item">
-                <strong>Uñas:</strong> <span id="val-unas">Onicomicosis de ambos hallux con coloración amarillenta y engrosamiento.</span>
+            <div class="section-item" id="sec-Plan-Tratamiento">
+                <strong>Plan / Tratamiento / Conducta:</strong> 
+                <span id="val-Plan-Tratamiento" class="multiline-text"></span>
             </div>
 
-            <div class="section-item">
-                <strong>Diagnósticos:</strong>
-                <ol class="diagnostics-list" id="val-diagnosticos">
-                    <li>1. PÁPULA PIGMENTADA EN REGIÓN MALAR IZQUIERDA (NEVUS COMPUESTO VERSUS OTRO)</li>
-                    <li>2. MÚLTIPLES LÉNTIGOS SOLARES</li>
-                    <li>3. ONICOMICOSIS DE AMBOS HALLUX</li>
-                    <li>4. NEVO INTRADÉRMICO Y NEVOS COMUNES EN REGIÓN INTERMAMARIA</li>
-                </ol>
-            </div>
-
-            <div class="section-item">
-                <strong>Tratamiento/Conducta:</strong> <span id="val-tratamiento">PROTECCIÓN SOLAR<br>
-                - Usar protector solar todas las mañanas. (Continuar usando el protector solar que ya tiene, reaplicando cada dos horas previo secado de la piel en playa u oficina).<br><br>
-                PARA LAS UÑAS<br>
-                - Crema con urea al 40%: Aplicar con un hisopo en el centro de las uñas afectadas (gruesas y amarillas), sin tocar la piel para evitar irritación. (Luego de colocar la crema, colocar adhesivo micropore o leucoplasia alrededor de las uñas y dejar actuar al menos 12 horas, idealmente 24 horas. Se recambia después de cada baño por lo menos durante cuatro semanas continuas).</span>
-            </div>
-
-            <div class="section-item" style="margin-top: 8px;">
-                <strong>Micológico/Parasitológico:</strong> <span id="val-micologico">Solicitado</span>
-            </div>
-
-            <div class="section-item" style="margin-top: 8px;">
-                <strong>Control:</strong> <span id="val-control">4 semanas.</span>
-            </div>
         </div>
     </div>
 
@@ -285,12 +260,54 @@
     </div>
 
     <script>
-        // 1. Función para imprimir o guardar directamente como PDF
+        // Mapeo exacto de los nombres de celdas de la hoja de Google Sheets
+        const camposGoogleSheet = [
+            { key: 'Fecha', target: 'val-Fecha', section: 'sec-Fecha' },
+            { key: 'Nombre y Apellido', target: 'val-Nombre-y-Apellido', section: 'sec-Nombre-y-Apellido' },
+            { key: 'Cedula', target: 'val-Cedula', section: 'sec-Cedula' },
+            { key: 'Telefono', target: 'val-Telefono', section: 'sec-Telefono' },
+            { key: 'F / N', target: 'val-FN', section: 'sec-FN' },
+            { key: 'Edad', target: 'val-Edad', section: 'sec-Edad' },
+            { key: 'Ocupacion', target: 'val-Ocupacion', section: 'sec-Ocupacion' },
+            { key: 'Aseguradora', target: 'val-Aseguradora', section: 'sec-Aseguradora' },
+            { key: 'Enfermedad Actual', target: 'val-Enfermedad-Actual', section: 'sec-Enfermedad-Actual' },
+            { key: 'Antecedentes Personales', target: 'val-Antecedentes-Personales', section: 'sec-Antecedentes-Personales' },
+            { key: 'Antecedentes Familiares', target: 'val-Antecedentes-Familiares', section: 'sec-Antecedentes-Familiares' },
+            { key: 'Examen Fisico', target: 'val-Examen-Fisico', section: 'sec-Examen-Fisico' },
+            { key: 'IDX Impresion Diagnostica', target: 'val-IDX-Impresion-Diagnostica', section: 'sec-IDX-Impresion-Diagnostica' },
+            { key: 'Plan Tratamiento', target: 'val-Plan-Tratamiento', section: 'sec-Plan-Tratamiento' }
+        ];
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Ajuste dinámico de Médico y Especialidad
+            if (urlParams.get('Medico tratante')) {
+                document.getElementById('field-Medico-tratante').childNodes[0].nodeValue = urlParams.get('Medico tratante') + ' - ';
+            }
+            if (urlParams.get('Especialidad Medica')) {
+                document.getElementById('field-Especialidad-Medica').innerText = urlParams.get('Especialidad Medica');
+            }
+
+            // Procesar cada campo para rellenar o para OCULTAR si está vacío
+            camposGoogleSheet.forEach(campo => {
+                const valor = urlParams.get(campo.key);
+                const elTarget = document.getElementById(campo.target);
+                const elSec = document.getElementById(campo.section);
+
+                if (valor && valor.trim() !== '' && valor.trim() !== 'null' && valor.trim() !== 'undefined') {
+                    if (elTarget) elTarget.innerText = valor.trim();
+                } else {
+                    // Si no viene información o está en blanco, se oculta el contenedor/sección
+                    if (elSec) elSec.style.display = 'none';
+                }
+            });
+        };
+
         function imprimirPDF() {
             window.print();
         }
 
-        // 2. Función para descargar el informe directamente en formato Word (.doc)
         function descargarWord() {
             var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
                 "xmlns:w='urn:schemas-microsoft-com:office:word' " +
@@ -325,19 +342,6 @@
             
             document.body.removeChild(downloadLink);
         }
-
-        // 3. Captura opcional de parámetros URL si se integra con AppSheet / Formulario
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            if(urlParams.has('fecha')) document.getElementById('val-fecha').innerText = urlParams.get('fecha');
-            if(urlParams.has('n')) document.getElementById('val-paciente').innerText = urlParams.get('n');
-            if(urlParams.has('c')) document.getElementById('val-ci').innerText = urlParams.get('c');
-            if(urlParams.has('e')) document.getElementById('val-edad').innerText = urlParams.get('e');
-            if(urlParams.has('telf')) document.getElementById('val-telf').innerText = urlParams.get('telf');
-            if(urlParams.has('ocupacion')) document.getElementById('val-ocupacion').innerText = urlParams.get('ocupacion');
-            if(urlParams.has('dir')) document.getElementById('val-direccion').innerText = urlParams.get('dir');
-        };
     </script>
 </body>
 </html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Médico - Dra. Carolina Párraga</title>
+    <style>
+        /* Estilos generales y de página */
+        * {
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        body {
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #000;
+        }
+
+        /* Hoja de tamaño carta / A4 centrada */
+        .page {
+            background: #ffffff;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm 20mm 15mm 20mm;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        /* Encabezado */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .header-logo {
+            max-width: 180px;
+            max-height: 80px;
+            object-fit: contain;
+        }
+
+        .header-info {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .header-info h2 {
+            margin: 0;
+            font-size: 16pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-info h3 {
+            margin: 2px 0 6px 0;
+            font-size: 12pt;
+            font-weight: normal;
+        }
+
+        .header-info p {
+            margin: 1px 0;
+            font-size: 9.5pt;
+        }
+
+        /* Datos del Paciente */
+        .patient-info {
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 10.5pt;
+            line-height: 1.4;
+        }
+
+        .patient-info .date-row {
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            row-gap: 3px;
+            column-gap: 20px;
+        }
+
+        .patient-grid div strong {
+            font-weight: bold;
+        }
+
+        .divider {
+            border-bottom: 1px solid #e0e0e0;
+            margin: 10px 0 15px 0;
+        }
+
+        /* Título del Reporte */
+        .report-title {
+            text-align: center;
+            font-size: 14pt;
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 15px 0 15px 0;
+        }
+
+        /* Contenido del Informe */
+        .report-body {
+            font-size: 10.5pt;
+            line-height: 1.45;
+            text-align: justify;
+        }
+
+        .section-item {
+            margin-bottom: 10px;
+        }
+
+        .section-item strong {
+            font-weight: bold;
+        }
+
+        .diagnostics-list {
+            margin: 4px 0 10px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .diagnostics-list li {
+            margin-bottom: 2px;
+            font-weight: normal;
+        }
+
+        /* Botones de acción inferiores */
+        .action-buttons {
+            margin-top: 25px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            background-color: #1d5f99;
+            color: #ffffff;
+            border: none;
+            padding: 10px 22px;
+            font-size: 11pt;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .btn:hover {
+            background-color: #14436d;
+        }
+
+        /* Reglas CSS para Impresión / Guardar en PDF */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+            .page {
+                box-shadow: none;
+                width: 100%;
+                padding: 0;
+            }
+            .action-buttons {
+                display: none !important;
+            }
+            @page {
+                size: A4;
+                margin: 15mm 15mm 15mm 15mm;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page" id="informe-content">
+        <!-- Encabezado Membrete -->
+        <div class="header">
+            <div style="width: 180px;">
+                <!-- Reemplazar src por el logo oficial de la Dra. Párraga -->
+                <img src="https://via.placeholder.com/180x80?text=LOGO+DRA.+PARRAGA" alt="Logo Dra. Párraga" class="header-logo" id="logo-img">
+            </div>
+            <div class="header-info">
+                <h2>Consultorio Médico Dermatológico</h2>
+                <h3>Dra. Carolina Párraga - Dermatólogo UCV</h3>
+                <p>Torre Cavendes - Caracas. Teléfono: 0414-9172983</p>
+                <p>Whatsapp: 04269198665 / @dracarolinaparraga</p>
+            </div>
+        </div>
+
+        <!-- Información del Paciente -->
+        <div class="patient-info">
+            <div class="date-row">
+                Fecha: <span id="val-fecha">13/08/2026</span>
+            </div>
+            <div class="patient-grid">
+                <div><strong>Paciente:</strong> <span id="val-paciente">Yeinibeth Torres</span></div>
+                <div><strong>Edad:</strong> <span id="val-edad">30</span></div>
+                <div><strong>C.I:</strong> <span id="val-ci">25386373</span></div>
+                <div><strong>Ocupación:</strong> <span id="val-ocupacion">Diseñador Web / Publicista</span></div>
+                <div><strong>Telf:</strong> <span id="val-telf">04242865320</span></div>
+                <div></div>
+                <div><strong>Dirección:</strong> <span id="val-direccion">Petare</span></div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Título -->
+        <div class="report-title">Informe Médico</div>
+
+        <!-- Contenido del Informe -->
+        <div class="report-body">
+            <div class="section-item">
+                <strong>Motivo de consulta:</strong> <span id="val-motivo">Paciente femenina quien presenta pápula pigmentada en región malar izquierda a nivel paranasal que en ocasiones se hace queratósica con descamación y resuelve espontáneamente, con aumento leve de tamaño.</span>
+            </div>
+
+            <div class="section-item">
+                <strong>Antecedentes personales:</strong> <span id="val-antecedentes">Laberintitis, migraña, gastritis crónica aguda, gastritis crónica por Helicobacter pylori (sin tratamiento actual), y trastorno depresivo en tratamiento con tríptico.</span>
+            </div>
+
+            <div class="section-item">
+                <strong>Alergias:</strong> <span id="val-alergias">No especificado</span>
+            </div>
+
+            <div class="section-item">
+                <strong>Quirúrgicos:</strong> <span id="val-quirurgicos">No especificado</span>
+            </div>
+
+            <div class="section-item">
+                <strong>Fototipo:</strong> <span id="val-fototipo">II</span> | <strong>Piel:</strong> <span id="val-piel">Piel fototipo II con turgor y elasticidad acordes. Pápula pigmentada de 3x2 mm localizada en región malar izquierda a nivel paranasal (dermatoscopia con múltiples glóbulos de pigmento de pequeño tamaño, impresión nevus compuesto versus otro). Múltiples léntigos solares en áreas fotoexpuestas (espalda superior, pecho y menor cantidad en región malar derecha). Un nevo intradérmico y dos nevos comunes en región intermamaria.</span>
+            </div>
+
+            <div class="section-item">
+                <strong>Uñas:</strong> <span id="val-unas">Onicomicosis de ambos hallux con coloración amarillenta y engrosamiento.</span>
+            </div>
+
+            <div class="section-item">
+                <strong>Diagnósticos:</strong>
+                <ol class="diagnostics-list" id="val-diagnosticos">
+                    <li>1. PÁPULA PIGMENTADA EN REGIÓN MALAR IZQUIERDA (NEVUS COMPUESTO VERSUS OTRO)</li>
+                    <li>2. MÚLTIPLES LÉNTIGOS SOLARES</li>
+                    <li>3. ONICOMICOSIS DE AMBOS HALLUX</li>
+                    <li>4. NEVO INTRADÉRMICO Y NEVOS COMUNES EN REGIÓN INTERMAMARIA</li>
+                </ol>
+            </div>
+
+            <div class="section-item">
+                <strong>Tratamiento/Conducta:</strong> <span id="val-tratamiento">PROTECCIÓN SOLAR<br>
+                - Usar protector solar todas las mañanas. (Continuar usando el protector solar que ya tiene, reaplicando cada dos horas previo secado de la piel en playa u oficina).<br><br>
+                PARA LAS UÑAS<br>
+                - Crema con urea al 40%: Aplicar con un hisopo en el centro de las uñas afectadas (gruesas y amarillas), sin tocar la piel para evitar irritación. (Luego de colocar la crema, colocar adhesivo micropore o leucoplasia alrededor de las uñas y dejar actuar al menos 12 horas, idealmente 24 horas. Se recambia después de cada baño por lo menos durante cuatro semanas continuas).</span>
+            </div>
+
+            <div class="section-item" style="margin-top: 8px;">
+                <strong>Micológico/Parasitológico:</strong> <span id="val-micologico">Solicitado</span>
+            </div>
+
+            <div class="section-item" style="margin-top: 8px;">
+                <strong>Control:</strong> <span id="val-control">4 semanas.</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones Inferiores -->
+    <div class="action-buttons">
+        <button class="btn" onclick="imprimirPDF()">Imprimir PDF</button>
+        <button class="btn" onclick="descargarWord()">Descargar Word</button>
+    </div>
+
+    <script>
+        // 1. Función para imprimir o guardar directamente como PDF
+        function imprimirPDF() {
+            window.print();
+        }
+
+        // 2. Función para descargar el informe directamente en formato Word (.doc)
+        function descargarWord() {
+            var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+                "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+                "xmlns='http://www.w3.org/TR/REC-html40'>" +
+                "<head><meta charset='utf-8'><title>Informe Médico</title>" +
+                "<style>body { font-family: 'Times New Roman', serif; font-size: 11pt; }</style>" +
+                "</head><body>";
+            
+            var content = document.getElementById("informe-content").innerHTML;
+            var footer = "</body></html>";
+            
+            var html = header + content + footer;
+
+            var blob = new Blob(['\ufeff', html], {
+                type: 'application/msword'
+            });
+            
+            var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+            
+            var filename = 'Informe_Medico_Dra_Parraga.doc';
+            
+            var downloadLink = document.createElement("a");
+            document.body.appendChild(downloadLink);
+            
+            if (navigator.msSaveOrOpenBlob) {
+                navigator.msSaveOrOpenBlob(blob, filename);
+            } else {
+                downloadLink.href = url;
+                downloadLink.download = filename;
+                downloadLink.click();
+            }
+            
+            document.body.removeChild(downloadLink);
+        }
+
+        // 3. Captura opcional de parámetros URL si se integra con AppSheet / Formulario
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if(urlParams.has('fecha')) document.getElementById('val-fecha').innerText = urlParams.get('fecha');
+            if(urlParams.has('n')) document.getElementById('val-paciente').innerText = urlParams.get('n');
+            if(urlParams.has('c')) document.getElementById('val-ci').innerText = urlParams.get('c');
+            if(urlParams.has('e')) document.getElementById('val-edad').innerText = urlParams.get('e');
+            if(urlParams.has('telf')) document.getElementById('val-telf').innerText = urlParams.get('telf');
+            if(urlParams.has('ocupacion')) document.getElementById('val-ocupacion').innerText = urlParams.get('ocupacion');
+            if(urlParams.has('dir')) document.getElementById('val-direccion').innerText = urlParams.get('dir');
+        };
+    </script>
+</body>
+</html>

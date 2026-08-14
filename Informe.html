@@ -189,7 +189,7 @@
             </div>
             <div class="header-info">
                 <h2>MEDICINA FÍSICA Y REHABILITACIÓN</h2>
-                <h3 id="field-Medico-tratante">Dra. Carolina Párraga - <span id="field-Especialidad-Medica">Dermatología</span></h3>
+                <h3><span id="field-Medico-tratante">Dra. Carolina Párraga</span> - <span id="field-Especialidad-Medica">Dermatología</span></h3>
                 <p>Calle Madrid con Paris, Qta Camopla La California Norte</p>
                 <p>Whatsapp: </p>
             </div>
@@ -220,7 +220,6 @@
         <!-- Contenido Dinámico del Informe -->
         <div class="report-body">
 
-            <!-- Sin etiqueta de título fuerte; muestra directamente el contenido -->
             <div class="section-item" id="sec-Enfermedad-Actual">
                 <span id="val-Enfermedad-Actual" class="multiline-text"></span>
             </div>
@@ -281,9 +280,9 @@
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
 
-            // Ajuste dinámico de Médico y Especialidad
+            // Ajuste dinámico de Nombre del Médico y Especialidad desde la URL
             if (urlParams.get('Medico tratante')) {
-                document.getElementById('field-Medico-tratante').childNodes[0].nodeValue = urlParams.get('Medico tratante') + ' - ';
+                document.getElementById('field-Medico-tratante').innerText = urlParams.get('Medico tratante');
             }
             if (urlParams.get('Especialidad Medica')) {
                 document.getElementById('field-Especialidad-Medica').innerText = urlParams.get('Especialidad Medica');
@@ -298,7 +297,6 @@
                 if (valor && valor.trim() !== '' && valor.trim() !== 'null' && valor.trim() !== 'undefined') {
                     if (elTarget) elTarget.innerText = valor.trim();
                 } else {
-                    // Si no viene información o está en blanco, se oculta el contenedor/sección
                     if (elSec) elSec.style.display = 'none';
                 }
             });
@@ -327,7 +325,7 @@
             
             var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
             
-            var filename = 'Informe_Medico_Dra_Parraga.doc';
+            var filename = 'Informe_Medico.doc';
             
             var downloadLink = document.createElement("a");
             document.body.appendChild(downloadLink);

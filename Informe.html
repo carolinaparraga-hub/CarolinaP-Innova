@@ -296,7 +296,7 @@
     </div>
 
     <script>
-        const camposGoogleSheet = [
+       const camposGoogleSheet = [
             { key: 'Fecha', target: 'val-Fecha', section: 'sec-Fecha' },
             { key: 'Nombre y Apellido', target: 'val-Nombre-y-Apellido', section: 'sec-Nombre-y-Apellido' },
             { key: 'Cedula', target: 'val-Cedula', section: 'sec-Cedula' },
@@ -312,7 +312,8 @@
             { key: 'IDX Impresion Diagnostica', target: 'val-IDX-Impresion-Diagnostica', section: 'sec-IDX-Impresion-Diagnostica' },
             { key: 'Plan Tratamiento', target: 'val-Plan-Tratamiento', section: 'sec-Plan-Tratamiento' }
         ];
-// Función para formatear fechas a DD/MM/AAAA
+
+        // Función para formatear fechas a DD/MM/AAAA
         function formatearFechaLatina(fechaStr) {
             if (!fechaStr) return '';
             
@@ -334,7 +335,7 @@
             return fechaStr; // Retorna original si ya viene en formato válido
         }
 
-            window.onload = function() {
+        window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
 
             // 1. Datos del Encabezado (Desde Tabla Centro Medico)
@@ -343,7 +344,7 @@
             if (urlParams.get('Medico tratante')) document.getElementById('field-Medico-tratante').innerText = urlParams.get('Medico tratante');
             if (urlParams.get('Especialidad Medica')) document.getElementById('field-Especialidad-Medica').innerText = urlParams.get('Especialidad Medica');
 
-           // 2. Datos del Pie de Página (Desde Tabla Centro Medico)
+            // 2. Datos del Pie de Página (Desde Tabla Centro Medico)
             if (urlParams.get('Direccion')) {
                 document.getElementById('field-Direccion').innerText = urlParams.get('Direccion');
             } else {
@@ -383,20 +384,26 @@
                 document.getElementById('field-Correo').innerText = correoVal;
                 document.getElementById('sec-Correo').style.display = 'inline';
             }
+
             // 3. Procesar campos del informe clínico
             camposGoogleSheet.forEach(campo => {
-                const valor = urlParams.get(campo.key);
+                let valor = urlParams.get(campo.key);
                 const elTarget = document.getElementById(campo.target);
                 const elSec = document.getElementById(campo.section);
 
                 if (valor && valor.trim() !== '' && valor.trim() !== 'null' && valor.trim() !== 'undefined') {
-                    if (elTarget) elTarget.innerText = valor.trim();
+                    valor = valor.trim();
+                    // Aplicar formato DD/MM/AAAA a la Fecha
+                    if (campo.key === 'Fecha') {
+                        valor = formatearFechaLatina(valor);
+                    }
+                    if (elTarget) elTarget.innerText = valor;
                 } else {
                     if (elSec) elSec.style.display = 'none';
                 }
             });
         };
-
+        
         function imprimirPDF() {
             window.print();
         }

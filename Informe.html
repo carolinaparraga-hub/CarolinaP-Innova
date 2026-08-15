@@ -408,14 +408,23 @@
             window.print();
         }
 
-       function descargarWord() {
+      function descargarWord() {
+    // 1. Obtener parámetros directamente de la URL para no depender de IDs del DOM
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    const tituloTexto = urlParams.get('Titulo') || (document.getElementById('field-Titulo') ? document.getElementById('field-Titulo').innerText : '');
+    const subtituloTexto = urlParams.get('Subtitulo') || (document.getElementById('field-Subtitulo') ? document.getElementById('field-Subtitulo').innerText : '');
+    const medicoTexto = urlParams.get('Medico tratante') || (document.getElementById('field-Medico-tratante') ? document.getElementById('field-Medico-tratante').innerText : '');
+    const especialidadTexto = urlParams.get('Especialidad Medica') || (document.getElementById('field-Especialidad-Medica') ? document.getElementById('field-Especialidad-Medica').innerText : '');
+
+    // 2. Clonar el contenido del informe
     const clonInforme = document.getElementById("informe-content").cloneNode(true);
 
-    // 0. Eliminar los botones de acción en la copia de Word
-    const botones = clonInforme.querySelectorAll('button, .no-print, input[type="button"]');
-    botones.forEach(btn => btn.remove());
+    // 3. Eliminar los botones de acción e hipervínculos de impresión en la copia
+    const elementosAEliminar = clonInforme.querySelectorAll('.no-print, button, a, [onclick]');
+    elementosAEliminar.forEach(el => el.remove());
 
-    // 1. Ajustar el logo con dimensiones estrictas
+    // 4. Ajustar el logo con dimensiones nativas
     const imgLogo = clonInforme.querySelector('img');
     if (imgLogo) {
         imgLogo.removeAttribute('style');
@@ -425,7 +434,7 @@
         imgLogo.style.height = '60px';
     }
 
-    // 2. Convertir rejilla del paciente a tabla
+    // 5. Convertir rejilla del paciente a tabla
     const patientGrid = clonInforme.querySelector('.patient-grid');
     if (patientGrid) {
         const items = patientGrid.querySelectorAll('div');
@@ -448,17 +457,11 @@
         patientGrid.outerHTML = tableHTML;
     }
 
-    // 3. Encabezado con Médico Tratante + Especialidad Médica
+    // 6. Construir Encabezado incluyendo Médico + Especialidad
     const headerDiv = clonInforme.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
         
-        const tituloTexto = document.getElementById('field-Titulo') ? document.getElementById('field-Titulo').innerText : '';
-        const subtituloTexto = document.getElementById('field-Subtitulo') ? document.getElementById('field-Subtitulo').innerText : '';
-        const medicoTexto = document.getElementById('field-Medico-tratante') ? document.getElementById('field-Medico-tratante').innerText : '';
-        const especialidadTexto = document.getElementById('field-Especialidad-Medica') ? document.getElementById('field-Especialidad-Medica').innerText : '';
-
-        // Concatenar Médico y Especialidad
         let medicoEspecialidadHTML = medicoTexto;
         if (especialidadTexto) {
             medicoEspecialidadHTML += (medicoTexto ? ' - ' : '') + especialidadTexto;
@@ -487,23 +490,24 @@
         headerDiv.outerHTML = headerTable;
     }
 
-    // 4. Reestructurar Pie de Página
+    // 7. Aislar el Footer para posicionarlo al final y limpiar la línea contenedora
     const footerDiv = clonInforme.querySelector('.footer');
     let footerHTML = '';
     if (footerDiv) {
         footerHTML = `
-            <table style="width:100%; border-top:1px solid #000; margin-top:30px; padding-top:6px; text-align:center; font-size:8.5pt; font-family:'Times New Roman', serif; border-collapse:collapse;">
+            <br/><br/>
+            <table style="width:100%; border-top:1px solid #000; padding-top:6px; margin-top:20px; text-align:center; font-size:8.5pt; font-family:'Times New Roman', serif; border-collapse:collapse;">
                 <tr>
-                    <td>${footerDiv.innerHTML}</td>
+                    <td style="text-align:center;">${footerDiv.innerHTML}</td>
                 </tr>
             </table>
         `;
-        footerDiv.remove(); // Se remueve del cuerpo principal para posicionarlo al final
+        footerDiv.remove();
     }
 
     const innerHTML = clonInforme.innerHTML;
     
-    // 5. Estructura HTML para Word con área de pie de página fijada
+    // 8. Estructura Documento MSO
     const htmlHeader = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -549,7 +553,7 @@
         </html>
     `;
 
-    // 6. Descarga del archivo .doc
+    // 9. Generar y descargar el Blob
     const blob = new Blob(['\ufeff', htmlHeader], { type: 'application/msword' });
     const filename = 'Informe_Medico.doc';
 

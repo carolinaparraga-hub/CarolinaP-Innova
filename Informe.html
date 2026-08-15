@@ -409,23 +409,23 @@
         }
 
        function descargarWord() {
-    // 1. Obtener una copia limpia del contenido del informe sin botones
     const clonInforme = document.getElementById("informe-content").cloneNode(true);
 
-    // 2. Ajustar la imagen del logo específicamente para Word
-    const imgLogo = clonInforme.querySelector('.header-logo');
+    // 1. Ajustar el logo con atributos HTML nativos (width y height) que Word respeta estrictamente
+    const imgLogo = clonInforme.querySelector('img');
     if (imgLogo) {
-        imgLogo.setAttribute('width', '150');
-        imgLogo.style.width = '150px';
+        imgLogo.removeAttribute('style');
+        imgLogo.setAttribute('width', '130');
+        imgLogo.setAttribute('height', ' auto');
+        imgLogo.style.width = '130px';
         imgLogo.style.height = 'auto';
-        imgLogo.style.maxWidth = '100%';
     }
 
-    // 3. Convertir flexbox/grid del paciente a tabla simple para compatibilidad con Word
+    // 2. Convertir rejilla del paciente a tabla compatible
     const patientGrid = clonInforme.querySelector('.patient-grid');
     if (patientGrid) {
         const items = patientGrid.querySelectorAll('div');
-        let tableHTML = '<table style="width:100%; border-collapse:collapse; font-size:10.5pt; margin-bottom:10px;">';
+        let tableHTML = '<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:10px;">';
         
         for (let i = 0; i < items.length; i += 2) {
             const leftContent = items[i] ? items[i].innerHTML : '';
@@ -434,8 +434,8 @@
             if (leftContent || rightContent) {
                 tableHTML += `
                     <tr>
-                        <td style="width:60%; padding: 2px 0;">${leftContent}</td>
-                        <td style="width:40%; padding: 2px 0;">${rightContent}</td>
+                        <td style="width:55%; padding: 2px 0;">${leftContent}</td>
+                        <td style="width:45%; padding: 2px 0;">${rightContent}</td>
                     </tr>
                 `;
             }
@@ -444,20 +444,33 @@
         patientGrid.outerHTML = tableHTML;
     }
 
-    // 4. Encabezado compatible con Word
+    // 3. Reestructurar el Encabezado (Logo + Título del Centro)
     const headerDiv = clonInforme.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
         const infoDiv = headerDiv.querySelector('.header-info');
         
+        // Extraer textos del título y subtítulo para aplicar estilos inline directos
+        const tituloTexto = document.getElementById('field-Titulo') ? document.getElementById('field-Titulo').innerText : '';
+        const subtituloTexto = document.getElementById('field-Subtitulo') ? document.getElementById('field-Subtitulo').innerText : '';
+        const medicoTexto = document.getElementById('field-Medico-tratante') ? document.getElementById('field-Medico-tratante').innerText : '';
+
         let headerTable = `
-            <table style="width:100%; border-bottom:2px solid #000; padding-bottom:8px; margin-bottom:15px;">
+            <table style="width:100%; border-bottom:2px solid #000; padding-bottom:8px; margin-bottom:15px; border-collapse:collapse;">
                 <tr>
-                    <td style="width:25%; vertical-align:middle; text-align:left;">
+                    <td style="width:30%; vertical-align:middle; text-align:left;">
                         ${logoDiv ? logoDiv.innerHTML : ''}
                     </td>
-                    <td style="width:75%; vertical-align:middle; text-align:center;">
-                        ${infoDiv ? infoDiv.innerHTML : ''}
+                    <td style="width:70%; vertical-align:middle; text-align:center;">
+                        <div style="font-size:16pt; font-weight:bold; color:#000000; font-family:'Times New Roman', serif; margin-bottom:4px;">
+                            ${tituloTexto}
+                        </div>
+                        <div style="font-size:11pt; font-weight:bold; color:#333333; font-family:'Times New Roman', serif;">
+                            ${subtituloTexto}
+                        </div>
+                        <div style="font-size:10pt; color:#555555; font-family:'Times New Roman', serif; margin-top:3px;">
+                            ${medicoTexto}
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -465,7 +478,7 @@
         headerDiv.outerHTML = headerTable;
     }
 
-    // 5. Construir HTML con reglas MSO para márgenes A4 en Word
+    // 4. Armar documento HTML con estilos MSO
     const innerHTML = clonInforme.innerHTML;
     
     const htmlHeader = `
@@ -487,10 +500,9 @@
             <style>
                 @page Section1 {
                     size: 595.3pt 841.9pt; /* A4 */
-                    margin: 42.5pt 42.5pt 42.5pt 42.5pt;
+                    margin: 36pt 42.5pt 36pt 42.5pt;
                     mso-header-margin: 35.4pt;
                     mso-footer-margin: 35.4pt;
-                    mso-paper-source: 0;
                 }
                 div.Section1 { page: Section1; }
                 body {
@@ -498,11 +510,11 @@
                     font-size: 11pt;
                     color: #000000;
                 }
+                img { max-width: 130px !important; height: auto !important; }
                 .date-row { text-align: right; font-weight: bold; margin-bottom: 10px; }
-                .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 15px 0; }
-                .section-item { margin-bottom: 10px; text-align: justify; }
-                .multiline-text { white-space: pre-wrap; }
-                .footer { border-top: 1px solid #000; padding-top: 8px; margin-top: 20px; text-align: center; font-size: 8.5pt; }
+                .report-title { text-align: center; font-size: 13pt; font-weight: bold; text-decoration: underline; margin: 12px 0; }
+                .section-item { margin-bottom: 8px; text-align: justify; }
+                .footer { border-top: 1px solid #000; padding-top: 6px; margin-top: 15px; text-align: center; font-size: 8.5pt; }
                 .footer p { margin: 2px 0; }
             </style>
         </head>
@@ -514,11 +526,8 @@
         </html>
     `;
 
-    // 6. Generar descarga de archivo .doc
-    const blob = new Blob(['\ufeff', htmlHeader], {
-        type: 'application/msword'
-    });
-
+    // 5. Descarga de Blob
+    const blob = new Blob(['\ufeff', htmlHeader], { type: 'application/msword' });
     const filename = 'Informe_Medico.doc';
 
     if (navigator.msSaveOrOpenBlob) {

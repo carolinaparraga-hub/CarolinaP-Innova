@@ -276,6 +276,7 @@
         </div>
 
         <!-- Pie de Página Institucional -->
+       <!-- Pie de Página Institucional -->
         <div class="footer">
             <p id="sec-Direccion"><span id="field-Direccion">Calle Madrid con Paris, Qta Camopla La California Norte</span></p>
             <p id="sec-Contactos-Tel">
@@ -283,11 +284,10 @@
                 <span id="sec-Whatsapp" style="display:none;"> | <strong>WhatsApp:</strong> <span id="field-Whatsapp"></span></span>
             </p>
             <p id="sec-Contactos-Digital">
-                <span id="sec-Redes" style="display:none;"><strong>Redes:</strong> <span id="field-Redes"></span></span>
-                <span id="sec-Correo" style="display:none;"> | <strong>Correo:</strong> <span id="field-Correo"></span></span>
+                <span id="sec-Redes" style="display:none;"><span id="field-Redes"></span></span>
+                <span id="sec-Correo" style="display:none;"><span id="field-Correo"></span></span>
             </p>
         </div>
-    </div>
 
     <!-- Botones Inferiores -->
     <div class="action-buttons">
@@ -322,7 +322,7 @@
             if (urlParams.get('Medico tratante')) document.getElementById('field-Medico-tratante').innerText = urlParams.get('Medico tratante');
             if (urlParams.get('Especialidad Medica')) document.getElementById('field-Especialidad-Medica').innerText = urlParams.get('Especialidad Medica');
 
-            // 2. Datos del Pie de Página (Desde Tabla Centro Medico)
+           // 2. Datos del Pie de Página (Desde Tabla Centro Medico)
             if (urlParams.get('Direccion')) {
                 document.getElementById('field-Direccion').innerText = urlParams.get('Direccion');
             } else {
@@ -346,16 +346,22 @@
                 document.getElementById('sec-Whatsapp').style.display = 'inline';
             }
 
-            if (urlParams.get('Redes sociales')) {
-                document.getElementById('field-Redes').innerText = urlParams.get('Redes sociales');
-                document.getElementById('sec-Redes').style.display = 'inline';
-            }
+            // Manejo dinámico de Redes y Correo sin títulos
+            const redesVal = urlParams.get('Redes sociales');
+            const correoVal = urlParams.get('Correo electronico');
 
-            if (urlParams.get('Correo electronico')) {
-                document.getElementById('field-Correo').innerText = urlParams.get('Correo electronico');
+            if (redesVal && correoVal) {
+                document.getElementById('field-Redes').innerText = redesVal + ' | ';
+                document.getElementById('sec-Redes').style.display = 'inline';
+                document.getElementById('field-Correo').innerText = correoVal;
+                document.getElementById('sec-Correo').style.display = 'inline';
+            } else if (redesVal) {
+                document.getElementById('field-Redes').innerText = redesVal;
+                document.getElementById('sec-Redes').style.display = 'inline';
+            } else if (correoVal) {
+                document.getElementById('field-Correo').innerText = correoVal;
                 document.getElementById('sec-Correo').style.display = 'inline';
             }
-
             // 3. Procesar campos del informe clínico
             camposGoogleSheet.forEach(campo => {
                 const valor = urlParams.get(campo.key);

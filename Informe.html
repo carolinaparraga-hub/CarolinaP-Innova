@@ -411,17 +411,21 @@
        function descargarWord() {
     const clonInforme = document.getElementById("informe-content").cloneNode(true);
 
-    // 1. Ajustar el logo con atributos HTML nativos (width y height) que Word respeta estrictamente
+    // 0. Eliminar los botones de acción en la copia de Word
+    const botones = clonInforme.querySelectorAll('button, .no-print, input[type="button"]');
+    botones.forEach(btn => btn.remove());
+
+    // 1. Ajustar el logo con dimensiones estrictas
     const imgLogo = clonInforme.querySelector('img');
     if (imgLogo) {
         imgLogo.removeAttribute('style');
         imgLogo.setAttribute('width', '130');
-        imgLogo.setAttribute('height', ' 60');
+        imgLogo.setAttribute('height', '60');
         imgLogo.style.width = '130px';
-        imgLogo.style.height = 'auto';
+        imgLogo.style.height = '60px';
     }
 
-    // 2. Convertir rejilla del paciente a tabla compatible
+    // 2. Convertir rejilla del paciente a tabla
     const patientGrid = clonInforme.querySelector('.patient-grid');
     if (patientGrid) {
         const items = patientGrid.querySelectorAll('div');
@@ -444,16 +448,21 @@
         patientGrid.outerHTML = tableHTML;
     }
 
-    // 3. Reestructurar el Encabezado (Logo + Título del Centro)
+    // 3. Encabezado con Médico Tratante + Especialidad Médica
     const headerDiv = clonInforme.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
-        const infoDiv = headerDiv.querySelector('.header-info');
         
-        // Extraer textos del título y subtítulo para aplicar estilos inline directos
         const tituloTexto = document.getElementById('field-Titulo') ? document.getElementById('field-Titulo').innerText : '';
         const subtituloTexto = document.getElementById('field-Subtitulo') ? document.getElementById('field-Subtitulo').innerText : '';
         const medicoTexto = document.getElementById('field-Medico-tratante') ? document.getElementById('field-Medico-tratante').innerText : '';
+        const especialidadTexto = document.getElementById('field-Especialidad-Medica') ? document.getElementById('field-Especialidad-Medica').innerText : '';
+
+        // Concatenar Médico y Especialidad
+        let medicoEspecialidadHTML = medicoTexto;
+        if (especialidadTexto) {
+            medicoEspecialidadHTML += (medicoTexto ? ' - ' : '') + especialidadTexto;
+        }
 
         let headerTable = `
             <table style="width:100%; border-bottom:2px solid #000; padding-bottom:8px; margin-bottom:15px; border-collapse:collapse;">
@@ -462,14 +471,14 @@
                         ${logoDiv ? logoDiv.innerHTML : ''}
                     </td>
                     <td style="width:70%; vertical-align:middle; text-align:center;">
-                        <div style="font-size:11pt; font-weight:bold; color:#000000; font-family:'Times New Roman', serif; margin-bottom:4px;">
+                        <div style="font-size:11pt; font-weight:bold; color:#000000; font-family:'Times New Roman', serif; margin-bottom:2px;">
                             ${tituloTexto}
                         </div>
-                        <div style="font-size:11pt; font-weight:bold; color:#333333; font-family:'Times New Roman', serif;">
+                        <div style="font-size:10pt; font-weight:bold; color:#333333; font-family:'Times New Roman', serif; margin-bottom:2px;">
                             ${subtituloTexto}
                         </div>
-                        <div style="font-size:10pt; color:#555555; font-family:'Times New Roman', serif; margin-top:3px;">
-                            ${medicoTexto}
+                        <div style="font-size:10pt; font-style:italic; color:#444444; font-family:'Times New Roman', serif;">
+                            ${medicoEspecialidadHTML}
                         </div>
                     </td>
                 </tr>
@@ -478,9 +487,23 @@
         headerDiv.outerHTML = headerTable;
     }
 
-    // 4. Armar documento HTML con estilos MSO
+    // 4. Reestructurar Pie de Página
+    const footerDiv = clonInforme.querySelector('.footer');
+    let footerHTML = '';
+    if (footerDiv) {
+        footerHTML = `
+            <table style="width:100%; border-top:1px solid #000; margin-top:30px; padding-top:6px; text-align:center; font-size:8.5pt; font-family:'Times New Roman', serif; border-collapse:collapse;">
+                <tr>
+                    <td>${footerDiv.innerHTML}</td>
+                </tr>
+            </table>
+        `;
+        footerDiv.remove(); // Se remueve del cuerpo principal para posicionarlo al final
+    }
+
     const innerHTML = clonInforme.innerHTML;
     
+    // 5. Estructura HTML para Word con área de pie de página fijada
     const htmlHeader = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -510,23 +533,23 @@
                     font-size: 11pt;
                     color: #000000;
                 }
-                img { max-width: 130px !important; height: 60 !important; }
+                img { max-width: 130px !important; height: 60px !important; }
                 .date-row { text-align: right; font-weight: bold; margin-bottom: 10px; }
                 .report-title { text-align: center; font-size: 13pt; font-weight: bold; text-decoration: underline; margin: 12px 0; }
                 .section-item { margin-bottom: 8px; text-align: justify; }
-                .footer { border-top: 1px solid #000; padding-top: 6px; margin-top: 15px; text-align: center; font-size: 8.5pt; }
-                .footer p { margin: 2px 0; }
+                p { margin: 3px 0; }
             </style>
         </head>
         <body>
             <div class="Section1">
                 ${innerHTML}
+                ${footerHTML}
             </div>
         </body>
         </html>
     `;
 
-    // 5. Descarga de Blob
+    // 6. Descarga del archivo .doc
     const blob = new Blob(['\ufeff', htmlHeader], { type: 'application/msword' });
     const filename = 'Informe_Medico.doc';
 

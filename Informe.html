@@ -28,6 +28,13 @@
             padding: 20mm 20mm 15mm 20mm;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
             position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .content-area {
+            flex-grow: 1;
         }
 
         /* Encabezado */
@@ -66,7 +73,8 @@
 
         .header-info p {
             margin: 1px 0;
-            font-size: 9pt;
+            font-size: 10pt;
+            font-weight: bold;
         }
 
         /* Datos del Paciente */
@@ -128,6 +136,20 @@
             white-space: pre-wrap;
         }
 
+        /* Pie de Página */
+        .footer {
+            border-top: 1px solid #000;
+            padding-top: 8px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 8.5pt;
+            line-height: 1.3;
+        }
+
+        .footer p {
+            margin: 2px 0;
+        }
+
         /* Botones de acción */
         .action-buttons {
             margin-top: 25px;
@@ -165,6 +187,7 @@
                 box-shadow: none;
                 width: 100%;
                 padding: 0;
+                min-height: 100vh;
             }
             .action-buttons {
                 display: none !important;
@@ -179,76 +202,90 @@
 <body>
 
     <div class="page" id="informe-content">
-        <!-- Encabezado Membrete -->
-        <div class="header">
-            <div style="width: 170px;">
-                <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" 
-                     alt="Centro de Salud y Rehabilitación El Marqués" 
-                     class="header-logo" 
-                     id="logo-centro">
+        <div class="content-area">
+            <!-- Encabezado Membrete -->
+            <div class="header">
+                <div style="width: 170px;">
+                    <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" 
+                         alt="Centro de Salud y Rehabilitación El Marqués" 
+                         class="header-logo" 
+                         id="logo-centro">
+                </div>
+                <div class="header-info">
+                    <h2 id="field-Titulo">Centro de Salud y Rehabilitación El Marqués</h2>
+                    <h3 id="field-Subtitulo">Medicina Física y Rehabilitación</h3>
+                    <p><span id="field-Medico-tratante">Dra. Carolina Párraga</span> - <span id="field-Especialidad-Medica">Dermatología</span></p>
+                </div>
             </div>
-            <div class="header-info">
-                <h2><span id="field-Medico-tratante">Dra. Carolina Párraga</span> - <span id="field-Especialidad-Medica">Dermatología</span></h2>
-                <h3>Medicina Física y Rehabilitación</h3>
-                <p>Calle Madrid con Paris, Qta Camopla La California Norte</p>
-                <p>Whatsapp: </p>
+
+            <!-- Información del Paciente -->
+            <div class="patient-info">
+                <div class="date-row" id="sec-Fecha">
+                    Fecha: <span id="val-Fecha"></span>
+                </div>
+                <div class="patient-grid">
+                    <div id="sec-Nombre-y-Apellido"><strong>Paciente:</strong> <span id="val-Nombre-y-Apellido"></span></div>
+                    <div id="sec-Edad"><strong>Edad:</strong> <span id="val-Edad"></span></div>
+                    <div id="sec-Cedula"><strong>C.I:</strong> <span id="val-Cedula"></span></div>
+                    <div id="sec-FN"><strong>F / N:</strong> <span id="val-FN"></span></div>
+                    <div id="sec-Telefono"><strong>Telf:</strong> <span id="val-Telefono"></span></div>
+                    <div id="sec-Ocupacion"><strong>Ocupación:</strong> <span id="val-Ocupacion"></span></div>
+                    <div id="sec-Aseguradora"><strong>Aseguradora:</strong> <span id="val-Aseguradora"></span></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Título del Reporte -->
+            <div class="report-title">Informe Médico</div>
+
+            <!-- Contenido Dinámico del Informe -->
+            <div class="report-body">
+
+                <div class="section-item" id="sec-Enfermedad-Actual">
+                    <span id="val-Enfermedad-Actual" class="multiline-text"></span>
+                </div>
+
+                <div class="section-item" id="sec-Antecedentes-Personales">
+                    <strong>Antecedentes Personales:</strong> 
+                    <span id="val-Antecedentes-Personales" class="multiline-text"></span>
+                </div>
+
+                <div class="section-item" id="sec-Antecedentes-Familiares">
+                    <strong>Antecedentes Familiares:</strong> 
+                    <span id="val-Antecedentes-Familiares" class="multiline-text"></span>
+                </div>
+
+                <div class="section-item" id="sec-Examen-Fisico">
+                    <strong>Examen Físico:</strong> 
+                    <span id="val-Examen-Fisico" class="multiline-text"></span>
+                </div>
+
+                <div class="section-item" id="sec-IDX-Impresion-Diagnostica">
+                    <strong>Impresión Diagnóstica (IDX):</strong> 
+                    <span id="val-IDX-Impresion-Diagnostica" class="multiline-text"></span>
+                </div>
+
+                <div class="section-item" id="sec-Plan-Tratamiento">
+                    <strong>Plan / Tratamiento / Conducta:</strong> 
+                    <span id="val-Plan-Tratamiento" class="multiline-text"></span>
+                </div>
+
             </div>
         </div>
 
-        <!-- Información del Paciente -->
-        <div class="patient-info">
-            <div class="date-row" id="sec-Fecha">
-                Fecha: <span id="val-Fecha"></span>
-            </div>
-            <div class="patient-grid">
-                <div id="sec-Nombre-y-Apellido"><strong>Paciente:</strong> <span id="val-Nombre-y-Apellido"></span></div>
-                <div id="sec-Edad"><strong>Edad:</strong> <span id="val-Edad"></span></div>
-                <div id="sec-Cedula"><strong>C.I:</strong> <span id="val-Cedula"></span></div>
-                <div id="sec-FN"><strong>F / N:</strong> <span id="val-FN"></span></div>
-                <div id="sec-Telefono"><strong>Telf:</strong> <span id="val-Telefono"></span></div>
-                <div id="sec-Ocupacion"><strong>Ocupación:</strong> <span id="val-Ocupacion"></span></div>
-                <div id="sec-Aseguradora"><strong>Aseguradora:</strong> <span id="val-Aseguradora"></span></div>
-                <div></div>
-            </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- Título -->
-        <div class="report-title">Informe Médico</div>
-
-        <!-- Contenido Dinámico del Informe -->
-        <div class="report-body">
-
-            <div class="section-item" id="sec-Enfermedad-Actual">
-                <span id="val-Enfermedad-Actual" class="multiline-text"></span>
-            </div>
-
-            <div class="section-item" id="sec-Antecedentes-Personales">
-                <strong>Antecedentes Personales:</strong> 
-                <span id="val-Antecedentes-Personales" class="multiline-text"></span>
-            </div>
-
-            <div class="section-item" id="sec-Antecedentes-Familiares">
-                <strong>Antecedentes Familiares:</strong> 
-                <span id="val-Antecedentes-Familiares" class="multiline-text"></span>
-            </div>
-
-            <div class="section-item" id="sec-Examen-Fisico">
-                <strong>Examen Físico:</strong> 
-                <span id="val-Examen-Fisico" class="multiline-text"></span>
-            </div>
-
-            <div class="section-item" id="sec-IDX-Impresion-Diagnostica">
-                <strong>Impresión Diagnóstica (IDX):</strong> 
-                <span id="val-IDX-Impresion-Diagnostica" class="multiline-text"></span>
-            </div>
-
-            <div class="section-item" id="sec-Plan-Tratamiento">
-                <strong>Plan / Tratamiento / Conducta:</strong> 
-                <span id="val-Plan-Tratamiento" class="multiline-text"></span>
-            </div>
-
+        <!-- Pie de Página Institucional -->
+        <div class="footer">
+            <p id="sec-Direccion"><span id="field-Direccion">Calle Madrid con Paris, Qta Camopla La California Norte</span></p>
+            <p id="sec-Contactos-Tel">
+                <span id="sec-Telefonos" style="display:none;"><strong>Telfs:</strong> <span id="field-Telefonos"></span></span>
+                <span id="sec-Whatsapp" style="display:none;"> | <strong>WhatsApp:</strong> <span id="field-Whatsapp"></span></span>
+            </p>
+            <p id="sec-Contactos-Digital">
+                <span id="sec-Redes" style="display:none;"><strong>Redes:</strong> <span id="field-Redes"></span></span>
+                <span id="sec-Correo" style="display:none;"> | <strong>Correo:</strong> <span id="field-Correo"></span></span>
+            </p>
         </div>
     </div>
 
@@ -259,7 +296,6 @@
     </div>
 
     <script>
-        // Mapeo exacto de los nombres de celdas de la hoja de Google Sheets
         const camposGoogleSheet = [
             { key: 'Fecha', target: 'val-Fecha', section: 'sec-Fecha' },
             { key: 'Nombre y Apellido', target: 'val-Nombre-y-Apellido', section: 'sec-Nombre-y-Apellido' },
@@ -280,15 +316,47 @@
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
 
-            // Ajuste dinámico de Nombre del Médico y Especialidad desde la URL
-            if (urlParams.get('Medico tratante')) {
-                document.getElementById('field-Medico-tratante').innerText = urlParams.get('Medico tratante');
-            }
-            if (urlParams.get('Especialidad Medica')) {
-                document.getElementById('field-Especialidad-Medica').innerText = urlParams.get('Especialidad Medica');
+            // 1. Datos del Encabezado (Desde Tabla Centro Medico)
+            if (urlParams.get('Titulo')) document.getElementById('field-Titulo').innerText = urlParams.get('Titulo');
+            if (urlParams.get('Subtitulo')) document.getElementById('field-Subtitulo').innerText = urlParams.get('Subtitulo');
+            if (urlParams.get('Medico tratante')) document.getElementById('field-Medico-tratante').innerText = urlParams.get('Medico tratante');
+            if (urlParams.get('Especialidad Medica')) document.getElementById('field-Especialidad-Medica').innerText = urlParams.get('Especialidad Medica');
+
+            // 2. Datos del Pie de Página (Desde Tabla Centro Medico)
+            if (urlParams.get('Direccion')) {
+                document.getElementById('field-Direccion').innerText = urlParams.get('Direccion');
+            } else {
+                document.getElementById('sec-Direccion').style.display = 'none';
             }
 
-            // Procesar cada campo para rellenar o para OCULTAR si está vacío
+            // Lógica para combinar teléfonos principal y secundario con /
+            const tel1 = urlParams.get('Numero de telefono principal') || '';
+            const tel2 = urlParams.get('Numero secundario') || '';
+            let telfsFinal = tel1;
+            if (tel1 && tel2) telfsFinal = tel1 + ' / ' + tel2;
+            else if (tel2) telfsFinal = tel2;
+
+            if (telfsFinal) {
+                document.getElementById('field-Telefonos').innerText = telfsFinal;
+                document.getElementById('sec-Telefonos').style.display = 'inline';
+            }
+
+            if (urlParams.get('Whatsapp')) {
+                document.getElementById('field-Whatsapp').innerText = urlParams.get('Whatsapp');
+                document.getElementById('sec-Whatsapp').style.display = 'inline';
+            }
+
+            if (urlParams.get('Redes sociales')) {
+                document.getElementById('field-Redes').innerText = urlParams.get('Redes sociales');
+                document.getElementById('sec-Redes').style.display = 'inline';
+            }
+
+            if (urlParams.get('Correo electronico')) {
+                document.getElementById('field-Correo').innerText = urlParams.get('Correo electronico');
+                document.getElementById('sec-Correo').style.display = 'inline';
+            }
+
+            // 3. Procesar campos del informe clínico
             camposGoogleSheet.forEach(campo => {
                 const valor = urlParams.get(campo.key);
                 const elTarget = document.getElementById(campo.target);
@@ -324,7 +392,6 @@
             });
             
             var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
-            
             var filename = 'Informe_Medico.doc';
             
             var downloadLink = document.createElement("a");

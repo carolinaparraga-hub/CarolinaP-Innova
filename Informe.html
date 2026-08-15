@@ -312,8 +312,29 @@
             { key: 'IDX Impresion Diagnostica', target: 'val-IDX-Impresion-Diagnostica', section: 'sec-IDX-Impresion-Diagnostica' },
             { key: 'Plan Tratamiento', target: 'val-Plan-Tratamiento', section: 'sec-Plan-Tratamiento' }
         ];
+// Función para formatear fechas a DD/MM/AAAA
+        function formatearFechaLatina(fechaStr) {
+            if (!fechaStr) return '';
+            
+            // Si viene en formato ISO/Americano: YYYY-MM-DD o MM/DD/YYYY
+            let partes = fechaStr.split(/[-/]/);
+            
+            // Caso 1: YYYY-MM-DD
+            if (partes[0].length === 4) {
+                const [anio, mes, dia] = partes;
+                return `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${anio}`;
+            }
+            
+            // Caso 2: MM/DD/YYYY (Formatos estándar recibidos de AppSheet)
+            if (partes.length === 3 && partes[2].length === 4) {
+                const [mes, dia, anio] = partes;
+                return `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${anio}`;
+            }
 
-        window.onload = function() {
+            return fechaStr; // Retorna original si ya viene en formato válido
+        }
+
+            window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
 
             // 1. Datos del Encabezado (Desde Tabla Centro Medico)

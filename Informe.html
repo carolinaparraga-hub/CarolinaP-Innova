@@ -408,22 +408,22 @@
             window.print();
         }
 
-     function descargarWord() {
-    // 1. Obtener parámetros de la URL para garantizar que Médico y Especialidad existan
+    function descargarWord() {
+    // 1. Obtener parámetros de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const tituloTexto = urlParams.get('Titulo') || (document.getElementById('field-Titulo') ? document.getElementById('field-Titulo').innerText : '');
     const subtituloTexto = urlParams.get('Subtitulo') || (document.getElementById('field-Subtitulo') ? document.getElementById('field-Subtitulo').innerText : '');
     const medicoTexto = urlParams.get('Medico tratante') || (document.getElementById('field-Medico-tratante') ? document.getElementById('field-Medico-tratante').innerText : '');
     const especialidadTexto = urlParams.get('Especialidad Medica') || (document.getElementById('field-Especialidad-Medica') ? document.getElementById('field-Especialidad-Medica').innerText : '');
 
-    // 2. Clonar el contenido y limpiar elementos no deseados (botones, elementos display:none)
+    // 2. Clonar el contenido y limpiar botones/elementos ocultos
     var node = document.getElementById("informe-content");
     var exportElement = node.cloneNode(true);
     
     var hiddenElements = exportElement.querySelectorAll('[style*="display: none"], .no-print, button, a, [onclick]');
     hiddenElements.forEach(el => el.remove());
 
-    // 3. Reestructurar el Encabezado con Médico + Especialidad
+    // 3. Encabezado en Tabla con alineación vertical
     const headerDiv = exportElement.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
@@ -434,7 +434,7 @@
         }
 
         let headerTable = `
-            <table class="header-table" style="width:100%; border-bottom:2.5pt solid #666666; padding-bottom:5pt; margin-bottom:10pt; border-collapse:collapse;">
+            <table class="header-table" style="width:100%; border-bottom:2.5pt solid #666666; padding-bottom:6pt; margin-bottom:12pt; border-collapse:collapse;">
                 <tr>
                     <td class="logo-cell" style="width:30%; vertical-align:middle;" align="left">
                         ${logoDiv ? logoDiv.innerHTML : ''}
@@ -456,35 +456,18 @@
         headerDiv.outerHTML = headerTable;
     }
 
-    // 4. Convertir rejilla del paciente a tabla compatible
-    const patientGrid = exportElement.querySelector('.patient-grid');
-    if (patientGrid) {
-        const items = patientGrid.querySelectorAll('div');
-        let tableHTML = '<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:10pt;">';
-        
-        for (let i = 0; i < items.length; i += 2) {
-            const leftContent = items[i] ? items[i].innerHTML : '';
-            const rightContent = items[i+1] ? items[i+1].innerHTML : '';
-            
-            if (leftContent || rightContent) {
-                tableHTML += `
-                    <tr>
-                        <td style="width:55%; padding:2pt 0; vertical-align:top;">${leftContent}</td>
-                        <td style="width:45%; padding:2pt 0; vertical-align:top;">${rightContent}</td>
-                    </tr>
-                `;
-            }
-        }
-        tableHTML += '</table>';
-        patientGrid.outerHTML = tableHTML;
-    }
+    // 4. Forzar saltos de línea y márgenes en los bloques clínicos
+    const clinicalBlocks = exportElement.querySelectorAll('.clinical-block, p');
+    clinicalBlocks.forEach(el => {
+        el.setAttribute('style', 'margin-bottom: 6pt !important; line-height: 1.25 !important; text-align: justify;');
+    });
 
-    // 5. Extraer y formatear Pie de Página al final
+    // 5. Extraer y formatear el Pie de Página
     const footerDiv = exportElement.querySelector('.footer');
     let footerHTML = '';
     if (footerDiv) {
         footerHTML = `
-            <table style="width:100%; border-top:1pt solid #666666; margin-top:20pt; padding-top:5pt; border-collapse:collapse;">
+            <table style="width:100%; border-top:1pt solid #666666; margin-top:25pt; padding-top:6pt; border-collapse:collapse;">
                 <tr>
                     <td align="center" style="text-align:center; font-family: Arial, sans-serif; font-size:8pt; color:#666666;">
                         ${footerDiv.innerHTML}
@@ -497,10 +480,10 @@
 
     var content = exportElement.innerHTML;
 
-    // Ajuste directo del logo en HTML plano
+    // Ajuste directo de imagen
     content = content.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
 
-    // 6. Generar documento HTML MSO con reset de márgenes
+    // 6. Generar HTML para Word con estilos de separación explícitos
     var preHtml = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
@@ -526,12 +509,22 @@
                 div.Section1 { page: Section1; }
                 body { font-family: 'Times New Roman', serif; font-size: 11pt; color: #000000; }
                 
-                /* Reset general para evitar saltos y espacios de Word */
-                p, div, span { margin: 0; padding: 0; line-height: 1.15; }
+                /* Reset general con interlineado controlado */
+                p { margin: 0 0 6pt 0; line-height: 1.2; }
+
+                /* Forzar título centrado en Word */
+                .doc-title { 
+                    text-align: center !important; 
+                    font-size: 14pt !important; 
+                    font-weight: bold !important; 
+                    text-decoration: underline !important; 
+                    margin-top: 14pt !important; 
+                    margin-bottom: 12pt !important; 
+                    display: block !important;
+                    width: 100% !important;
+                }
 
                 .date-row { text-align: right !important; font-weight: bold; margin: 8pt 0 !important; display: block; width: 100%; }
-                .doc-title { text-align: center !important; font-size: 13pt !important; font-weight: bold; text-decoration: underline; margin: 12pt 0 !important; }
-                .clinical-block { margin-bottom: 6pt !important; text-align: justify; }
             </style>
         </head>
         <body>
@@ -542,10 +535,13 @@
         </body>
         </html>`;
 
-    // 7. Aplicar parches de alineación nativa HTML
+    // 7. Reemplazos nativos de alineación para garantizar soporte Word
     var finalContent = preHtml.replace(/class="info-cell"/g, 'class="info-cell" align="center"');
     finalContent = finalContent.replace(/class="date-row"/g, 'class="date-row" align="right"');
+    
+    // Forzar alineación HTML directa en el título
     finalContent = finalContent.replace(/class="doc-title"/g, 'class="doc-title" align="center"');
+    finalContent = finalContent.replace(/Informe Médico/g, '<div class="doc-title" align="center"><u><b>Informe Médico</b></u></div>');
 
     // 8. Crear Blob y descargar
     var blob = new Blob(['\ufeff', finalContent], { type: 'application/msword' });

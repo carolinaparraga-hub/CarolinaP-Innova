@@ -408,57 +408,23 @@
             window.print();
         }
 
-      function descargarWord() {
-    // 1. Obtener parámetros directamente de la URL para no depender de IDs del DOM
+     function descargarWord() {
+    // 1. Obtener parámetros de la URL para garantizar que Médico y Especialidad existan
     const urlParams = new URLSearchParams(window.location.search);
-    
     const tituloTexto = urlParams.get('Titulo') || (document.getElementById('field-Titulo') ? document.getElementById('field-Titulo').innerText : '');
     const subtituloTexto = urlParams.get('Subtitulo') || (document.getElementById('field-Subtitulo') ? document.getElementById('field-Subtitulo').innerText : '');
     const medicoTexto = urlParams.get('Medico tratante') || (document.getElementById('field-Medico-tratante') ? document.getElementById('field-Medico-tratante').innerText : '');
     const especialidadTexto = urlParams.get('Especialidad Medica') || (document.getElementById('field-Especialidad-Medica') ? document.getElementById('field-Especialidad-Medica').innerText : '');
 
-    // 2. Clonar el contenido del informe
-    const clonInforme = document.getElementById("informe-content").cloneNode(true);
+    // 2. Clonar el contenido y limpiar elementos no deseados (botones, elementos display:none)
+    var node = document.getElementById("informe-content");
+    var exportElement = node.cloneNode(true);
+    
+    var hiddenElements = exportElement.querySelectorAll('[style*="display: none"], .no-print, button, a, [onclick]');
+    hiddenElements.forEach(el => el.remove());
 
-    // 3. Eliminar los botones de acción e hipervínculos de impresión en la copia
-    const elementosAEliminar = clonInforme.querySelectorAll('.no-print, button, a, [onclick]');
-    elementosAEliminar.forEach(el => el.remove());
-
-    // 4. Ajustar el logo con dimensiones nativas
-    const imgLogo = clonInforme.querySelector('img');
-    if (imgLogo) {
-        imgLogo.removeAttribute('style');
-        imgLogo.setAttribute('width', '130');
-        imgLogo.setAttribute('height', '60');
-        imgLogo.style.width = '130px';
-        imgLogo.style.height = '60px';
-    }
-
-    // 5. Convertir rejilla del paciente a tabla
-    const patientGrid = clonInforme.querySelector('.patient-grid');
-    if (patientGrid) {
-        const items = patientGrid.querySelectorAll('div');
-        let tableHTML = '<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:10px;">';
-        
-        for (let i = 0; i < items.length; i += 2) {
-            const leftContent = items[i] ? items[i].innerHTML : '';
-            const rightContent = items[i+1] ? items[i+1].innerHTML : '';
-            
-            if (leftContent || rightContent) {
-                tableHTML += `
-                    <tr>
-                        <td style="width:55%; padding: 2px 0;">${leftContent}</td>
-                        <td style="width:45%; padding: 2px 0;">${rightContent}</td>
-                    </tr>
-                `;
-            }
-        }
-        tableHTML += '</table>';
-        patientGrid.outerHTML = tableHTML;
-    }
-
-    // 6. Construir Encabezado incluyendo Médico + Especialidad
-    const headerDiv = clonInforme.querySelector('.header');
+    // 3. Reestructurar el Encabezado con Médico + Especialidad
+    const headerDiv = exportElement.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
         
@@ -468,19 +434,19 @@
         }
 
         let headerTable = `
-            <table style="width:100%; border-bottom:2px solid #000; padding-bottom:8px; margin-bottom:15px; border-collapse:collapse;">
+            <table class="header-table" style="width:100%; border-bottom:2.5pt solid #666666; padding-bottom:5pt; margin-bottom:10pt; border-collapse:collapse;">
                 <tr>
-                    <td style="width:30%; vertical-align:middle; text-align:left;">
+                    <td class="logo-cell" style="width:30%; vertical-align:middle;" align="left">
                         ${logoDiv ? logoDiv.innerHTML : ''}
                     </td>
-                    <td style="width:70%; vertical-align:middle; text-align:center;">
-                        <div style="font-size:11pt; font-weight:bold; color:#000000; font-family:'Times New Roman', serif; margin-bottom:2px;">
+                    <td class="info-cell" style="width:70%; vertical-align:middle; text-align:center;" align="center">
+                        <div style="font-family: Arial, sans-serif; font-size:12pt; font-weight:bold; color:#333333; margin-bottom:2pt;">
                             ${tituloTexto}
                         </div>
-                        <div style="font-size:10pt; font-weight:bold; color:#333333; font-family:'Times New Roman', serif; margin-bottom:2px;">
+                        <div style="font-family: Arial, sans-serif; font-size:10pt; font-weight:bold; color:#555555; margin-bottom:2pt;">
                             ${subtituloTexto}
                         </div>
-                        <div style="font-size:10pt; font-style:italic; color:#444444; font-family:'Times New Roman', serif;">
+                        <div style="font-family: Arial, sans-serif; font-size:9.5pt; font-style:italic; color:#666666;">
                             ${medicoEspecialidadHTML}
                         </div>
                     </td>
@@ -490,28 +456,53 @@
         headerDiv.outerHTML = headerTable;
     }
 
-    // 7. Aislar el Footer para posicionarlo al final y limpiar la línea contenedora
-    const footerDiv = clonInforme.querySelector('.footer');
+    // 4. Convertir rejilla del paciente a tabla compatible
+    const patientGrid = exportElement.querySelector('.patient-grid');
+    if (patientGrid) {
+        const items = patientGrid.querySelectorAll('div');
+        let tableHTML = '<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:10pt;">';
+        
+        for (let i = 0; i < items.length; i += 2) {
+            const leftContent = items[i] ? items[i].innerHTML : '';
+            const rightContent = items[i+1] ? items[i+1].innerHTML : '';
+            
+            if (leftContent || rightContent) {
+                tableHTML += `
+                    <tr>
+                        <td style="width:55%; padding:2pt 0; vertical-align:top;">${leftContent}</td>
+                        <td style="width:45%; padding:2pt 0; vertical-align:top;">${rightContent}</td>
+                    </tr>
+                `;
+            }
+        }
+        tableHTML += '</table>';
+        patientGrid.outerHTML = tableHTML;
+    }
+
+    // 5. Extraer y formatear Pie de Página al final
+    const footerDiv = exportElement.querySelector('.footer');
     let footerHTML = '';
     if (footerDiv) {
         footerHTML = `
-            <br/><br/>
-            <table style="width:100%; border-top:1px solid #000; padding-top:6px; margin-top:20px; text-align:center; font-size:8.5pt; font-family:'Times New Roman', serif; border-collapse:collapse;">
+            <table style="width:100%; border-top:1pt solid #666666; margin-top:20pt; padding-top:5pt; border-collapse:collapse;">
                 <tr>
-                    <td style="text-align:center;">${footerDiv.innerHTML}</td>
+                    <td align="center" style="text-align:center; font-family: Arial, sans-serif; font-size:8pt; color:#666666;">
+                        ${footerDiv.innerHTML}
+                    </td>
                 </tr>
             </table>
         `;
         footerDiv.remove();
     }
 
-    const innerHTML = clonInforme.innerHTML;
-    
-    // 8. Estructura Documento MSO
-    const htmlHeader = `
-        <html xmlns:o='urn:schemas-microsoft-com:office:office' 
-              xmlns:w='urn:schemas-microsoft-com:office:word' 
-              xmlns='http://www.w3.org/TR/REC-html40'>
+    var content = exportElement.innerHTML;
+
+    // Ajuste directo del logo en HTML plano
+    content = content.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
+
+    // 6. Generar documento HTML MSO con reset de márgenes
+    var preHtml = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
             <meta charset='utf-8'>
             <title>Informe Médico</title>
@@ -520,55 +511,54 @@
                 <w:WordDocument>
                     <w:View>Print</w:View>
                     <w:Zoom>100</w:Zoom>
-                    <w:DoNotOptimizeForCustomXLS/>
+                    <w:DoNotOptimizeForBrowser/>
                 </w:WordDocument>
             </xml>
             <![endif]-->
             <style>
-                @page Section1 {
-                    size: 595.3pt 841.9pt; /* A4 */
-                    margin: 36pt 42.5pt 36pt 42.5pt;
-                    mso-header-margin: 35.4pt;
-                    mso-footer-margin: 35.4pt;
+                @page Section1 { 
+                    size: 8.5in 11in; 
+                    margin: 0.8in 0.75in 0.8in 0.75in;
+                    mso-header-margin: .5in; 
+                    mso-footer-margin: .5in; 
+                    mso-paper-source: 0; 
                 }
                 div.Section1 { page: Section1; }
-                body {
-                    font-family: 'Times New Roman', serif;
-                    font-size: 11pt;
-                    color: #000000;
-                }
-                img { max-width: 130px !important; height: 60px !important; }
-                .date-row { text-align: right; font-weight: bold; margin-bottom: 10px; }
-                .report-title { text-align: center; font-size: 13pt; font-weight: bold; text-decoration: underline; margin: 12px 0; }
-                .section-item { margin-bottom: 8px; text-align: justify; }
-                p { margin: 3px 0; }
+                body { font-family: 'Times New Roman', serif; font-size: 11pt; color: #000000; }
+                
+                /* Reset general para evitar saltos y espacios de Word */
+                p, div, span { margin: 0; padding: 0; line-height: 1.15; }
+
+                .date-row { text-align: right !important; font-weight: bold; margin: 8pt 0 !important; display: block; width: 100%; }
+                .doc-title { text-align: center !important; font-size: 13pt !important; font-weight: bold; text-decoration: underline; margin: 12pt 0 !important; }
+                .clinical-block { margin-bottom: 6pt !important; text-align: justify; }
             </style>
         </head>
         <body>
             <div class="Section1">
-                ${innerHTML}
+                ${content}
                 ${footerHTML}
             </div>
         </body>
-        </html>
-    `;
+        </html>`;
 
-    // 9. Generar y descargar el Blob
-    const blob = new Blob(['\ufeff', htmlHeader], { type: 'application/msword' });
-    const filename = 'Informe_Medico.doc';
+    // 7. Aplicar parches de alineación nativa HTML
+    var finalContent = preHtml.replace(/class="info-cell"/g, 'class="info-cell" align="center"');
+    finalContent = finalContent.replace(/class="date-row"/g, 'class="date-row" align="right"');
+    finalContent = finalContent.replace(/class="doc-title"/g, 'class="doc-title" align="center"');
 
-    if (navigator.msSaveOrOpenBlob) {
-        navigator.msSaveOrOpenBlob(blob, filename);
-    } else {
-        const downloadLink = document.createElement("a");
-        document.body.appendChild(downloadLink);
-        const url = URL.createObjectURL(blob);
-        downloadLink.href = url;
-        downloadLink.download = filename;
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        URL.revokeObjectURL(url);
-    }
+    // 8. Crear Blob y descargar
+    var blob = new Blob(['\ufeff', finalContent], { type: 'application/msword' });
+    var url = URL.createObjectURL(blob);
+    var filename = 'Informe_Medico_' + (urlParams.get('Nombre y Apellido') || 'Paciente') + '.doc';
+    
+    var downloadLink = document.createElement("a");
+    document.body.appendChild(downloadLink);
+    downloadLink.href = url;
+    downloadLink.download = filename;
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    URL.revokeObjectURL(url);
 }
     </script>
 </body>

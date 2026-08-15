@@ -408,39 +408,132 @@
             window.print();
         }
 
-        function descargarWord() {
-            var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
-                "xmlns:w='urn:schemas-microsoft-com:office:word' " +
-                "xmlns='http://www.w3.org/TR/REC-html40'>" +
-                "<head><meta charset='utf-8'><title>Informe Médico</title>" +
-                "<style>body { font-family: 'Times New Roman', serif; font-size: 11pt; }</style>" +
-                "</head><body>";
-            
-            var content = document.getElementById("informe-content").innerHTML;
-            var footer = "</body></html>";
-            
-            var html = header + content + footer;
+       function descargarWord() {
+    // 1. Obtener una copia limpia del contenido del informe sin botones
+    const clonInforme = document.getElementById("informe-content").cloneNode(true);
 
-            var blob = new Blob(['\ufeff', html], {
-                type: 'application/msword'
-            });
+    // 2. Ajustar la imagen del logo específicamente para Word
+    const imgLogo = clonInforme.querySelector('.header-logo');
+    if (imgLogo) {
+        imgLogo.setAttribute('width', '150');
+        imgLogo.style.width = '150px';
+        imgLogo.style.height = 'auto';
+        imgLogo.style.maxWidth = '100%';
+    }
+
+    // 3. Convertir flexbox/grid del paciente a tabla simple para compatibilidad con Word
+    const patientGrid = clonInforme.querySelector('.patient-grid');
+    if (patientGrid) {
+        const items = patientGrid.querySelectorAll('div');
+        let tableHTML = '<table style="width:100%; border-collapse:collapse; font-size:10.5pt; margin-bottom:10px;">';
+        
+        for (let i = 0; i < items.length; i += 2) {
+            const leftContent = items[i] ? items[i].innerHTML : '';
+            const rightContent = items[i+1] ? items[i+1].innerHTML : '';
             
-            var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
-            var filename = 'Informe_Medico.doc';
-            
-            var downloadLink = document.createElement("a");
-            document.body.appendChild(downloadLink);
-            
-            if (navigator.msSaveOrOpenBlob) {
-                navigator.msSaveOrOpenBlob(blob, filename);
-            } else {
-                downloadLink.href = url;
-                downloadLink.download = filename;
-                downloadLink.click();
+            if (leftContent || rightContent) {
+                tableHTML += `
+                    <tr>
+                        <td style="width:60%; padding: 2px 0;">${leftContent}</td>
+                        <td style="width:40%; padding: 2px 0;">${rightContent}</td>
+                    </tr>
+                `;
             }
-            
-            document.body.removeChild(downloadLink);
         }
+        tableHTML += '</table>';
+        patientGrid.outerHTML = tableHTML;
+    }
+
+    // 4. Encabezado compatible con Word
+    const headerDiv = clonInforme.querySelector('.header');
+    if (headerDiv) {
+        const logoDiv = headerDiv.querySelector('div:first-child');
+        const infoDiv = headerDiv.querySelector('.header-info');
+        
+        let headerTable = `
+            <table style="width:100%; border-bottom:2px solid #000; padding-bottom:8px; margin-bottom:15px;">
+                <tr>
+                    <td style="width:25%; vertical-align:middle; text-align:left;">
+                        ${logoDiv ? logoDiv.innerHTML : ''}
+                    </td>
+                    <td style="width:75%; vertical-align:middle; text-align:center;">
+                        ${infoDiv ? infoDiv.innerHTML : ''}
+                    </td>
+                </tr>
+            </table>
+        `;
+        headerDiv.outerHTML = headerTable;
+    }
+
+    // 5. Construir HTML con reglas MSO para márgenes A4 en Word
+    const innerHTML = clonInforme.innerHTML;
+    
+    const htmlHeader = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+              xmlns:w='urn:schemas-microsoft-com:office:word' 
+              xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+            <meta charset='utf-8'>
+            <title>Informe Médico</title>
+            <!--[if gte mso 9]>
+            <xml>
+                <w:WordDocument>
+                    <w:View>Print</w:View>
+                    <w:Zoom>100</w:Zoom>
+                    <w:DoNotOptimizeForCustomXLS/>
+                </w:WordDocument>
+            </xml>
+            <![endif]-->
+            <style>
+                @page Section1 {
+                    size: 595.3pt 841.9pt; /* A4 */
+                    margin: 42.5pt 42.5pt 42.5pt 42.5pt;
+                    mso-header-margin: 35.4pt;
+                    mso-footer-margin: 35.4pt;
+                    mso-paper-source: 0;
+                }
+                div.Section1 { page: Section1; }
+                body {
+                    font-family: 'Times New Roman', serif;
+                    font-size: 11pt;
+                    color: #000000;
+                }
+                .date-row { text-align: right; font-weight: bold; margin-bottom: 10px; }
+                .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 15px 0; }
+                .section-item { margin-bottom: 10px; text-align: justify; }
+                .multiline-text { white-space: pre-wrap; }
+                .footer { border-top: 1px solid #000; padding-top: 8px; margin-top: 20px; text-align: center; font-size: 8.5pt; }
+                .footer p { margin: 2px 0; }
+            </style>
+        </head>
+        <body>
+            <div class="Section1">
+                ${innerHTML}
+            </div>
+        </body>
+        </html>
+    `;
+
+    // 6. Generar descarga de archivo .doc
+    const blob = new Blob(['\ufeff', htmlHeader], {
+        type: 'application/msword'
+    });
+
+    const filename = 'Informe_Medico.doc';
+
+    if (navigator.msSaveOrOpenBlob) {
+        navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+        const downloadLink = document.createElement("a");
+        document.body.appendChild(downloadLink);
+        const url = URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = filename;
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(url);
+    }
+}
     </script>
 </body>
 </html>

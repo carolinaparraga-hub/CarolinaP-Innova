@@ -189,7 +189,7 @@ function descargarWord() {
     var node = document.getElementById("informe-content");
     var exportElement = node.cloneNode(true);
 
-    // 1. Encabezado para Word (Tabla compacta)
+    // 1. Encabezado para Word
     const headerDiv = exportElement.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
@@ -209,7 +209,7 @@ function descargarWord() {
             </table>`;
     }
 
-    // 2. Grilla de datos del paciente para Word
+    // 2. Grilla de datos del paciente
     const patientGrid = exportElement.querySelector('.patient-grid');
     if (patientGrid) {
         const paciente = p['Nombre y Apellido'] || '';
@@ -245,18 +245,21 @@ function descargarWord() {
         patientGrid.outerHTML = `<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:6pt;">${rows}</table>`;
     }
 
-    // 3. Capturar el pie de página y ELIMINARLO por completo del cuerpo
-    const footerDiv = exportElement.querySelector('.footer');
+    // 3. CAPTURA Y DESTRUCCIÓN TOTAL DEL FOOTER EN EL CUERPO
     let footerHTML = '';
+    const footerDiv = exportElement.querySelector('.footer');
     if (footerDiv) {
         footerHTML = footerDiv.innerHTML;
-        footerDiv.parentNode.removeChild(footerDiv); // Garantiza la remoción absoluta del flujo del cuerpo
+        footerDiv.remove(); // Remueve el contenedor .footer por completo del clon
     }
+
+    // Doble verificación: busca si quedó algún elemento .footer flotando y lo borra
+    exportElement.querySelectorAll('.footer').forEach(el => el.remove());
 
     // Ajuste de imágenes para Word
     var content = exportElement.innerHTML.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
 
-    // 4. Estructura XML / HTML
+    // 4. Estructura XML / HTML para Word
     var preHtml = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -307,7 +310,7 @@ function descargarWord() {
                     margin-bottom: 4pt; 
                 }
 
-                /* Estilo del pie de página nativo en Word */
+                /* Estilo exclusivo del pie nativo */
                 div.MsoFooter {
                     font-family: Arial, sans-serif;
                     font-size: 8.5pt;
@@ -326,7 +329,6 @@ function descargarWord() {
             <div class="Section1">
                 ${content}
 
-                <!-- Definición única del Pie Nativo -->
                 <div style="mso-element:footer" id="f1">
                     <div class="MsoFooter">
                         ${footerHTML}

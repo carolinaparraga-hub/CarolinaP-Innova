@@ -186,9 +186,11 @@
         };
 
 function descargarWord() {
-    // 1. Obtener los datos del objeto p o fallback
+    // ============================================================
+    // 1. OBTENER DATOS
+    // ============================================================
     var datos = (typeof p !== 'undefined') ? p : {};
-    
+
     var paciente = datos['Nombre y Apellido'] || '';
     var edad = datos['Edad'] || '';
     var ci = datos['Cedula'] || '';
@@ -196,113 +198,194 @@ function descargarWord() {
     var telf = datos['Telefono'] || '';
     var ocupacion = datos['Ocupacion'] || '';
     var aseguradora = datos['Aseguradora'] || '';
-    var titulo = datos['Titulo'] || '';
-    var subtitulo = datos['Subtitulo'] || '';
-    var medico = datos['Medico tratante'] || '';
-    var especialidad = datos['Especialidad Medica'] || '';
-    var direccion = datos['Direccion'] || '';
+
+    var titulo = datos['Titulo'] || 'Centro de Salud y Rehabilitación EL MARQUÉZ';
+    var subtitulo = datos['Subtitulo'] || 'Medicina Física y Rehabilitación J-30945810-8';
+    var medico = datos['Medico tratante'] || 'Jose Camejo';
+    var especialidad = datos['Especialidad Medica'] || 'Terapeuta ocupacional';
+
     var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
 
-    // Datos de contacto dinámicos para el pie nativo
-    var tel1 = datos['Numero de telefono principal'] || '';
-    var tel2 = datos['Numero secundario'] || '';
-    var telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
-    var whatsapp = datos['Whatsapp'] || '';
-    var redes = datos['Redes sociales'] || '';
-    var correo = datos['Correo electronico'] || '';
-
-    // 2. Extraer el contenido del cuerpo del informe
+    // ============================================================
+    // 2. EXTRAER SOLO EL CONTENIDO MÉDICO
+    // ============================================================
+    var node = document.getElementById("informe-content");
     var cuerpoHTML = '';
-    var reportBodyNode = document.querySelector('.report-body');
 
-    if (reportBodyNode) {
-        var clone = reportBodyNode.cloneNode(true);
-        cuerpoHTML = clone.innerHTML;
+    if (node) {
+        var clone = node.cloneNode(true);
+
+        // IMPORTANTE:
+        // Eliminamos únicamente elementos estructurales conocidos.
+        // No buscamos palabras dentro de todos los div/p/span porque
+        // eso puede borrar accidentalmente contenido médico.
+        clone.querySelectorAll(
+            '.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr'
+        ).forEach(function(el) {
+            el.remove();
+        });
+
+        // Tomamos únicamente el contenido del cuerpo médico.
+        var reportBody = clone.querySelector('.report-body');
+
+        if (reportBody) {
+            cuerpoHTML = reportBody.innerHTML;
+        }
     }
 
-    // 3. Encabezado dinámico en tabla nativa para Word
+    // ============================================================
+    // 3. ENCABEZADO DEL DOCUMENTO WORD
+    // ============================================================
     var headerHTML = `
         <table style="width:100%; border-bottom:1.5pt solid #333333; padding-bottom:4pt; margin-bottom:12pt; border-collapse:collapse;">
             <tr>
                 <td style="width:25%; vertical-align:middle;" align="left">
-                    <strong style="font-size:12pt; font-family:Arial, sans-serif;">${titulo}</strong>
+                    <strong style="font-size:11pt; font-family:Arial;">EL MARQUÉZ</strong>
                 </td>
+
                 <td style="width:75%; text-align:center; vertical-align:middle;" align="center">
-                    ${subtitulo ? `<div style="font-family: Arial, sans-serif; font-size:11pt; font-weight:bold; color:#111;">${subtitulo}</div>` : ''}
-                    ${direccion ? `<div style="font-family: Arial, sans-serif; font-size:9pt; color:#444;">${direccion}</div>` : ''}
-                    ${medicoEsp ? `<div style="font-family: Arial, sans-serif; font-size:9pt; font-style:italic; color:#555;">${medicoEsp}</div>` : ''}
+                    <div style="font-family:Arial, sans-serif; font-size:11pt; font-weight:bold; color:#111;">
+                        ${subtitulo}
+                    </div>
+
+                    <div style="font-family:Arial, sans-serif; font-size:9pt; color:#444;">
+                        Calle Madrid con París, Qta Camopla La California Norte
+                    </div>
+
+                    <div style="font-family:Arial, sans-serif; font-size:9pt; font-style:italic; color:#555;">
+                        ${medicoEsp}
+                    </div>
                 </td>
             </tr>
         </table>`;
 
-    // 4. Tabla de datos del paciente
+    // ============================================================
+    // 4. DATOS DEL PACIENTE
+    // ============================================================
     var patientHTML = `
-        <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman', serif; font-size:10.5pt; margin-bottom:10pt;">
+        <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman', serif; font-size:10pt; margin-bottom:10pt;">
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>Paciente:</strong> ${paciente}</td>
-                <td style="width:45%; padding:2pt 0;"><strong>Edad:</strong> ${edad}</td>
+                <td style="width:55%; padding:2pt 0;">
+                    <strong>Paciente:</strong> ${paciente}
+                </td>
+
+                <td style="width:45%; padding:2pt 0;">
+                    <strong>Edad:</strong> ${edad}
+                </td>
             </tr>
+
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>C.I:</strong> ${ci}</td>
-                <td style="width:45%; padding:2pt 0;"><strong>F / N:</strong> ${fn}</td>
+                <td style="width:55%; padding:2pt 0;">
+                    <strong>C.I:</strong> ${ci}
+                </td>
+
+                <td style="width:45%; padding:2pt 0;">
+                    <strong>F / N:</strong> ${fn}
+                </td>
             </tr>
+
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>Telf:</strong> ${telf}</td>
-                <td style="width:45%; padding:2pt 0;"><strong>Ocupación:</strong> ${ocupacion}</td>
+                <td style="width:55%; padding:2pt 0;">
+                    <strong>Telf:</strong> ${telf}
+                </td>
+
+                <td style="width:45%; padding:2pt 0;">
+                    <strong>Ocupación:</strong> ${ocupacion}
+                </td>
             </tr>
-            ${aseguradora ? `<tr><td style="width:55%; padding:2pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td><td style="width:45%;"></td></tr>` : ''}
+
+            ${aseguradora ? `
+            <tr>
+                <td style="width:55%; padding:2pt 0;">
+                    <strong>Aseguradora:</strong> ${aseguradora}
+                </td>
+                <td style="width:45%;"></td>
+            </tr>
+            ` : ''}
         </table>`;
 
-    // 5. Pie de página nativo dinámico
-    var lineaTel = '';
-    if (telfsFinal) lineaTel += `<strong>Telfs:</strong> ${telfsFinal}`;
-    if (whatsapp) lineaTel += (lineaTel ? ' | ' : '') + `<strong>WhatsApp:</strong> ${whatsapp}`;
-
-    var lineaDigital = '';
-    if (redes) lineaDigital += redes;
-    if (correo) lineaDigital += (lineaDigital ? ' | ' : '') + correo;
-
+    // ============================================================
+    // 5. CONTENIDO DEL PIE DE PÁGINA NATIVO
+    // ============================================================
     var footerTexto = `
-        ${lineaTel ? `<p style="margin:0; padding:0;">${lineaTel}</p>` : ''}
-        ${lineaDigital ? `<p style="margin:0; padding:0;">${lineaDigital}</p>` : ''}`;
+        <p style="margin:0; padding:0;">
+            <strong>Telfs:</strong> 0212-2716272 / 0424-2865320 |
+            <strong>WhatsApp:</strong> 0424-1336013
+        </p>
 
-    // 6. Ensamblado completo del documento HTML/MSO Word
+        <p style="margin:0; padding:0;">
+            Instagram, Twitter, Facebook @tufisioccs |
+            tufisioccs@gmail.com
+        </p>`;
+
+    // ============================================================
+    // 6. DOCUMENTO HTML ESPECÍFICO PARA MICROSOFT WORD
+    // ============================================================
+    //
+    // IMPORTANTE:
+    // El footer YA NO está dentro de Section1.
+    //
+    // Se coloca en una tabla técnica oculta (hrdftrtbl), que es
+    // una estructura utilizada para que Word reconozca correctamente
+    // headers/footers sin imprimirlos como contenido normal.
+    //
     var preHtml = `
-        <html xmlns:o='urn:schemas-microsoft-com:office:office' 
-              xmlns:w='urn:schemas-microsoft-com:office:word' 
-              xmlns='http://www.w3.org/TR/REC-html40'>
+        <html xmlns:o="urn:schemas-microsoft-com:office:office"
+              xmlns:w="urn:schemas-microsoft-com:office:word"
+              xmlns="http://www.w3.org/TR/REC-html40">
+
         <head>
-            <meta charset='utf-8'>
+            <meta charset="utf-8">
+
             <title>Informe Médico</title>
+
             <style>
                 @page Section1 {
-                    size: 595.3pt 841.9pt; /* A4 */
+                    size: 595.3pt 841.9pt;
                     margin: 0.7in 0.75in 0.8in 0.75in;
+
                     mso-header-margin: 0.4in;
                     mso-footer-margin: 0.3in;
+
                     mso-footer: f1;
                 }
-                div.Section1 { page: Section1; }
 
-                body { 
-                    font-family: 'Times New Roman', serif; 
-                    font-size: 11pt; 
-                    color: #000; 
+                div.Section1 {
+                    page: Section1;
+                }
+
+                /*
+                 * Tabla técnica utilizada para contener
+                 * el footer de Word sin mostrarlo como
+                 * contenido normal.
+                 */
+                table#hrdftrtbl {
+                    margin: 0in 0in 0in 900in;
+                    width: 1px;
+                    height: 1px;
+                    overflow: hidden;
+                }
+
+                body {
+                    font-family: 'Times New Roman', serif;
+                    font-size: 11pt;
+                    color: #000;
                     line-height: 1.25;
                 }
 
-                p, div {
+                p,
+                div {
                     margin-top: 0pt;
                     margin-bottom: 4pt;
                 }
 
-                .doc-title { 
-                    text-align: center; 
-                    font-size: 13pt; 
-                    font-weight: bold; 
-                    text-decoration: underline; 
+                .doc-title {
+                    text-align: center;
+                    font-size: 13pt;
+                    font-weight: bold;
+                    text-decoration: underline;
                     margin-top: 10pt;
-                    margin-bottom: 12pt; 
+                    margin-bottom: 12pt;
                 }
 
                 div.MsoFooter {
@@ -315,35 +398,81 @@ function descargarWord() {
                 }
             </style>
         </head>
+
         <body>
+
+            <!-- ================================================== -->
+            <!-- CONTENIDO NORMAL DEL DOCUMENTO                    -->
+            <!-- ================================================== -->
+
             <div class="Section1">
+
                 ${headerHTML}
+
                 ${patientHTML}
-                
-                <div class="doc-title" align="center"><u><b>Informe Médico</b></u></div>
+
+                <div class="doc-title" align="center">
+                    <u><b>Informe Médico</b></u>
+                </div>
 
                 <div class="report-body">
                     ${cuerpoHTML}
                 </div>
 
-                <div style="mso-element:footer" id="f1">
-                    <div class="MsoFooter">
-                        ${footerTexto}
-                    </div>
-                </div>
             </div>
+
+            <!-- ================================================== -->
+            <!-- FOOTER NATIVO DE WORD                              -->
+            <!-- ================================================== -->
+
+            <table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>
+
+                        <div style="mso-element:footer" id="f1">
+
+                            <div class="MsoFooter">
+                                ${footerTexto}
+                            </div>
+
+                        </div>
+
+                    </td>
+                </tr>
+            </table>
+
         </body>
         </html>`;
 
-    // 7. Descarga del archivo
-    var blob = new Blob(['\ufeff', preHtml], { type: 'application/msword' });
+    // ============================================================
+    // 7. GENERAR ARCHIVO WORD
+    // ============================================================
+    var blob = new Blob(
+        ['\ufeff', preHtml],
+        { type: 'application/msword' }
+    );
+
     var url = URL.createObjectURL(blob);
+
     var a = document.createElement("a");
+
     a.href = url;
-    a.download = 'Informe_Medico_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';
+
+    a.download =
+        'Informe_Medico_' +
+        (
+            paciente
+                ? paciente.replace(/\s+/g, '_')
+                : 'Paciente'
+        ) +
+        '.doc';
+
     document.body.appendChild(a);
+
     a.click();
+
     document.body.removeChild(a);
+
     URL.revokeObjectURL(url);
 }
     </script>

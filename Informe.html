@@ -189,7 +189,19 @@ function descargarWord() {
     var node = document.getElementById("informe-content");
     var exportElement = node.cloneNode(true);
 
-    // 1. Encabezado para Word
+    // 1. CAPTURA Y REMOCIÓN ABSOLUTA DEL FOOTER
+    // Buscamos el contenedor por clase o ID y guardamos su HTML
+    let footerHTML = '';
+    const footerDiv = exportElement.querySelector('.footer, #footer, footer');
+    if (footerDiv) {
+        footerHTML = footerDiv.innerHTML;
+        footerDiv.remove();
+    }
+
+    // Purgar cualquier sub-elemento o clase repetida de footer en el cuerpo
+    exportElement.querySelectorAll('.footer, #footer, footer, .footer-content, .footer-text').forEach(el => el.remove());
+
+    // 2. Encabezado para Word
     const headerDiv = exportElement.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
@@ -209,7 +221,7 @@ function descargarWord() {
             </table>`;
     }
 
-    // 2. Grilla de datos del paciente
+    // 3. Grilla de datos del paciente
     const patientGrid = exportElement.querySelector('.patient-grid');
     if (patientGrid) {
         const paciente = p['Nombre y Apellido'] || '';
@@ -244,17 +256,6 @@ function descargarWord() {
 
         patientGrid.outerHTML = `<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:6pt;">${rows}</table>`;
     }
-
-    // 3. CAPTURA Y DESTRUCCIÓN TOTAL DEL FOOTER EN EL CUERPO
-    let footerHTML = '';
-    const footerDiv = exportElement.querySelector('.footer');
-    if (footerDiv) {
-        footerHTML = footerDiv.innerHTML;
-        footerDiv.remove(); // Remueve el contenedor .footer por completo del clon
-    }
-
-    // Doble verificación: busca si quedó algún elemento .footer flotando y lo borra
-    exportElement.querySelectorAll('.footer').forEach(el => el.remove());
 
     // Ajuste de imágenes para Word
     var content = exportElement.innerHTML.replace(/<img/g, '<img width="130" height="60" style="display:block;"');

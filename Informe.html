@@ -185,105 +185,162 @@
             });
         };
 
-        function descargarWord() {
-            var node = document.getElementById("informe-content");
-            var exportElement = node.cloneNode(true);
+       function descargarWord() {
+    var node = document.getElementById("informe-content");
+    var exportElement = node.cloneNode(true);
 
-            const headerDiv = exportElement.querySelector('.header');
-            if (headerDiv) {
-                const logoDiv = headerDiv.querySelector('div:first-child');
-                let medicoEsp = p['Medico tratante'] || '';
-                if (p['Especialidad Medica']) medicoEsp += (medicoEsp ? ' - ' : '') + p['Especialidad Medica'];
+    // 1. Encabezado para Word (Tabla limpia)
+    const headerDiv = exportElement.querySelector('.header');
+    if (headerDiv) {
+        const logoDiv = headerDiv.querySelector('div:first-child');
+        let medicoEsp = p['Medico tratante'] || '';
+        if (p['Especialidad Medica']) medicoEsp += (medicoEsp ? ' - ' : '') + p['Especialidad Medica'];
 
-                headerDiv.outerHTML = `
-                    <table style="width:100%; border-bottom:2pt solid #666666; padding-bottom:4pt; margin-bottom:8pt; border-collapse:collapse;">
-                        <tr>
-                            <td style="width:30%; vertical-align:middle;" align="left">${logoDiv ? logoDiv.innerHTML : ''}</td>
-                            <td style="width:70%; vertical-align:middle; text-align:center;" align="center">
-                                <div style="font-family: Arial, sans-serif; font-size:12pt; font-weight:bold; color:#333;">${p['Titulo'] || ''}</div>
-                                <div style="font-family: Arial, sans-serif; font-size:10pt; font-weight:bold; color:#555;">${p['Subtitulo'] || ''}</div>
-                                <div style="font-family: Arial, sans-serif; font-size:9.5pt; font-style:italic; color:#666;">${medicoEsp}</div>
-                            </td>
-                        </tr>
-                    </table>`;
-            }
+        headerDiv.outerHTML = `
+            <table style="width:100%; border-bottom:1.5pt solid #333333; padding-bottom:6pt; margin-bottom:12pt; border-collapse:collapse;">
+                <tr>
+                    <td style="width:30%; vertical-align:middle;" align="left">${logoDiv ? logoDiv.innerHTML : ''}</td>
+                    <td style="width:70%; vertical-align:middle; text-align:center;" align="center">
+                        <div style="font-family: Arial, sans-serif; font-size:12pt; font-weight:bold; color:#222;">${p['Titulo'] || ''}</div>
+                        <div style="font-family: Arial, sans-serif; font-size:10pt; font-weight:bold; color:#444;">${p['Subtitulo'] || ''}</div>
+                        <div style="font-family: Arial, sans-serif; font-size:9.5pt; font-style:italic; color:#666;">${medicoEsp}</div>
+                    </td>
+                </tr>
+            </table>`;
+    }
 
-            const patientGrid = exportElement.querySelector('.patient-grid');
-            if (patientGrid) {
-                const paciente = p['Nombre y Apellido'] || '';
-                const edad = p['Edad'] || '';
-                const ci = p['Cedula'] || '';
-                const fn = p['F / N'] || '';
-                const telf = p['Telefono'] || '';
-                const ocupacion = p['Ocupacion'] || '';
-                const aseguradora = p['Aseguradora'] || '';
+    // 2. Grilla de datos del paciente para Word
+    const patientGrid = exportElement.querySelector('.patient-grid');
+    if (patientGrid) {
+        const paciente = p['Nombre y Apellido'] || '';
+        const edad = p['Edad'] || '';
+        const ci = p['Cedula'] || '';
+        const fn = p['F / N'] || '';
+        const telf = p['Telefono'] || '';
+        const ocupacion = p['Ocupacion'] || '';
+        const aseguradora = p['Aseguradora'] || '';
 
-                let rows = `
-                    <tr>
-                        <td style="width:55%; padding:1pt 0;"><strong>Paciente:</strong> ${paciente}</td>
-                        <td style="width:45%; padding:1pt 0;"><strong>Edad:</strong> ${edad}</td>
-                    </tr>
-                    <tr>
-                        <td style="width:55%; padding:1pt 0;"><strong>C.I:</strong> ${ci}</td>
-                        <td style="width:45%; padding:1pt 0;"><strong>F / N:</strong> ${fn}</td>
-                    </tr>
-                    <tr>
-                        <td style="width:55%; padding:1pt 0;"><strong>Telf:</strong> ${telf}</td>
-                        <td style="width:45%; padding:1pt 0;">${ocupacion ? `<strong>Ocupación:</strong> ${ocupacion}` : ''}</td>
-                    </tr>`;
+        let rows = `
+            <tr>
+                <td style="width:55%; padding:2pt 0;"><strong>Paciente:</strong> ${paciente}</td>
+                <td style="width:45%; padding:2pt 0;"><strong>Edad:</strong> ${edad}</td>
+            </tr>
+            <tr>
+                <td style="width:55%; padding:2pt 0;"><strong>C.I:</strong> ${ci}</td>
+                <td style="width:45%; padding:2pt 0;"><strong>F / N:</strong> ${fn}</td>
+            </tr>
+            <tr>
+                <td style="width:55%; padding:2pt 0;"><strong>Telf:</strong> ${telf}</td>
+                <td style="width:45%; padding:2pt 0;">${ocupacion ? `<strong>Ocupación:</strong> ${ocupacion}` : ''}</td>
+            </tr>`;
 
-                if (aseguradora) {
-                    rows += `
-                    <tr>
-                        <td style="width:55%; padding:1pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td>
-                        <td style="width:45%; padding:1pt 0;"></td>
-                    </tr>`;
+        if (aseguradora) {
+            rows += `
+            <tr>
+                <td style="width:55%; padding:2pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td>
+                <td style="width:45%; padding:2pt 0;"></td>
+            </tr>`;
+        }
+
+        patientGrid.outerHTML = `<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:8pt;">${rows}</table>`;
+    }
+
+    // 3. Extraer contenido del Pie de Página para convertirlo en Pie Nativo de Word
+    const footerDiv = exportElement.querySelector('.footer');
+    let footerText = '';
+    if (footerDiv) {
+        footerText = footerDiv.innerHTML;
+        footerDiv.remove(); // Se elimina del flujo del cuerpo para pasarlo al área de encabezado/pie de Word
+    }
+
+    // Ajuste de imágenes para Word
+    var content = exportElement.innerHTML.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
+
+    // 4. Estructura XML completa para Microsoft Word con Sección de Pie de Página nativa (Footer f1)
+    var preHtml = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+              xmlns:w='urn:schemas-microsoft-com:office:word' 
+              xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+            <meta charset='utf-8'>
+            <title>Informe Médico</title>
+            <style>
+                /* Configuración de Hoja A4 y enlace al Pie de Página f1 */
+                @page Section1 {
+                    size: 595.3pt 841.9pt; /* A4 */
+                    margin: 0.8in 0.75in 0.9in 0.75in;
+                    mso-header-margin: 0.5in;
+                    mso-footer-margin: 0.4in;
+                    mso-footer: f1;
+                }
+                div.Section1 { page: Section1; }
+
+                /* Control de tipografía global y espaciado de párrafos */
+                body { 
+                    font-family: 'Times New Roman', serif; 
+                    font-size: 11pt; 
+                    color: #000; 
                 }
 
-                patientGrid.outerHTML = `<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:4pt;">${rows}</table>`;
-            }
+                /* Control explícito del espacio entre párrafos en Word */
+                p, div.section-item { 
+                    margin-top: 0pt;
+                    margin-bottom: 6pt; /* Controla el espacio entre párrafos */
+                    line-height: 1.25;
+                    text-align: justify;
+                }
 
-            const footerDiv = exportElement.querySelector('.footer');
-            let footerHTML = '';
-            if (footerDiv) {
-                footerHTML = `<table align="center" style="width:100%; border-top:1pt solid #666666; margin-top:20pt; padding-top:4pt;"><tr><td align="center" style="text-align:center; font-family: Arial, sans-serif; font-size:8.5pt; color:#555;">${footerDiv.innerHTML}</td></tr></table>`;
-                footerDiv.remove();
-            }
+                .doc-title { 
+                    text-align: center; 
+                    font-size: 13pt; 
+                    font-weight: bold; 
+                    text-decoration: underline; 
+                    margin-top: 10pt;
+                    margin-bottom: 12pt; 
+                }
 
-            var content = exportElement.innerHTML.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
+                .date-row { 
+                    text-align: right; 
+                    font-weight: bold; 
+                    margin-bottom: 6pt; 
+                }
 
-            var preHtml = `
-                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-                <head><meta charset='utf-8'><title>Informe Médico</title>
-                <style>
-                    @page Section1 { size: 8.5in 11in; margin: 0.8in 0.75in; }
-                    div.Section1 { page: Section1; }
-                    body { font-family: 'Times New Roman', serif; font-size: 11pt; color: #000; }
-                    td { padding: 1pt 0; }
-                    p { margin-bottom: 8pt; line-height: 1.15; }
-                    .doc-title { text-align: center; font-size: 13pt; font-weight: bold; text-decoration: underline; margin: 6pt 0 8pt 0; }
-                    .date-row { text-align: right; font-weight: bold; margin: 4pt 0; }
-                </style>
-                </head>
-                <body>
-                    <div class="Section1">
-                        ${content}
-                        ${footerHTML}
+                /* Estilo del pie de página nativo en Word */
+                div.MsoFooter {
+                    font-family: Arial, sans-serif;
+                    font-size: 8.5pt;
+                    color: #444444;
+                    text-align: center;
+                    border-top: 1pt solid #666666;
+                    padding-top: 4pt;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="Section1">
+                ${content}
+
+                <!-- Definición del Pie de Página Nativo (f1) -->
+                <div style="mso-element:footer" id="f1">
+                    <div class="MsoFooter">
+                        ${footerText}
                     </div>
-                </body>
-                </html>`;
+                </div>
+            </div>
+        </body>
+        </html>`;
 
-            var finalContent = preHtml.replace(/Informe Médico/g, '<div class="doc-title" align="center"><u><b>Informe Médico</b></u></div>');
-            var blob = new Blob(['\ufeff', finalContent], { type: 'application/msword' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement("a");
-            a.href = url;
-            a.download = 'Informe_Medico_' + (p['Nombre y Apellido'] || 'Paciente') + '.doc';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
+    var finalContent = preHtml.replace(/Informe Médico/g, '<div class="doc-title" align="center"><u><b>Informe Médico</b></u></div>');
+    var blob = new Blob(['\ufeff', finalContent], { type: 'application/msword' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = 'Informe_Medico_' + (p['Nombre y Apellido'] || 'Paciente') + '.doc';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
     </script>
 </body>
 </html>

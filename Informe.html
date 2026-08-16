@@ -185,11 +185,11 @@
             });
         };
 
-    function descargarWord() {
+function descargarWord() {
     var node = document.getElementById("informe-content");
     var exportElement = node.cloneNode(true);
 
-    // 1. Encabezado para Word (Tabla compacta sin márgenes extras)
+    // 1. Encabezado para Word (Tabla compacta)
     const headerDiv = exportElement.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
@@ -209,7 +209,7 @@
             </table>`;
     }
 
-    // 2. Tabla de datos del paciente para Word (Celdas compactas)
+    // 2. Grilla de datos del paciente para Word
     const patientGrid = exportElement.querySelector('.patient-grid');
     if (patientGrid) {
         const paciente = p['Nombre y Apellido'] || '';
@@ -245,18 +245,18 @@
         patientGrid.outerHTML = `<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:6pt;">${rows}</table>`;
     }
 
-    // 3. Extraer contenido del Pie de Página para convertirlo en Pie Nativo de Word
+    // 3. Capturar el pie de página y ELIMINARLO por completo del cuerpo
     const footerDiv = exportElement.querySelector('.footer');
-    let footerText = '';
+    let footerHTML = '';
     if (footerDiv) {
-        footerText = footerDiv.innerHTML;
-        footerDiv.remove();
+        footerHTML = footerDiv.innerHTML;
+        footerDiv.parentNode.removeChild(footerDiv); // Garantiza la remoción absoluta del flujo del cuerpo
     }
 
-    // Ajuste de dimensiones de imagen para Word
+    // Ajuste de imágenes para Word
     var content = exportElement.innerHTML.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
 
-    // 4. Estructura XML / HTML con reglas CSS aisladas
+    // 4. Estructura XML / HTML
     var preHtml = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -280,16 +280,14 @@
                     color: #000; 
                 }
 
-                /* Reseteo general para elementos en tablas y divs de control */
                 p, div, td {
                     margin-top: 0pt;
                     margin-bottom: 0pt;
                 }
 
-                /* Espaciado de párrafos EXCLUSIVO para el contenido del informe */
                 .report-body div.section-item { 
                     margin-top: 0pt;
-                    margin-bottom: 6pt; /* Controla únicamente la separación entre bloques del informe */
+                    margin-bottom: 6pt;
                     line-height: 1.25;
                     text-align: justify;
                 }
@@ -309,7 +307,7 @@
                     margin-bottom: 4pt; 
                 }
 
-                /* Pie de página nativo compacto */
+                /* Estilo del pie de página nativo en Word */
                 div.MsoFooter {
                     font-family: Arial, sans-serif;
                     font-size: 8.5pt;
@@ -328,9 +326,10 @@
             <div class="Section1">
                 ${content}
 
+                <!-- Definición única del Pie Nativo -->
                 <div style="mso-element:footer" id="f1">
                     <div class="MsoFooter">
-                        ${footerText}
+                        ${footerHTML}
                     </div>
                 </div>
             </div>
@@ -348,7 +347,6 @@
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
-    
     </script>
 </body>
 </html>

@@ -131,7 +131,6 @@
             font-weight: bold;
         }
 
-        /* Estilo para preservar saltos de línea cargados desde la base de datos */
         .multiline-text {
             white-space: pre-wrap;
         }
@@ -231,7 +230,6 @@
                     <div id="sec-Telefono" class="field-telf"><strong>Telf:</strong> <span id="val-Telefono"></span></div>
                     <div id="sec-Ocupacion" class="field-ocupacion"><strong>Ocupación:</strong> <span id="val-Ocupacion"></span></div>
                     <div id="sec-Aseguradora" class="field-aseguradora"><strong>Aseguradora:</strong> <span id="val-Aseguradora"></span></div>
-                    <div></div>
                 </div>
             </div>
 
@@ -304,7 +302,6 @@
             { key: 'F / N', target: 'val-FN', section: 'sec-FN' },
             { key: 'Edad', target: 'val-Edad', section: 'sec-Edad' },
             { key: 'Ocupacion', target: 'val-Ocupacion', section: 'sec-Ocupacion' },
-            { key: 'Ocupación', target: 'val-Ocupacion', section: 'sec-Ocupacion' },
             { key: 'Aseguradora', target: 'val-Aseguradora', section: 'sec-Aseguradora' },
             { key: 'Enfermedad Actual', target: 'val-Enfermedad-Actual', section: 'sec-Enfermedad-Actual' },
             { key: 'Antecedentes Personales', target: 'val-Antecedentes-Personales', section: 'sec-Antecedentes-Personales' },
@@ -314,22 +311,17 @@
             { key: 'Plan Tratamiento', target: 'val-Plan-Tratamiento', section: 'sec-Plan-Tratamiento' }
         ];
 
-        // Función para formatear fechas a DD/MM/AAAA
         function formatearFechaLatina(fechaStr) {
             if (!fechaStr) return '';
-            
             let partes = fechaStr.split(/[-/]/);
-            
             if (partes[0].length === 4) {
                 const [anio, mes, dia] = partes;
                 return `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${anio}`;
             }
-            
             if (partes.length === 3 && partes[2].length === 4) {
                 const [mes, dia, anio] = partes;
                 return `${dia.padStart(2, '0')}/${mes.padStart(2, '0')}/${anio}`;
             }
-
             return fechaStr;
         }
 
@@ -381,7 +373,7 @@
                 document.getElementById('sec-Correo').style.display = 'inline';
             }
 
-            // 3. Procesar campos del informe clínico
+            // 3. Procesar campos del paciente y clínicos
             camposGoogleSheet.forEach(campo => {
                 let valor = urlParams.get(campo.key);
                 const elTarget = document.getElementById(campo.target);
@@ -393,9 +385,9 @@
                         valor = formatearFechaLatina(valor);
                     }
                     if (elTarget) elTarget.innerText = valor;
-                    if (elSec) elSec.style.display = '';
+                    if (elSec) elSec.style.display = 'block';
                 } else {
-                    if (elSec && (!elTarget || !elTarget.innerText.trim())) elSec.style.display = 'none';
+                    if (elSec) elSec.style.display = 'none';
                 }
             });
         };
@@ -417,7 +409,7 @@
             var hiddenElements = exportElement.querySelectorAll('[style*="display: none"], .no-print, button, a, [onclick]');
             hiddenElements.forEach(el => el.remove());
 
-            // Header
+            // Header Word
             const headerDiv = exportElement.querySelector('.header');
             if (headerDiv) {
                 const logoDiv = headerDiv.querySelector('div:first-child');
@@ -450,22 +442,16 @@
                 headerDiv.outerHTML = headerTable;
             }
 
-            // Datos Paciente (Obtención limpia de datos)
+            // Datos Paciente Word
             const patientGrid = exportElement.querySelector('.patient-grid');
             if (patientGrid) {
-                const getVal = (selector, keyAlt) => {
-                    const el = patientGrid.querySelector(selector + ' span');
-                    if (el && el.innerText.trim()) return el.innerText.trim();
-                    return urlParams.get(keyAlt) || urlParams.get(keyAlt.normalize("NFD").replace(/[\u0300-\u036f]/g, "")) || '';
-                };
-
-                const paciente = getVal('.field-paciente', 'Nombre y Apellido');
-                const edad = getVal('.field-edad', 'Edad');
-                const ci = getVal('.field-ci', 'Cedula');
-                const fn = getVal('.field-fn', 'F / N') || getVal('.field-fn', 'Fecha de Nacimiento');
-                const telf = getVal('.field-telf', 'Telefono');
-                const ocupacion = getVal('.field-ocupacion', 'Ocupacion') || getVal('.field-ocupacion', 'Ocupación');
-                const aseguradora = getVal('.field-aseguradora', 'Aseguradora');
+                const paciente = urlParams.get('Nombre y Apellido') || '';
+                const edad = urlParams.get('Edad') || '';
+                const ci = urlParams.get('Cedula') || '';
+                const fn = urlParams.get('F / N') || urlParams.get('F / N') || '';
+                const telf = urlParams.get('Telefono') || '';
+                const ocupacion = urlParams.get('Ocupacion') || '';
+                const aseguradora = urlParams.get('Aseguradora') || '';
 
                 let rowsHTML = `
                     <tr>
@@ -476,16 +462,11 @@
                         <td style="width:55%; padding:1pt 0; vertical-align:top;"><strong>C.I:</strong> ${ci}</td>
                         <td style="width:45%; padding:1pt 0; vertical-align:top;"><strong>F / N:</strong> ${fn}</td>
                     </tr>
+                    <tr>
+                        <td style="width:55%; padding:1pt 0; vertical-align:top;"><strong>Telf:</strong> ${telf}</td>
+                        <td style="width:45%; padding:1pt 0; vertical-align:top;">${ocupacion ? `<strong>Ocupación:</strong> ${ocupacion}` : ''}</td>
+                    </tr>
                 `;
-
-                if (telf || ocupacion) {
-                    rowsHTML += `
-                        <tr>
-                            <td style="width:55%; padding:1pt 0; vertical-align:top;">${telf ? `<strong>Telf:</strong> ${telf}` : ''}</td>
-                            <td style="width:45%; padding:1pt 0; vertical-align:top;">${ocupacion ? `<strong>Ocupación:</strong> ${ocupacion}` : ''}</td>
-                        </tr>
-                    `;
-                }
 
                 if (aseguradora) {
                     rowsHTML += `
@@ -504,7 +485,7 @@
                 patientGrid.outerHTML = tableHTML;
             }
 
-            // Footer
+            // Footer Word
             const footerDiv = exportElement.querySelector('.footer');
             let footerHTML = '';
             if (footerDiv) {
@@ -520,18 +501,14 @@
                 footerDiv.remove();
             }
 
-            // Formateo de Bloques Clínicos
             const clinicalBlocks = exportElement.querySelectorAll('.clinical-block, p');
             clinicalBlocks.forEach(el => {
                 el.setAttribute('style', 'margin-bottom: 8pt !important; mso-para-margin-bottom: 8pt; line-height: 1.2 !important; text-align: justify;');
             });
 
             var content = exportElement.innerHTML;
-
-            // Reemplazo de imágenes
             content = content.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
 
-            // Estructura HTML MSO
             var preHtml = `
                 <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
                 <head>
@@ -556,11 +533,9 @@
                         }
                         div.Section1 { page: Section1; }
                         body { font-family: 'Times New Roman', serif; font-size: 11pt; color: #000000; }
-                        
                         table { margin: 0; padding: 0; }
                         td { padding: 1pt 0; }
                         p { margin-top: 0pt; margin-bottom: 8pt !important; mso-para-margin-bottom: 8pt; line-height: 1.15; }
-
                         .doc-title { 
                             text-align: center !important; 
                             font-size: 13pt !important; 
@@ -571,7 +546,6 @@
                             display: block !important;
                             width: 100% !important;
                         }
-
                         .date-row { text-align: right !important; font-weight: bold; margin: 4pt 0 !important; display: block; width: 100%; }
                     </style>
                 </head>

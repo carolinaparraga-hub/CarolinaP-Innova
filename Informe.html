@@ -201,26 +201,43 @@ function descargarWord() {
     var ocupacion = datos['Ocupacion'] || '';
     var aseguradora = datos['Aseguradora'] || '';
 
-    var titulo = datos['Titulo'] || 'MEDICINA FÍSICA Y REHABILITACIÓN J-30945810-8';
-    var subtitulo = datos['Subtitulo'] || 'Centro de Salud y Rehabilitación EL MARQUÉZ';
+    var titulo = datos['Titulo'] ||
+        'MEDICINA FÍSICA Y REHABILITACIÓN J-30945810-8';
+
+    var subtitulo = datos['Subtitulo'] ||
+        'Centro de Salud y Rehabilitación EL MARQUÉZ';
 
     var medico = datos['Medico tratante'] || 'Jose Camejo';
-    var especialidad = datos['Especialidad Medica'] || 'Terapeuta ocupacional';
 
-    var direccion = datos['Direccion'] ||
-        'Calle Madrid con París, Qta Camopla La California Norte';
+    var especialidad = datos['Especialidad Medica'] ||
+        'Terapeuta ocupacional';
 
-    var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
+    // ============================================================
+    // DIRECCIÓN:
+    // Esta variable viene del campo "Direccion" del sistema.
+    // Puede cambiar dependiendo del propietario / centro.
+    // ============================================================
+
+    var direccion = datos['Direccion'] || '';
+
+    var medicoEsp =
+        medico + (especialidad ? ' - ' + especialidad : '');
+
+
+    // ============================================================
+    // 2. URL DEL LOGO
+    // ============================================================
 
     var logoURL =
         'https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW';
 
 
     // ============================================================
-    // 2. OBTENER SOLO EL CUERPO MÉDICO
+    // 3. EXTRAER SOLO EL CUERPO MÉDICO
     // ============================================================
 
     var node = document.getElementById("informe-content");
+
     var cuerpoHTML = '';
 
     if (node) {
@@ -228,21 +245,27 @@ function descargarWord() {
         var clone = node.cloneNode(true);
 
         /*
-         * Eliminamos únicamente los elementos que NO deben
-         * aparecer dentro del cuerpo del Word.
+         * Eliminamos del clon todo lo que pertenece
+         * al diseño HTML original pero no al cuerpo
+         * médico del Word.
          */
+
         clone.querySelectorAll(
             '.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr'
         ).forEach(function(el) {
             el.remove();
         });
 
+
         /*
-         * Tomamos exclusivamente el .report-body.
-         * De esta manera no existe posibilidad de que el
-         * membrete o pie de página termine dentro del contenido.
+         * SOLO tomamos .report-body.
+         *
+         * Esto evita que el membrete o el footer
+         * puedan duplicarse en el contenido.
          */
-        var reportBody = clone.querySelector('.report-body');
+
+        var reportBody =
+            clone.querySelector('.report-body');
 
         if (reportBody) {
             cuerpoHTML = reportBody.innerHTML;
@@ -251,15 +274,17 @@ function descargarWord() {
 
 
     // ============================================================
-    // 3. MEMBRETE
+    // 4. MEMBRETE
     // ============================================================
     //
-    // Se utiliza una tabla de 3 columnas:
+    // CORRECCIONES:
     //
-    // [ LOGO ] [ INFORMACIÓN CENTRADA ] [ ESPACIO ]
-    //
-    // La tercera columna permite que el bloque central quede
-    // realmente centrado en la página.
+    // - Logo 120 x 60
+    // - Título 12 pt
+    // - Subtítulo 11 pt
+    // - Médico / especialidad 10 pt
+    // - SIN dirección en el membrete
+    // - Desplazamiento visual hacia la derecha
     //
 
     var headerHTML = `
@@ -269,14 +294,17 @@ function descargarWord() {
                 width:100%;
                 border-collapse:collapse;
                 table-layout:fixed;
-                margin:0;
+                margin:0 0 0 8mm;
                 padding:0;
             "
         >
 
             <tr>
 
-                <!-- LOGO -->
+                <!-- ==========================================
+                     LOGO
+                     ========================================== -->
+
                 <td
                     style="
                         width:120px;
@@ -302,14 +330,20 @@ function descargarWord() {
                 </td>
 
 
-                <!-- INFORMACIÓN CENTRAL -->
+                <!-- ==========================================
+                     INFORMACIÓN DEL CENTRO
+                     ========================================== -->
+
                 <td
                     style="
+                        width:auto;
                         vertical-align:middle;
                         text-align:center;
-                        padding:0 8px;
+                        padding:0 6px 0 18px;
                     "
                 >
+
+                    <!-- TÍTULO -->
 
                     <div
                         style="
@@ -325,6 +359,8 @@ function descargarWord() {
                     </div>
 
 
+                    <!-- SUBTÍTULO -->
+
                     <div
                         style="
                             font-family:'Times New Roman', serif;
@@ -337,6 +373,8 @@ function descargarWord() {
                         ${subtitulo}
                     </div>
 
+
+                    <!-- MÉDICO / ESPECIALIDAD -->
 
                     <div
                         style="
@@ -351,26 +389,16 @@ function descargarWord() {
                         ${medicoEsp}
                     </div>
 
-
-                    <div
-                        style="
-                            font-family:'Times New Roman', serif;
-                            font-size:9pt;
-                            line-height:1.05;
-                            margin:2pt 0 0 0;
-                            padding:0;
-                        "
-                    >
-                        ${direccion}
-                    </div>
-
                 </td>
 
 
-                <!-- ESPACIO DE EQUILIBRIO -->
+                <!-- ==========================================
+                     ESPACIO DE EQUILIBRIO
+                     ========================================== -->
+
                 <td
                     style="
-                        width:120px;
+                        width:70px;
                         padding:0;
                     "
                 >
@@ -382,7 +410,9 @@ function descargarWord() {
         </table>
 
 
-        <!-- LÍNEA DEL MEMBRETE -->
+        <!-- ================================================
+             LÍNEA DEL MEMBRETE
+             ================================================= -->
 
         <div
             style="
@@ -394,11 +424,12 @@ function descargarWord() {
             "
         >
         </div>
+
     `;
 
 
     // ============================================================
-    // 4. INFORMACIÓN DEL PACIENTE
+    // 5. INFORMACIÓN DEL PACIENTE
     // ============================================================
 
     var patientHTML = `
@@ -427,7 +458,11 @@ function descargarWord() {
                     "
                 >
                     <strong>Fecha:</strong>
-                    ${datos['Fecha'] ? formatearFechaLatina(datos['Fecha']) : ''}
+                    ${
+                        datos['Fecha']
+                        ? formatearFechaLatina(datos['Fecha'])
+                        : ''
+                    }
                 </td>
 
             </tr>
@@ -533,7 +568,8 @@ function descargarWord() {
                             line-height:1;
                         "
                     >
-                        <strong>Aseguradora:</strong> ${aseguradora}
+                        <strong>Aseguradora:</strong>
+                        ${aseguradora}
                     </td>
 
                     <td
@@ -554,7 +590,7 @@ function descargarWord() {
         </table>
 
 
-        <!-- LÍNEA DESPUÉS DE DATOS DEL PACIENTE -->
+        <!-- LÍNEA INFERIOR -->
 
         <div
             style="
@@ -566,29 +602,53 @@ function descargarWord() {
             "
         >
         </div>
+
     `;
 
 
     // ============================================================
-    // 5. PIE DE PÁGINA NATIVO DE WORD
+    // 6. PIE DE PÁGINA NATIVO DE WORD
     // ============================================================
+    //
+    // ORDEN:
+    //
+    // 1. DIRECCIÓN
+    // 2. TELÉFONOS / WHATSAPP
+    // 3. REDES / CORREO
+    //
+    // La dirección es dinámica.
+    // Si el propietario la cambia, Word mostrará
+    // automáticamente la nueva dirección.
+    //
+
+    var footerDireccion = '';
+
+    if (direccion) {
+
+        footerDireccion = `
+
+            <p
+                style="
+                    margin:0;
+                    padding:0;
+                    line-height:1;
+                "
+            >
+                ${direccion}
+            </p>
+
+        `;
+    }
+
 
     var footerTexto = `
 
-        <p
-            style="
-                margin:0;
-                padding:0;
-                line-height:1;
-            "
-        >
-            <strong>Telfs:</strong>
-            0212-2716272 / 0424-2865320
-            |
-            <strong>WhatsApp:</strong>
-            0424-1336013
-        </p>
+        <!-- DIRECCIÓN -->
 
+        ${footerDireccion}
+
+
+        <!-- TELÉFONOS / WHATSAPP -->
 
         <p
             style="
@@ -597,16 +657,41 @@ function descargarWord() {
                 line-height:1;
             "
         >
-            Instagram, Twitter, Facebook @tufisioccs
+
+            <strong>Telfs:</strong>
+            0212-2716272 / 0424-2865320
+
             |
+
+            <strong>WhatsApp:</strong>
+            0424-1336013
+
+        </p>
+
+
+        <!-- REDES / CORREO -->
+
+        <p
+            style="
+                margin:2pt 0 0 0;
+                padding:0;
+                line-height:1;
+            "
+        >
+
+            Instagram, Twitter, Facebook @tufisioccs
+
+            |
+
             tufisioccs@gmail.com
+
         </p>
 
     `;
 
 
     // ============================================================
-    // 6. DOCUMENTO HTML PARA MICROSOFT WORD
+    // 7. DOCUMENTO HTML COMPATIBLE CON WORD
     // ============================================================
 
     var preHtml = `
@@ -653,7 +738,7 @@ function descargarWord() {
 
 
                 /* =================================================
-                   TABLA TÉCNICA DEL FOOTER
+                   TABLA TÉCNICA DEL FOOTER NATIVO
                    ================================================= */
 
                 table#hrdftrtbl {
@@ -734,7 +819,7 @@ function descargarWord() {
 
 
                 /* =================================================
-                   CADA SECCIÓN MÉDICA
+                   SECCIONES MÉDICAS
                    ================================================= */
 
                 .section-item {
@@ -747,11 +832,6 @@ function descargarWord() {
                 }
 
 
-                /*
-                 * Mantiene saltos de línea de los textos
-                 * provenientes del sistema.
-                 */
-
                 .multiline-text {
 
                     white-space:pre-wrap;
@@ -759,7 +839,7 @@ function descargarWord() {
 
 
                 /* =================================================
-                   PÁRRAFOS Y DIVISIONES
+                   PÁRRAFOS
                    ================================================= */
 
                 p {
@@ -806,6 +886,7 @@ function descargarWord() {
 
         <body>
 
+
             <!-- =================================================
                  CONTENIDO PRINCIPAL
                  ================================================= -->
@@ -817,15 +898,17 @@ function descargarWord() {
                 ${patientHTML}
 
 
-                <!-- TÍTULO -->
+                <!-- TÍTULO DEL INFORME -->
 
                 <div
                     class="doc-title"
                     align="center"
                 >
+
                     <u>
                         <b>Informe Médico</b>
                     </u>
+
                 </div>
 
 
@@ -882,7 +965,7 @@ function descargarWord() {
 
 
     // ============================================================
-    // 7. CREAR Y DESCARGAR WORD
+    // 8. CREAR ARCHIVO WORD
     // ============================================================
 
     var blob = new Blob(

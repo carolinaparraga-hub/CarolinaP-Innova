@@ -189,63 +189,52 @@ function descargarWord() {
     var node = document.getElementById("informe-content");
     var exportElement = node.cloneNode(true);
 
-    // ==========================================
-    // 1. ESTRATEGIA DE EXTRACCIÓN Y LIMPIEZA TOTAL
-    // ==========================================
-    
-    // Extracción de datos del pie de página (Teléfonos, Dirección, Redes)
-    // Se intentan leer del HTML; si no existen, se definen valores por defecto limpios.
-    let footerTextoHtml = '';
+    // 1. CAPTURA DEL FOOTER Y LIMPIEZA PRECISA (SIN BORRAR EL CUERPO)
+    let footerHTML = '';
     const footerDiv = exportElement.querySelector('.footer, #footer, footer');
+    
     if (footerDiv) {
-        footerTextoHtml = footerDiv.innerHTML;
+        footerHTML = footerDiv.innerHTML;
+        footerDiv.remove(); // Se elimina SOLO el nodo del footer, no los padres
     } else {
-        footerTextoHtml = `
-            <p style="margin:0; padding:0;"><strong>Telfs:</strong> 0212-2716272 / 0424-2865320 | <strong>WhatsApp:</strong> 0424-1336013</p>
-            <p style="margin:0; padding:0;">Instagram, Twitter, Facebook @tufisioccs | tufisioccs@gmail.com</p>
-        `;
+        // Si no tiene clase .footer, buscamos SOLO los elementos directos al final
+        const lastElements = Array.from(exportElement.children);
+        lastElements.forEach(child => {
+            if (child.textContent.includes('Telfs:') || child.tagName === 'HR') {
+                if (!footerHTML && child.tagName !== 'HR') footerHTML = child.innerHTML;
+                child.remove();
+            }
+        });
     }
 
-    // PURGA TOTAL: Se remueven absolutamente todos los footers, líneas HR y bloques de contacto del DOM clonado
-    exportElement.querySelectorAll('.footer, #footer, footer, hr').forEach(el => el.remove());
-    
-    exportElement.querySelectorAll('p, div, span, td, section').forEach(el => {
-        const txt = el.textContent || '';
-        if (txt.includes('Telfs:') || txt.includes('WhatsApp:') || txt.includes('tufisioccs') || txt.includes('Calle Madrid')) {
-            // Solo elimina si no es parte del encabezado principal
-            if (!el.closest('.header')) {
-                el.remove();
-            }
-        }
-    });
+    // Asegurar que no queden etiquetas <hr> sueltas
+    exportElement.querySelectorAll('hr').forEach(hr => hr.remove());
 
-    // ==========================================
-    // 2. CONSTRUCCIÓN DEL ENCABEZADO
-    // ==========================================
+    // 2. Encabezado para Word
     const headerDiv = exportElement.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
-        let medicoEsp = p['Medico tratante'] || '';
-        if (p['Especialidad Medica']) medicoEsp += (medicoEsp ? ' - ' : '') + p['Especialidad Medica'];
+        let medicoEsp = (typeof p !== 'undefined' && p['Medico tratante']) ? p['Medico tratante'] : '';
+        if (typeof p !== 'undefined' && p['Especialidad Medica']) {
+            medicoEsp += (medicoEsp ? ' - ' : '') + p['Especialidad Medica'];
+        }
 
         headerDiv.outerHTML = `
             <table style="width:100%; border-bottom:1.5pt solid #333333; padding-bottom:4pt; margin-bottom:10pt; border-collapse:collapse;">
                 <tr>
                     <td style="width:30%; vertical-align:middle; padding:0; margin:0;" align="left">${logoDiv ? logoDiv.innerHTML : ''}</td>
                     <td style="width:70%; vertical-align:middle; text-align:center; padding:0; margin:0;" align="center">
-                        <div style="font-family: Arial, sans-serif; font-size:12pt; font-weight:bold; color:#222; margin:0; padding:0; line-height:1.1;">${p['Titulo'] || ''}</div>
-                        <div style="font-family: Arial, sans-serif; font-size:10pt; font-weight:bold; color:#444; margin:2pt 0 0 0; padding:0; line-height:1.1;">${p['Subtitulo'] || ''}</div>
+                        <div style="font-family: Arial, sans-serif; font-size:12pt; font-weight:bold; color:#222; margin:0; padding:0; line-height:1.1;">${(typeof p !== 'undefined' && p['Titulo']) || ''}</div>
+                        <div style="font-family: Arial, sans-serif; font-size:10pt; font-weight:bold; color:#444; margin:2pt 0 0 0; padding:0; line-height:1.1;">${(typeof p !== 'undefined' && p['Subtitulo']) || ''}</div>
                         <div style="font-family: Arial, sans-serif; font-size:9.5pt; font-style:italic; color:#666; margin:2pt 0 0 0; padding:0; line-height:1.1;">${medicoEsp}</div>
                     </td>
                 </tr>
             </table>`;
     }
 
-    // ==========================================
-    // 3. CONSTRUCCIÓN DE LA TABLA DE PACIENTE
-    // ==========================================
+    // 3. Grilla de datos del paciente
     const patientGrid = exportElement.querySelector('.patient-grid');
-    if (patientGrid) {
+    if (patientGrid && typeof p !== 'undefined') {
         const paciente = p['Nombre y Apellido'] || '';
         const edad = p['Edad'] || '';
         const ci = p['Cedula'] || '';
@@ -279,12 +268,10 @@ function descargarWord() {
         patientGrid.outerHTML = `<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:6pt;">${rows}</table>`;
     }
 
-    // Limpieza de imágenes
+    // Ajuste de imágenes
     var content = exportElement.innerHTML.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
 
-    // ==========================================
-    // 4. ESTRUCTURA XML / MSO EXCLUSIVA DE WORD
-    // ==========================================
+    // 4. Estructura HTML para Word con Pie Nativo
     var preHtml = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -292,15 +279,6 @@ function descargarWord() {
         <head>
             <meta charset='utf-8'>
             <title>Informe Médico</title>
-            <!--[if gte mso 9]>
-            <xml>
-                <w:WordDocument>
-                    <w:View>Print</w:View>
-                    <w:Zoom>100</w:Zoom>
-                    <w:DoNotOptimizeForCustomX射lines/>
-                </w:WordDocument>
-            </xml>
-            <![endif]-->
             <style>
                 @page Section1 {
                     size: 595.3pt 841.9pt; /* A4 */
@@ -320,8 +298,6 @@ function descargarWord() {
                 p, div, td {
                     margin-top: 0pt;
                     margin-bottom: 0pt;
-                    border: none !important;
-                    mso-border-alt: none !important;
                 }
 
                 .report-body div.section-item { 
@@ -329,8 +305,6 @@ function descargarWord() {
                     margin-bottom: 6pt;
                     line-height: 1.25;
                     text-align: justify;
-                    border: none !important;
-                    mso-border-alt: none !important;
                 }
 
                 .doc-title { 
@@ -342,31 +316,30 @@ function descargarWord() {
                     margin-bottom: 10pt; 
                 }
 
-                /* REGLAS EXCLUSIVAS DEL PIE NATIVO EN WORD */
+                /* ESTILOS DEL PIE NATIVO DE WORD */
                 div.MsoFooter {
-                    font-family: Arial, sans-serif !important;
-                    font-size: 8.5pt !important;
-                    color: #333333 !important;
-                    text-align: center !important;
-                    border-top: 1pt solid #444444 !important;
-                    mso-border-top-alt: solid #444444 .75pt !important;
-                    padding-top: 4pt !important;
+                    font-family: Arial, sans-serif;
+                    font-size: 8.5pt;
+                    color: #333333;
+                    text-align: center;
+                    border-top: 1pt solid #444444;
+                    padding-top: 4pt;
                 }
                 div.MsoFooter p {
                     margin: 1pt 0 !important;
-                    line-height: 1.15 !important;
+                    line-height: 1.15;
                 }
             </style>
         </head>
         <body>
             <div class="Section1">
-                <!-- CUERPO PRINCIPAL (SIN FOOTER NI LÍNEAS RESIDUALES) -->
+                <!-- CUERPO PRINCIPAL DEL INFORME -->
                 ${content}
 
-                <!-- PIE DE PÁGINA NATIVO DE WORD (AISLADO EN MSO-ELEMENT) -->
+                <!-- PIE DE PÁGINA ANCLADO AL MARGEN DE WORD -->
                 <div style="mso-element:footer" id="f1">
                     <div class="MsoFooter">
-                        ${footerTextoHtml}
+                        ${footerHTML}
                     </div>
                 </div>
             </div>
@@ -378,7 +351,7 @@ function descargarWord() {
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
     a.href = url;
-    a.download = 'Informe_Medico_' + (p['Nombre y Apellido'] || 'Paciente') + '.doc';
+    a.download = 'Informe_Medico_' + ((typeof p !== 'undefined' && p['Nombre y Apellido']) || 'Paciente') + '.doc';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

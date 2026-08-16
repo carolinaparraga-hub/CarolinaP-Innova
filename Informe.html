@@ -186,9 +186,11 @@
         };
 
 function descargarWord() {
+
     // ============================================================
     // 1. OBTENER DATOS
     // ============================================================
+
     var datos = (typeof p !== 'undefined') ? p : {};
 
     var paciente = datos['Nombre y Apellido'] || '';
@@ -199,210 +201,724 @@ function descargarWord() {
     var ocupacion = datos['Ocupacion'] || '';
     var aseguradora = datos['Aseguradora'] || '';
 
-    var titulo = datos['Titulo'] || 'Centro de Salud y Rehabilitación EL MARQUÉZ';
-    var subtitulo = datos['Subtitulo'] || 'Medicina Física y Rehabilitación J-30945810-8';
+    var titulo = datos['Titulo'] || 'MEDICINA FÍSICA Y REHABILITACIÓN J-30945810-8';
+    var subtitulo = datos['Subtitulo'] || 'Centro de Salud y Rehabilitación EL MARQUÉZ';
+
     var medico = datos['Medico tratante'] || 'Jose Camejo';
     var especialidad = datos['Especialidad Medica'] || 'Terapeuta ocupacional';
 
-    // Logo opcional en Base64 o URL absoluta. Si no hay logo, usará el texto formateado.
-    var logoUrl = datos['Logo'] || ''; 
+    var direccion = datos['Direccion'] ||
+        'Calle Madrid con París, Qta Camopla La California Norte';
 
     var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
 
+    var logoURL =
+        'https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW';
+
+
     // ============================================================
-    // 2. EXTRAER SOLO EL CONTENIDO MÉDICO
+    // 2. OBTENER SOLO EL CUERPO MÉDICO
     // ============================================================
+
     var node = document.getElementById("informe-content");
     var cuerpoHTML = '';
 
     if (node) {
+
         var clone = node.cloneNode(true);
 
+        /*
+         * Eliminamos únicamente los elementos que NO deben
+         * aparecer dentro del cuerpo del Word.
+         */
         clone.querySelectorAll(
             '.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr'
         ).forEach(function(el) {
             el.remove();
         });
 
+        /*
+         * Tomamos exclusivamente el .report-body.
+         * De esta manera no existe posibilidad de que el
+         * membrete o pie de página termine dentro del contenido.
+         */
         var reportBody = clone.querySelector('.report-body');
+
         if (reportBody) {
             cuerpoHTML = reportBody.innerHTML;
-        } else {
-            cuerpoHTML = clone.innerHTML;
         }
     }
 
+
     // ============================================================
-    // 3. ENCABEZADO DEL DOCUMENTO WORD (MEMBRETE COMPACTO)
+    // 3. MEMBRETE
     // ============================================================
-    // - mso-line-height-rule: exact y line-height: 1.15 em/pt evitan que Word expanda las líneas
-    // - margin: 0pt y padding: 0pt controlan el colapso de espacio entre texto
-    var logoHTML = logoUrl 
-        ? `<img src="${logoUrl}" style="max-width:140px; max-height:60px; height:auto; display:block;" />`
-        : `<strong style="font-size:12pt; font-family:Arial, sans-serif; color:#1a2b4c; line-height:1.1;">EL MARQUÉZ</strong>`;
+    //
+    // Se utiliza una tabla de 3 columnas:
+    //
+    // [ LOGO ] [ INFORMACIÓN CENTRADA ] [ ESPACIO ]
+    //
+    // La tercera columna permite que el bloque central quede
+    // realmente centrado en la página.
+    //
 
     var headerHTML = `
-        <table style="width:100%; border-bottom:1.5pt solid #333333; padding-bottom:6pt; margin-bottom:12pt; border-collapse:collapse;">
+
+        <table
+            style="
+                width:100%;
+                border-collapse:collapse;
+                table-layout:fixed;
+                margin:0;
+                padding:0;
+            "
+        >
+
             <tr>
-                <td style="width:30%; vertical-align:middle; text-align:left;" align="left" valign="middle">
-                    ${logoHTML}
+
+                <!-- LOGO -->
+                <td
+                    style="
+                        width:120px;
+                        vertical-align:middle;
+                        text-align:left;
+                        padding:0;
+                    "
+                >
+
+                    <img
+                        src="${logoURL}"
+                        width="120"
+                        height="60"
+                        style="
+                            width:120px;
+                            height:60px;
+                            display:block;
+                            object-fit:contain;
+                        "
+                        alt="Logo"
+                    >
+
                 </td>
 
-                <td style="width:70%; text-align:center; vertical-align:middle; font-family:Arial, sans-serif; line-height:1.15; mso-line-height-rule:exactly;" align="center" valign="middle">
-                    <p style="margin:0; padding:0; font-size:11pt; font-weight:bold; color:#111111;">
+
+                <!-- INFORMACIÓN CENTRAL -->
+                <td
+                    style="
+                        vertical-align:middle;
+                        text-align:center;
+                        padding:0 8px;
+                    "
+                >
+
+                    <div
+                        style="
+                            font-family:'Times New Roman', serif;
+                            font-size:12pt;
+                            font-weight:bold;
+                            line-height:1.05;
+                            margin:0;
+                            padding:0;
+                        "
+                    >
                         ${titulo}
-                    </p>
-                    <p style="margin:1pt 0 0 0; padding:0; font-size:9.5pt; font-weight:normal; color:#333333;">
+                    </div>
+
+
+                    <div
+                        style="
+                            font-family:'Times New Roman', serif;
+                            font-size:11pt;
+                            line-height:1.05;
+                            margin:2pt 0 0 0;
+                            padding:0;
+                        "
+                    >
                         ${subtitulo}
-                    </p>
-                    <p style="margin:1pt 0 0 0; padding:0; font-size:8.5pt; color:#555555;">
-                        Calle Madrid con París, Qta Camopla La California Norte
-                    </p>
-                    <p style="margin:1pt 0 0 0; padding:0; font-size:9pt; font-style:italic; color:#444444; font-weight:bold;">
+                    </div>
+
+
+                    <div
+                        style="
+                            font-family:'Times New Roman', serif;
+                            font-size:10pt;
+                            font-weight:bold;
+                            line-height:1.05;
+                            margin:3pt 0 0 0;
+                            padding:0;
+                        "
+                    >
                         ${medicoEsp}
-                    </p>
+                    </div>
+
+
+                    <div
+                        style="
+                            font-family:'Times New Roman', serif;
+                            font-size:9pt;
+                            line-height:1.05;
+                            margin:2pt 0 0 0;
+                            padding:0;
+                        "
+                    >
+                        ${direccion}
+                    </div>
+
                 </td>
+
+
+                <!-- ESPACIO DE EQUILIBRIO -->
+                <td
+                    style="
+                        width:120px;
+                        padding:0;
+                    "
+                >
+                    &nbsp;
+                </td>
+
             </tr>
-        </table>`;
+
+        </table>
+
+
+        <!-- LÍNEA DEL MEMBRETE -->
+
+        <div
+            style="
+                border-bottom:1.5pt solid #000000;
+                margin-top:5pt;
+                margin-bottom:8pt;
+                height:1pt;
+                line-height:1pt;
+            "
+        >
+        </div>
+    `;
+
 
     // ============================================================
-    // 4. DATOS DEL PACIENTE
+    // 4. INFORMACIÓN DEL PACIENTE
     // ============================================================
+
     var patientHTML = `
-        <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman', serif; font-size:10pt; margin-bottom:10pt;">
+
+        <!-- FECHA -->
+
+        <table
+            style="
+                width:100%;
+                border-collapse:collapse;
+                font-family:'Times New Roman', serif;
+                font-size:10pt;
+                line-height:1;
+                margin:0 0 5pt 0;
+            "
+        >
+
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>Paciente:</strong> ${paciente}</td>
-                <td style="width:45%; padding:2pt 0;"><strong>Edad:</strong> ${edad}</td>
+
+                <td
+                    style="
+                        width:100%;
+                        text-align:right;
+                        padding:0 0 3pt 0;
+                        line-height:1;
+                    "
+                >
+                    <strong>Fecha:</strong>
+                    ${datos['Fecha'] ? formatearFechaLatina(datos['Fecha']) : ''}
+                </td>
+
             </tr>
+
+        </table>
+
+
+        <!-- DATOS PRINCIPALES -->
+
+        <table
+            style="
+                width:100%;
+                border-collapse:collapse;
+                table-layout:fixed;
+                font-family:'Times New Roman', serif;
+                font-size:10pt;
+                line-height:1;
+                margin:0;
+                padding:0;
+            "
+        >
+
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>C.I:</strong> ${ci}</td>
-                <td style="width:45%; padding:2pt 0;"><strong>F / N:</strong> ${fn}</td>
+
+                <td
+                    style="
+                        width:55%;
+                        padding:1.5pt 0;
+                        line-height:1;
+                    "
+                >
+                    <strong>Paciente:</strong> ${paciente}
+                </td>
+
+                <td
+                    style="
+                        width:45%;
+                        padding:1.5pt 0;
+                        line-height:1;
+                    "
+                >
+                    <strong>Edad:</strong> ${edad}
+                </td>
+
             </tr>
+
+
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>Telf:</strong> ${telf}</td>
-                <td style="width:45%; padding:2pt 0;"><strong>Ocupación:</strong> ${ocupacion}</td>
+
+                <td
+                    style="
+                        padding:1.5pt 0;
+                        line-height:1;
+                    "
+                >
+                    <strong>C.I:</strong> ${ci}
+                </td>
+
+                <td
+                    style="
+                        padding:1.5pt 0;
+                        line-height:1;
+                    "
+                >
+                    <strong>F / N:</strong> ${fn}
+                </td>
+
             </tr>
-            ${aseguradora ? `
+
+
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td>
-                <td style="width:45%;"></td>
-            </tr>` : ''}
-        </table>`;
+
+                <td
+                    style="
+                        padding:1.5pt 0;
+                        line-height:1;
+                    "
+                >
+                    <strong>Telf:</strong> ${telf}
+                </td>
+
+                <td
+                    style="
+                        padding:1.5pt 0;
+                        line-height:1;
+                    "
+                >
+                    <strong>Ocupación:</strong> ${ocupacion}
+                </td>
+
+            </tr>
+
+
+            ${
+                aseguradora
+                ?
+                `
+                <tr>
+
+                    <td
+                        style="
+                            padding:1.5pt 0;
+                            line-height:1;
+                        "
+                    >
+                        <strong>Aseguradora:</strong> ${aseguradora}
+                    </td>
+
+                    <td
+                        style="
+                            padding:1.5pt 0;
+                            line-height:1;
+                        "
+                    >
+                        &nbsp;
+                    </td>
+
+                </tr>
+                `
+                :
+                ''
+            }
+
+        </table>
+
+
+        <!-- LÍNEA DESPUÉS DE DATOS DEL PACIENTE -->
+
+        <div
+            style="
+                border-bottom:0.75pt solid #BFBFBF;
+                margin-top:6pt;
+                margin-bottom:8pt;
+                height:1pt;
+                line-height:1pt;
+            "
+        >
+        </div>
+    `;
+
 
     // ============================================================
-    // 5. PIE DE PÁGINA NATIVO
+    // 5. PIE DE PÁGINA NATIVO DE WORD
     // ============================================================
+
     var footerTexto = `
-        <p style="margin:0; padding:0; line-height:1.1;">
-            <strong>Telfs:</strong> 0212-2716272 / 0424-2865320 | <strong>WhatsApp:</strong> 0424-1336013
+
+        <p
+            style="
+                margin:0;
+                padding:0;
+                line-height:1;
+            "
+        >
+            <strong>Telfs:</strong>
+            0212-2716272 / 0424-2865320
+            |
+            <strong>WhatsApp:</strong>
+            0424-1336013
         </p>
-        <p style="margin:1pt 0 0 0; padding:0; line-height:1.1;">
-            Instagram, Twitter, Facebook @tufisioccs | tufisioccs@gmail.com
-        </p>`;
+
+
+        <p
+            style="
+                margin:2pt 0 0 0;
+                padding:0;
+                line-height:1;
+            "
+        >
+            Instagram, Twitter, Facebook @tufisioccs
+            |
+            tufisioccs@gmail.com
+        </p>
+
+    `;
+
 
     // ============================================================
-    // 6. ESTRUCTURA HTML PARA MS WORD
+    // 6. DOCUMENTO HTML PARA MICROSOFT WORD
     // ============================================================
+
     var preHtml = `
-        <html xmlns:o="urn:schemas-microsoft-com:office:office"
-              xmlns:w="urn:schemas-microsoft-com:office:word"
-              xmlns="http://www.w3.org/TR/REC-html40">
+
+        <html
+            xmlns:o="urn:schemas-microsoft-com:office:office"
+            xmlns:w="urn:schemas-microsoft-com:office:word"
+            xmlns="http://www.w3.org/TR/REC-html40"
+        >
 
         <head>
+
             <meta charset="utf-8">
+
             <title>Informe Médico</title>
 
+
             <style>
+
+                /* =================================================
+                   CONFIGURACIÓN DE PÁGINA
+                   ================================================= */
+
                 @page Section1 {
-                    size: 595.3pt 841.9pt;
-                    margin: 0.6in 0.75in 0.8in 0.75in;
-                    mso-header-margin: 0.4in;
-                    mso-footer-margin: 0.3in;
-                    mso-footer: f1;
+
+                    size:595.3pt 841.9pt;
+
+                    margin:
+                        0.65in
+                        0.75in
+                        0.80in
+                        0.75in;
+
+                    mso-header-margin:0.3in;
+                    mso-footer-margin:0.30in;
+
+                    mso-footer:f1;
                 }
+
 
                 div.Section1 {
-                    page: Section1;
+                    page:Section1;
                 }
+
+
+                /* =================================================
+                   TABLA TÉCNICA DEL FOOTER
+                   ================================================= */
 
                 table#hrdftrtbl {
-                    margin: 0in 0in 0in 900in;
-                    width: 1px;
-                    height: 1px;
-                    overflow: hidden;
+
+                    margin:
+                        0in
+                        0in
+                        0in
+                        900in;
+
+                    width:1px;
+                    height:1px;
+
+                    overflow:hidden;
                 }
+
+
+                /* =================================================
+                   CUERPO GENERAL
+                   ================================================= */
 
                 body {
-                    font-family: 'Times New Roman', serif;
-                    font-size: 11pt;
-                    color: #000;
-                    line-height: 1.25;
+
+                    font-family:'Times New Roman', serif;
+
+                    font-size:10.5pt;
+
+                    color:#000000;
+
+                    line-height:1.12;
+
+                    margin:0;
+                    padding:0;
                 }
 
-                p, div {
-                    margin-top: 0pt;
-                    margin-bottom: 4pt;
-                }
+
+                /* =================================================
+                   TÍTULO DEL INFORME
+                   ================================================= */
 
                 .doc-title {
-                    text-align: center;
-                    font-size: 13pt;
-                    font-weight: bold;
-                    text-decoration: underline;
-                    margin-top: 10pt;
-                    margin-bottom: 12pt;
+
+                    font-family:'Times New Roman', serif;
+
+                    text-align:center;
+
+                    font-size:12.5pt;
+
+                    font-weight:bold;
+
+                    text-decoration:underline;
+
+                    line-height:1;
+
+                    margin-top:2pt;
+
+                    margin-bottom:9pt;
                 }
+
+
+                /* =================================================
+                   CUERPO MÉDICO
+                   ================================================= */
+
+                .report-body {
+
+                    font-family:'Times New Roman', serif;
+
+                    font-size:10.5pt;
+
+                    line-height:1.15;
+
+                    text-align:justify;
+
+                    margin:0;
+                    padding:0;
+                }
+
+
+                /* =================================================
+                   CADA SECCIÓN MÉDICA
+                   ================================================= */
+
+                .section-item {
+
+                    margin-top:0pt;
+
+                    margin-bottom:6pt;
+
+                    line-height:1.15;
+                }
+
+
+                /*
+                 * Mantiene saltos de línea de los textos
+                 * provenientes del sistema.
+                 */
+
+                .multiline-text {
+
+                    white-space:pre-wrap;
+                }
+
+
+                /* =================================================
+                   PÁRRAFOS Y DIVISIONES
+                   ================================================= */
+
+                p {
+
+                    margin-top:0pt;
+
+                    margin-bottom:3pt;
+
+                    line-height:1.15;
+                }
+
+
+                div {
+
+                    line-height:1.15;
+                }
+
+
+                /* =================================================
+                   FOOTER NATIVO
+                   ================================================= */
 
                 div.MsoFooter {
-                    font-family: Arial, sans-serif;
-                    font-size: 8.5pt;
-                    color: #333333;
-                    text-align: center;
-                    border-top: 1pt solid #444444;
-                    padding-top: 4pt;
+
+                    font-family:Arial, sans-serif;
+
+                    font-size:8.5pt;
+
+                    color:#333333;
+
+                    text-align:center;
+
+                    border-top:0.75pt solid #555555;
+
+                    padding-top:3pt;
+
+                    line-height:1.05;
                 }
+
             </style>
+
         </head>
 
+
         <body>
+
+            <!-- =================================================
+                 CONTENIDO PRINCIPAL
+                 ================================================= -->
+
             <div class="Section1">
+
                 ${headerHTML}
+
                 ${patientHTML}
 
-                <div class="doc-title" align="center">
-                    <u><b>Informe Médico</b></u>
+
+                <!-- TÍTULO -->
+
+                <div
+                    class="doc-title"
+                    align="center"
+                >
+                    <u>
+                        <b>Informe Médico</b>
+                    </u>
                 </div>
+
+
+                <!-- CUERPO MÉDICO -->
 
                 <div class="report-body">
+
                     ${cuerpoHTML}
+
                 </div>
+
             </div>
 
-            <table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
+
+            <!-- =================================================
+                 FOOTER NATIVO DE WORD
+                 ================================================= -->
+
+            <table
+                id="hrdftrtbl"
+                border="0"
+                cellspacing="0"
+                cellpadding="0"
+            >
+
                 <tr>
+
                     <td>
-                        <div style="mso-element:footer" id="f1">
+
+                        <div
+                            style="mso-element:footer"
+                            id="f1"
+                        >
+
                             <div class="MsoFooter">
+
                                 ${footerTexto}
+
                             </div>
+
                         </div>
+
                     </td>
+
                 </tr>
+
             </table>
+
+
         </body>
-        </html>`;
+
+        </html>
+    `;
+
 
     // ============================================================
-    // 7. DESCARGAR ARCHIVO
+    // 7. CREAR Y DESCARGAR WORD
     // ============================================================
-    var blob = new Blob(['\ufeff', preHtml], { type: 'application/msword' });
+
+    var blob = new Blob(
+        ['\ufeff', preHtml],
+        {
+            type:'application/msword'
+        }
+    );
+
+
     var url = URL.createObjectURL(blob);
+
+
     var a = document.createElement("a");
+
     a.href = url;
-    a.download = 'Informe_Medico_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';
+
+
+    a.download =
+        'Informe_Medico_' +
+        (
+            paciente
+            ?
+            paciente.replace(/\s+/g, '_')
+            :
+            'Paciente'
+        ) +
+        '.doc';
+
+
     document.body.appendChild(a);
+
     a.click();
+
     document.body.removeChild(a);
+
     URL.revokeObjectURL(url);
 }
     </script>

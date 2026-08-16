@@ -202,26 +202,12 @@ function descargarWord() {
     var especialidad = datos['Especialidad Medica'] || 'Terapeuta ocupacional';
     var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
 
-    // 2. Extraer ÚNICAMENTE el contenido del reporte (cuerpo médico)
-    var node = document.getElementById("informe-content");
+    // 2. Extraer ÚNICAMENTE el área del reporte médico (.report-body)
     var cuerpoHTML = '';
+    var reportBodyNode = document.querySelector('.report-body');
 
-    if (node) {
-        var clone = node.cloneNode(true);
-        
-        // Quitar encabezados y pies dentro del clon para que no se dupliquen
-        clone.querySelectorAll('.header, .footer, #footer, footer, .patient-grid, hr').forEach(function(el) {
-            el.remove();
-        });
-
-        // Quitar elementos sueltos con datos de contacto del cuerpo
-        clone.querySelectorAll('p, div, span').forEach(function(el) {
-            var txt = el.textContent || '';
-            if (txt.includes('Telfs:') || txt.includes('WhatsApp:') || txt.includes('tufisioccs')) {
-                el.remove();
-            }
-        });
-
+    if (reportBodyNode) {
+        var clone = reportBodyNode.cloneNode(true);
         cuerpoHTML = clone.innerHTML;
     }
 

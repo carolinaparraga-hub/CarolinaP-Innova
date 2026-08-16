@@ -189,13 +189,20 @@ function descargarWord() {
     var node = document.getElementById("informe-content");
     var exportElement = node.cloneNode(true);
 
-    // 1. ELIMINACIÓN TOTAL Y DIRECTA DEL PIE DE PÁGINA
-    // Eliminamos cualquier contenedor de pie, línea divisoria o textos de contacto
-    exportElement.querySelectorAll('.footer, #footer, footer, hr').forEach(el => el.remove());
-    
-    // Purgamos párrafos o elementos que contengan la palabra de los teléfonos
-    exportElement.querySelectorAll('p, div, span').forEach(el => {
-        if (el.textContent.includes('Telfs:') || el.textContent.includes('WhatsApp:')) {
+    // 1. ELIMINACIÓN DE LA LÍNEA Y BORDES EN TODO EL DOCUMENTO
+    // A. Quitar bordes CSS (border-top, border-bottom) de todos los elementos clonados
+    exportElement.querySelectorAll('*').forEach(el => {
+        el.style.borderTop = 'none';
+        el.style.borderBottom = 'none';
+        el.style.border = 'none';
+    });
+
+    // B. Remover etiquetas <hr> y elementos de pie/contactos
+    exportElement.querySelectorAll('hr, .footer, #footer, footer').forEach(el => el.remove());
+
+    // C. Remover párrafos o divs que contengan la información de contacto
+    exportElement.querySelectorAll('p, div, span, td').forEach(el => {
+        if (el.textContent.includes('Telfs:') || el.textContent.includes('WhatsApp:') || el.textContent.includes('tufisioccs')) {
             el.remove();
         }
     });
@@ -259,7 +266,7 @@ function descargarWord() {
     // Ajuste de imágenes
     var content = exportElement.innerHTML.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
 
-    // 4. Estructura Word limpia (SIN BLOQUES DE FOOTER RENDERIZADOS)
+    // 4. Estructura HTML para Word sin bordes residuales en el cuerpo
     var preHtml = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -283,6 +290,7 @@ function descargarWord() {
                 p, div, td {
                     margin-top: 0pt;
                     margin-bottom: 0pt;
+                    border: none !important;
                 }
 
                 .report-body div.section-item { 
@@ -290,6 +298,7 @@ function descargarWord() {
                     margin-bottom: 6pt;
                     line-height: 1.25;
                     text-align: justify;
+                    border: none !important;
                 }
 
                 .doc-title { 

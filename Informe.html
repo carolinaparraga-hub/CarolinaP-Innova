@@ -189,27 +189,16 @@ function descargarWord() {
     var node = document.getElementById("informe-content");
     var exportElement = node.cloneNode(true);
 
-    // 1. CAPTURA Y REMOCIÓN DEFINITIVA DEL FOOTER Y SU LÍNEA (HR / BORDER)
-    let footerHTML = '';
-
-    // A. Si existe un elemento con clase/id footer
-    const footerDiv = exportElement.querySelector('.footer, #footer, footer');
-    if (footerDiv) {
-        footerHTML = footerDiv.innerHTML;
-        footerDiv.remove();
-    } else {
-        // B. Si no tiene clase .footer, capturamos el último elemento/párrafo que contenga los teléfonos
-        const allElements = exportElement.querySelectorAll('div, p, hr');
-        allElements.forEach(el => {
-            if (el.textContent.includes('Telfs:') || el.textContent.includes('WhatsApp:') || el.tagName === 'HR') {
-                if (!footerHTML && el.tagName !== 'HR') footerHTML = el.innerHTML;
-                el.remove(); // Se elimina la línea HR y los textos de contacto del cuerpo
-            }
-        });
-    }
-
-    // Purgar cualquier línea o borde residual al final del cuerpo
-    exportElement.querySelectorAll('hr').forEach(hr => hr.remove());
+    // 1. ELIMINACIÓN TOTAL Y DIRECTA DEL PIE DE PÁGINA
+    // Eliminamos cualquier contenedor de pie, línea divisoria o textos de contacto
+    exportElement.querySelectorAll('.footer, #footer, footer, hr').forEach(el => el.remove());
+    
+    // Purgamos párrafos o elementos que contengan la palabra de los teléfonos
+    exportElement.querySelectorAll('p, div, span').forEach(el => {
+        if (el.textContent.includes('Telfs:') || el.textContent.includes('WhatsApp:')) {
+            el.remove();
+        }
+    });
 
     // 2. Encabezado para Word
     const headerDiv = exportElement.querySelector('.header');
@@ -267,10 +256,10 @@ function descargarWord() {
         patientGrid.outerHTML = `<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:6pt;">${rows}</table>`;
     }
 
-    // Ajuste de imágenes para Word
+    // Ajuste de imágenes
     var content = exportElement.innerHTML.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
 
-    // 4. Estructura XML / HTML para Word
+    // 4. Estructura Word limpia (SIN BLOQUES DE FOOTER RENDERIZADOS)
     var preHtml = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -281,10 +270,7 @@ function descargarWord() {
             <style>
                 @page Section1 {
                     size: 595.3pt 841.9pt; /* A4 */
-                    margin: 0.8in 0.75in 0.9in 0.75in;
-                    mso-header-margin: 0.5in;
-                    mso-footer-margin: 0.4in;
-                    mso-footer: f1;
+                    margin: 0.8in 0.75in 0.8in 0.75in;
                 }
                 div.Section1 { page: Section1; }
 
@@ -314,37 +300,11 @@ function descargarWord() {
                     margin-top: 8pt;
                     margin-bottom: 10pt; 
                 }
-
-                .date-row { 
-                    text-align: right; 
-                    font-weight: bold; 
-                    margin-bottom: 4pt; 
-                }
-
-                /* Pie nativo de Word con línea superior */
-                div.MsoFooter {
-                    font-family: Arial, sans-serif;
-                    font-size: 8.5pt;
-                    color: #444444;
-                    text-align: center;
-                    border-top: 1pt solid #666666;
-                    padding-top: 4pt;
-                }
-                div.MsoFooter p {
-                    margin: 1pt 0 !important;
-                    line-height: 1.1;
-                }
             </style>
         </head>
         <body>
             <div class="Section1">
                 ${content}
-
-                <div style="mso-element:footer" id="f1">
-                    <div class="MsoFooter">
-                        ${footerHTML}
-                    </div>
-                </div>
             </div>
         </body>
         </html>`;

@@ -189,17 +189,27 @@ function descargarWord() {
     var node = document.getElementById("informe-content");
     var exportElement = node.cloneNode(true);
 
-    // 1. CAPTURA Y REMOCIÓN ABSOLUTA DEL FOOTER
-    // Buscamos el contenedor por clase o ID y guardamos su HTML
+    // 1. CAPTURA Y REMOCIÓN DEFINITIVA DEL FOOTER Y SU LÍNEA (HR / BORDER)
     let footerHTML = '';
+
+    // A. Si existe un elemento con clase/id footer
     const footerDiv = exportElement.querySelector('.footer, #footer, footer');
     if (footerDiv) {
         footerHTML = footerDiv.innerHTML;
         footerDiv.remove();
+    } else {
+        // B. Si no tiene clase .footer, capturamos el último elemento/párrafo que contenga los teléfonos
+        const allElements = exportElement.querySelectorAll('div, p, hr');
+        allElements.forEach(el => {
+            if (el.textContent.includes('Telfs:') || el.textContent.includes('WhatsApp:') || el.tagName === 'HR') {
+                if (!footerHTML && el.tagName !== 'HR') footerHTML = el.innerHTML;
+                el.remove(); // Se elimina la línea HR y los textos de contacto del cuerpo
+            }
+        });
     }
 
-    // Purgar cualquier sub-elemento o clase repetida de footer en el cuerpo
-    exportElement.querySelectorAll('.footer, #footer, footer, .footer-content, .footer-text').forEach(el => el.remove());
+    // Purgar cualquier línea o borde residual al final del cuerpo
+    exportElement.querySelectorAll('hr').forEach(hr => hr.remove());
 
     // 2. Encabezado para Word
     const headerDiv = exportElement.querySelector('.header');
@@ -311,7 +321,7 @@ function descargarWord() {
                     margin-bottom: 4pt; 
                 }
 
-                /* Estilo exclusivo del pie nativo */
+                /* Pie nativo de Word con línea superior */
                 div.MsoFooter {
                     font-family: Arial, sans-serif;
                     font-size: 8.5pt;

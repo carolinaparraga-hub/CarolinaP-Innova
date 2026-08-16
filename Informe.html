@@ -395,7 +395,7 @@
                     if (elTarget) elTarget.innerText = valor;
                     if (elSec) elSec.style.display = '';
                 } else {
-                    if (elSec && !elTarget.innerText.trim()) elSec.style.display = 'none';
+                    if (elSec && (!elTarget || !elTarget.innerText.trim())) elSec.style.display = 'none';
                 }
             });
         };
@@ -450,42 +450,55 @@
                 headerDiv.outerHTML = headerTable;
             }
 
-            // Datos Paciente (Construcción explícita sin saltos extra)
+            // Datos Paciente (Obtención limpia de datos)
             const patientGrid = exportElement.querySelector('.patient-grid');
             if (patientGrid) {
-                const getVal = (selector, fallbackParam) => {
-                    const el = patientGrid.querySelector(selector);
-                    if (el) return el.innerHTML;
-                    return urlParams.get(fallbackParam) || '';
+                const getVal = (selector, keyAlt) => {
+                    const el = patientGrid.querySelector(selector + ' span');
+                    if (el && el.innerText.trim()) return el.innerText.trim();
+                    return urlParams.get(keyAlt) || urlParams.get(keyAlt.normalize("NFD").replace(/[\u0300-\u036f]/g, "")) || '';
                 };
 
                 const paciente = getVal('.field-paciente', 'Nombre y Apellido');
                 const edad = getVal('.field-edad', 'Edad');
                 const ci = getVal('.field-ci', 'Cedula');
-                const fn = getVal('.field-fn', 'Fecha de Nacimiento');
+                const fn = getVal('.field-fn', 'F / N') || getVal('.field-fn', 'Fecha de Nacimiento');
                 const telf = getVal('.field-telf', 'Telefono');
                 const ocupacion = getVal('.field-ocupacion', 'Ocupacion') || getVal('.field-ocupacion', 'Ocupación');
                 const aseguradora = getVal('.field-aseguradora', 'Aseguradora');
 
-                let tableHTML = `
-                    <table style="width:100%; border-collapse:collapse; font-size:10pt; line-height:1.1; margin-bottom:4pt;">
+                let rowsHTML = `
+                    <tr>
+                        <td style="width:55%; padding:1pt 0; vertical-align:top;"><strong>Paciente:</strong> ${paciente}</td>
+                        <td style="width:45%; padding:1pt 0; vertical-align:top;"><strong>Edad:</strong> ${edad}</td>
+                    </tr>
+                    <tr>
+                        <td style="width:55%; padding:1pt 0; vertical-align:top;"><strong>C.I:</strong> ${ci}</td>
+                        <td style="width:45%; padding:1pt 0; vertical-align:top;"><strong>F / N:</strong> ${fn}</td>
+                    </tr>
+                `;
+
+                if (telf || ocupacion) {
+                    rowsHTML += `
                         <tr>
-                            <td style="width:55%; padding:1pt 0; vertical-align:top;">${paciente}</td>
-                            <td style="width:45%; padding:1pt 0; vertical-align:top;">${edad}</td>
+                            <td style="width:55%; padding:1pt 0; vertical-align:top;">${telf ? `<strong>Telf:</strong> ${telf}` : ''}</td>
+                            <td style="width:45%; padding:1pt 0; vertical-align:top;">${ocupacion ? `<strong>Ocupación:</strong> ${ocupacion}` : ''}</td>
                         </tr>
+                    `;
+                }
+
+                if (aseguradora) {
+                    rowsHTML += `
                         <tr>
-                            <td style="width:55%; padding:1pt 0; vertical-align:top;">${ci}</td>
-                            <td style="width:45%; padding:1pt 0; vertical-align:top;">${fn}</td>
-                        </tr>
-                        <tr>
-                            <td style="width:55%; padding:1pt 0; vertical-align:top;">${telf}</td>
-                            <td style="width:45%; padding:1pt 0; vertical-align:top;">${ocupacion}</td>
-                        </tr>
-                        ${aseguradora ? `
-                        <tr>
-                            <td style="width:55%; padding:1pt 0; vertical-align:top;">${aseguradora}</td>
+                            <td style="width:55%; padding:1pt 0; vertical-align:top;"><strong>Aseguradora:</strong> ${aseguradora}</td>
                             <td style="width:45%; padding:1pt 0; vertical-align:top;"></td>
-                        </tr>` : ''}
+                        </tr>
+                    `;
+                }
+
+                let tableHTML = `
+                    <table style="width:100%; border-collapse:collapse; font-size:10pt; line-height:1.2; margin-bottom:4pt;">
+                        ${rowsHTML}
                     </table>
                 `;
                 patientGrid.outerHTML = tableHTML;

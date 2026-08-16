@@ -185,11 +185,11 @@
             });
         };
 
-       function descargarWord() {
+    function descargarWord() {
     var node = document.getElementById("informe-content");
     var exportElement = node.cloneNode(true);
 
-    // 1. Encabezado para Word (Tabla limpia)
+    // 1. Encabezado para Word (Tabla compacta sin márgenes extras)
     const headerDiv = exportElement.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
@@ -197,19 +197,19 @@
         if (p['Especialidad Medica']) medicoEsp += (medicoEsp ? ' - ' : '') + p['Especialidad Medica'];
 
         headerDiv.outerHTML = `
-            <table style="width:100%; border-bottom:1.5pt solid #333333; padding-bottom:6pt; margin-bottom:12pt; border-collapse:collapse;">
+            <table style="width:100%; border-bottom:1.5pt solid #333333; padding-bottom:4pt; margin-bottom:10pt; border-collapse:collapse;">
                 <tr>
-                    <td style="width:30%; vertical-align:middle;" align="left">${logoDiv ? logoDiv.innerHTML : ''}</td>
-                    <td style="width:70%; vertical-align:middle; text-align:center;" align="center">
-                        <div style="font-family: Arial, sans-serif; font-size:12pt; font-weight:bold; color:#222;">${p['Titulo'] || ''}</div>
-                        <div style="font-family: Arial, sans-serif; font-size:10pt; font-weight:bold; color:#444;">${p['Subtitulo'] || ''}</div>
-                        <div style="font-family: Arial, sans-serif; font-size:9.5pt; font-style:italic; color:#666;">${medicoEsp}</div>
+                    <td style="width:30%; vertical-align:middle; padding:0; margin:0;" align="left">${logoDiv ? logoDiv.innerHTML : ''}</td>
+                    <td style="width:70%; vertical-align:middle; text-align:center; padding:0; margin:0;" align="center">
+                        <div style="font-family: Arial, sans-serif; font-size:12pt; font-weight:bold; color:#222; margin:0; padding:0; line-height:1.1;">${p['Titulo'] || ''}</div>
+                        <div style="font-family: Arial, sans-serif; font-size:10pt; font-weight:bold; color:#444; margin:2pt 0 0 0; padding:0; line-height:1.1;">${p['Subtitulo'] || ''}</div>
+                        <div style="font-family: Arial, sans-serif; font-size:9.5pt; font-style:italic; color:#666; margin:2pt 0 0 0; padding:0; line-height:1.1;">${medicoEsp}</div>
                     </td>
                 </tr>
             </table>`;
     }
 
-    // 2. Grilla de datos del paciente para Word
+    // 2. Tabla de datos del paciente para Word (Celdas compactas)
     const patientGrid = exportElement.querySelector('.patient-grid');
     if (patientGrid) {
         const paciente = p['Nombre y Apellido'] || '';
@@ -222,27 +222,27 @@
 
         let rows = `
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>Paciente:</strong> ${paciente}</td>
-                <td style="width:45%; padding:2pt 0;"><strong>Edad:</strong> ${edad}</td>
+                <td style="width:55%; padding:1pt 0; margin:0; line-height:1.2;"><strong>Paciente:</strong> ${paciente}</td>
+                <td style="width:45%; padding:1pt 0; margin:0; line-height:1.2;"><strong>Edad:</strong> ${edad}</td>
             </tr>
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>C.I:</strong> ${ci}</td>
-                <td style="width:45%; padding:2pt 0;"><strong>F / N:</strong> ${fn}</td>
+                <td style="width:55%; padding:1pt 0; margin:0; line-height:1.2;"><strong>C.I:</strong> ${ci}</td>
+                <td style="width:45%; padding:1pt 0; margin:0; line-height:1.2;"><strong>F / N:</strong> ${fn}</td>
             </tr>
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>Telf:</strong> ${telf}</td>
-                <td style="width:45%; padding:2pt 0;">${ocupacion ? `<strong>Ocupación:</strong> ${ocupacion}` : ''}</td>
+                <td style="width:55%; padding:1pt 0; margin:0; line-height:1.2;"><strong>Telf:</strong> ${telf}</td>
+                <td style="width:45%; padding:1pt 0; margin:0; line-height:1.2;">${ocupacion ? `<strong>Ocupación:</strong> ${ocupacion}` : ''}</td>
             </tr>`;
 
         if (aseguradora) {
             rows += `
             <tr>
-                <td style="width:55%; padding:2pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td>
-                <td style="width:45%; padding:2pt 0;"></td>
+                <td style="width:55%; padding:1pt 0; margin:0; line-height:1.2;"><strong>Aseguradora:</strong> ${aseguradora}</td>
+                <td style="width:45%; padding:1pt 0; margin:0; line-height:1.2;"></td>
             </tr>`;
         }
 
-        patientGrid.outerHTML = `<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:8pt;">${rows}</table>`;
+        patientGrid.outerHTML = `<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:6pt;">${rows}</table>`;
     }
 
     // 3. Extraer contenido del Pie de Página para convertirlo en Pie Nativo de Word
@@ -250,13 +250,13 @@
     let footerText = '';
     if (footerDiv) {
         footerText = footerDiv.innerHTML;
-        footerDiv.remove(); // Se elimina del flujo del cuerpo para pasarlo al área de encabezado/pie de Word
+        footerDiv.remove();
     }
 
-    // Ajuste de imágenes para Word
+    // Ajuste de dimensiones de imagen para Word
     var content = exportElement.innerHTML.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
 
-    // 4. Estructura XML completa para Microsoft Word con Sección de Pie de Página nativa (Footer f1)
+    // 4. Estructura XML / HTML con reglas CSS aisladas
     var preHtml = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -265,7 +265,6 @@
             <meta charset='utf-8'>
             <title>Informe Médico</title>
             <style>
-                /* Configuración de Hoja A4 y enlace al Pie de Página f1 */
                 @page Section1 {
                     size: 595.3pt 841.9pt; /* A4 */
                     margin: 0.8in 0.75in 0.9in 0.75in;
@@ -275,17 +274,22 @@
                 }
                 div.Section1 { page: Section1; }
 
-                /* Control de tipografía global y espaciado de párrafos */
                 body { 
                     font-family: 'Times New Roman', serif; 
                     font-size: 11pt; 
                     color: #000; 
                 }
 
-                /* Control explícito del espacio entre párrafos en Word */
-                p, div.section-item { 
+                /* Reseteo general para elementos en tablas y divs de control */
+                p, div, td {
                     margin-top: 0pt;
-                    margin-bottom: 6pt; /* Controla el espacio entre párrafos */
+                    margin-bottom: 0pt;
+                }
+
+                /* Espaciado de párrafos EXCLUSIVO para el contenido del informe */
+                .report-body div.section-item { 
+                    margin-top: 0pt;
+                    margin-bottom: 6pt; /* Controla únicamente la separación entre bloques del informe */
                     line-height: 1.25;
                     text-align: justify;
                 }
@@ -295,17 +299,17 @@
                     font-size: 13pt; 
                     font-weight: bold; 
                     text-decoration: underline; 
-                    margin-top: 10pt;
-                    margin-bottom: 12pt; 
+                    margin-top: 8pt;
+                    margin-bottom: 10pt; 
                 }
 
                 .date-row { 
                     text-align: right; 
                     font-weight: bold; 
-                    margin-bottom: 6pt; 
+                    margin-bottom: 4pt; 
                 }
 
-                /* Estilo del pie de página nativo en Word */
+                /* Pie de página nativo compacto */
                 div.MsoFooter {
                     font-family: Arial, sans-serif;
                     font-size: 8.5pt;
@@ -314,13 +318,16 @@
                     border-top: 1pt solid #666666;
                     padding-top: 4pt;
                 }
+                div.MsoFooter p {
+                    margin: 1pt 0 !important;
+                    line-height: 1.1;
+                }
             </style>
         </head>
         <body>
             <div class="Section1">
                 ${content}
 
-                <!-- Definición del Pie de Página Nativo (f1) -->
                 <div style="mso-element:footer" id="f1">
                     <div class="MsoFooter">
                         ${footerText}
@@ -341,6 +348,7 @@
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+    
     </script>
 </body>
 </html>

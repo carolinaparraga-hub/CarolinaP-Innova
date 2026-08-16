@@ -189,25 +189,39 @@ function descargarWord() {
     var node = document.getElementById("informe-content");
     var exportElement = node.cloneNode(true);
 
-    // 1. ELIMINACIÓN DE LA LÍNEA Y BORDES EN TODO EL DOCUMENTO
-    // A. Quitar bordes CSS (border-top, border-bottom) de todos los elementos clonados
-    exportElement.querySelectorAll('*').forEach(el => {
-        el.style.borderTop = 'none';
-        el.style.borderBottom = 'none';
-        el.style.border = 'none';
-    });
+    // ==========================================
+    // 1. ESTRATEGIA DE EXTRACCIÓN Y LIMPIEZA TOTAL
+    // ==========================================
+    
+    // Extracción de datos del pie de página (Teléfonos, Dirección, Redes)
+    // Se intentan leer del HTML; si no existen, se definen valores por defecto limpios.
+    let footerTextoHtml = '';
+    const footerDiv = exportElement.querySelector('.footer, #footer, footer');
+    if (footerDiv) {
+        footerTextoHtml = footerDiv.innerHTML;
+    } else {
+        footerTextoHtml = `
+            <p style="margin:0; padding:0;"><strong>Telfs:</strong> 0212-2716272 / 0424-2865320 | <strong>WhatsApp:</strong> 0424-1336013</p>
+            <p style="margin:0; padding:0;">Instagram, Twitter, Facebook @tufisioccs | tufisioccs@gmail.com</p>
+        `;
+    }
 
-    // B. Remover etiquetas <hr> y elementos de pie/contactos
-    exportElement.querySelectorAll('hr, .footer, #footer, footer').forEach(el => el.remove());
-
-    // C. Remover párrafos o divs que contengan la información de contacto
-    exportElement.querySelectorAll('p, div, span, td').forEach(el => {
-        if (el.textContent.includes('Telfs:') || el.textContent.includes('WhatsApp:') || el.textContent.includes('tufisioccs')) {
-            el.remove();
+    // PURGA TOTAL: Se remueven absolutamente todos los footers, líneas HR y bloques de contacto del DOM clonado
+    exportElement.querySelectorAll('.footer, #footer, footer, hr').forEach(el => el.remove());
+    
+    exportElement.querySelectorAll('p, div, span, td, section').forEach(el => {
+        const txt = el.textContent || '';
+        if (txt.includes('Telfs:') || txt.includes('WhatsApp:') || txt.includes('tufisioccs') || txt.includes('Calle Madrid')) {
+            // Solo elimina si no es parte del encabezado principal
+            if (!el.closest('.header')) {
+                el.remove();
+            }
         }
     });
 
-    // 2. Encabezado para Word
+    // ==========================================
+    // 2. CONSTRUCCIÓN DEL ENCABEZADO
+    // ==========================================
     const headerDiv = exportElement.querySelector('.header');
     if (headerDiv) {
         const logoDiv = headerDiv.querySelector('div:first-child');
@@ -227,7 +241,9 @@ function descargarWord() {
             </table>`;
     }
 
-    // 3. Grilla de datos del paciente
+    // ==========================================
+    // 3. CONSTRUCCIÓN DE LA TABLA DE PACIENTE
+    // ==========================================
     const patientGrid = exportElement.querySelector('.patient-grid');
     if (patientGrid) {
         const paciente = p['Nombre y Apellido'] || '';
@@ -263,10 +279,12 @@ function descargarWord() {
         patientGrid.outerHTML = `<table style="width:100%; border-collapse:collapse; font-size:10pt; margin-bottom:6pt;">${rows}</table>`;
     }
 
-    // Ajuste de imágenes
+    // Limpieza de imágenes
     var content = exportElement.innerHTML.replace(/<img/g, '<img width="130" height="60" style="display:block;"');
 
-    // 4. Estructura HTML para Word sin bordes residuales en el cuerpo
+    // ==========================================
+    // 4. ESTRUCTURA XML / MSO EXCLUSIVA DE WORD
+    // ==========================================
     var preHtml = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -274,10 +292,22 @@ function descargarWord() {
         <head>
             <meta charset='utf-8'>
             <title>Informe Médico</title>
+            <!--[if gte mso 9]>
+            <xml>
+                <w:WordDocument>
+                    <w:View>Print</w:View>
+                    <w:Zoom>100</w:Zoom>
+                    <w:DoNotOptimizeForCustomX射lines/>
+                </w:WordDocument>
+            </xml>
+            <![endif]-->
             <style>
                 @page Section1 {
                     size: 595.3pt 841.9pt; /* A4 */
-                    margin: 0.8in 0.75in 0.8in 0.75in;
+                    margin: 0.8in 0.75in 0.9in 0.75in;
+                    mso-header-margin: 0.5in;
+                    mso-footer-margin: 0.4in;
+                    mso-footer: f1;
                 }
                 div.Section1 { page: Section1; }
 
@@ -291,6 +321,7 @@ function descargarWord() {
                     margin-top: 0pt;
                     margin-bottom: 0pt;
                     border: none !important;
+                    mso-border-alt: none !important;
                 }
 
                 .report-body div.section-item { 
@@ -299,6 +330,7 @@ function descargarWord() {
                     line-height: 1.25;
                     text-align: justify;
                     border: none !important;
+                    mso-border-alt: none !important;
                 }
 
                 .doc-title { 
@@ -309,11 +341,34 @@ function descargarWord() {
                     margin-top: 8pt;
                     margin-bottom: 10pt; 
                 }
+
+                /* REGLAS EXCLUSIVAS DEL PIE NATIVO EN WORD */
+                div.MsoFooter {
+                    font-family: Arial, sans-serif !important;
+                    font-size: 8.5pt !important;
+                    color: #333333 !important;
+                    text-align: center !important;
+                    border-top: 1pt solid #444444 !important;
+                    mso-border-top-alt: solid #444444 .75pt !important;
+                    padding-top: 4pt !important;
+                }
+                div.MsoFooter p {
+                    margin: 1pt 0 !important;
+                    line-height: 1.15 !important;
+                }
             </style>
         </head>
         <body>
             <div class="Section1">
+                <!-- CUERPO PRINCIPAL (SIN FOOTER NI LÍNEAS RESIDUALES) -->
                 ${content}
+
+                <!-- PIE DE PÁGINA NATIVO DE WORD (AISLADO EN MSO-ELEMENT) -->
+                <div style="mso-element:footer" id="f1">
+                    <div class="MsoFooter">
+                        ${footerTextoHtml}
+                    </div>
+                </div>
             </div>
         </body>
         </html>`;

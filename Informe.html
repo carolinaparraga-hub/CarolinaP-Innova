@@ -4,356 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informe Médico</title>
-    <!-- FontAwesome para íconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- html2pdf.js para exportar PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
     <style>
-        :root {
-            --primary-color: #003366; /* Azul médico principal */
-            --secondary-color: #4a6b82;
-            --text-color: #222222;
-            --bg-light: #f4f7f9;
-            --border-color: #dcdcdc;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-color);
-            line-height: 1.5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
-        }
-
-        /* Barra de acciones (Botones arriba) */
-        .action-bar {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-bottom: 20px;
-            padding: 0 10px;
-        }
-
-        .btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background 0.2s, transform 0.1s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .btn:hover {
-            background-color: #002244;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-outline {
-            background-color: white;
-            color: var(--primary-color);
-            border: 1px solid var(--primary-color);
-        }
-
-        .btn-outline:hover {
-            background-color: #eef4f8;
-        }
-
-        /* Hoja de Papel Tamaño Carta */
-        .page-container {
-            background: #ffffff;
-            width: 800px;
-            min-height: 1030px;
-            padding: 45px 50px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-        }
-
-        /* Encabezado */
-        header {
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .header-titles h1 {
-            color: var(--primary-color);
-            font-size: 22px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .header-titles h2 {
-            color: var(--secondary-color);
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 2px;
-        }
-
-        .doctor-info {
-            text-align: right;
-        }
-
-        .doctor-info h3 {
-            color: var(--primary-color);
-            font-size: 16px;
-            font-weight: 700;
-        }
-
-        .doctor-info p {
-            font-size: 12px;
-            color: #555;
-        }
-
-        /* Secciones del Informe */
-        .report-body {
-            flex-grow: 1;
-        }
-
-        /* Ficha Paciente (Grid de 2 columnas) */
-        .patient-card {
-            background-color: #f9fbfd;
-            border: 1px solid #e1e8ed;
-            border-radius: 6px;
-            padding: 12px 18px;
-            margin-bottom: 20px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px 20px;
-            font-size: 13.5px;
-        }
-
-        .patient-card div {
-            display: flex;
-            gap: 5px;
-        }
-
-        .patient-card label {
-            font-weight: 700;
-            color: var(--primary-color);
-            white-space: nowrap;
-        }
-
-        /* Secciones Clinicas */
-        .section-block {
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--primary-color);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 3px;
-            margin-bottom: 6px;
-            text-transform: uppercase;
-        }
-
-        .section-content {
-            font-size: 13.5px;
-            color: #333;
-            white-space: pre-line;
-            text-align: justify;
-        }
-
-        /* Pie de página */
-        footer {
-            margin-top: 30px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 12px;
-            font-size: 11px;
-            color: #666;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        footer i {
-            color: var(--primary-color);
-            margin-right: 4px;
-        }
-
-        /* Estilos de Impresión */
+        * { box-sizing: border-box; font-family: 'Times New Roman', Times, serif; }
+        body { background-color: #f2f2f2; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #000; }
+        .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 20mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+        .content-area { flex-grow: 1; }
+        
+        /* Membrete */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; }
+        .header-logo { max-width: 170px; max-height: 85px; object-fit: contain; }
+        .header-info { text-align: center; flex-grow: 1; }
+        .header-info h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
+        .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
+        .header-info p { margin: 1px 0; font-size: 10pt; font-weight: bold; }
+        
+        /* Datos Paciente */
+        .patient-info { width: 100%; margin-bottom: 15px; font-size: 10.5pt; line-height: 1.4; }
+        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 10px; }
+        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 4px; column-gap: 20px; }
+        .divider { border-bottom: 1px solid #ccc; margin: 10px 0 15px 0; }
+        
+        /* Cuerpo del Informe */
+        .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 15px 0 15px 0; }
+        .report-body { font-size: 10.5pt; line-height: 1.45; text-align: justify; }
+        .section-item { margin-bottom: 10px; }
+        .multiline-text { white-space: pre-wrap; }
+        
+        /* Pie de página e Íconos */
+        .footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 20px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
+        .footer p { margin: 3px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .footer-item { display: inline-flex; align-items: center; gap: 4px; }
+        .icon { width: 11px; height: 11px; fill: #333; vertical-align: middle; display: inline-block; }
+        
+        /* Botones Acción */
+        .action-buttons { margin-top: 25px; margin-bottom: 30px; display: flex; gap: 15px; justify-content: center; }
+        .btn { background-color: #1d5f99; color: #ffffff; border: none; padding: 10px 22px; font-size: 11pt; font-weight: bold; border-radius: 4px; cursor: pointer; font-family: Arial, sans-serif; }
+        .btn:hover { background-color: #14436d; }
+        
         @media print {
-            body {
-                background: none;
-                padding: 0;
-            }
-
-            .action-bar {
-                display: none;
-            }
-
-            .page-container {
-                box-shadow: none;
-                width: 100%;
-                padding: 0;
-                min-height: auto;
-            }
-
-            @page {
-                size: letter;
-                margin: 15mm 15mm 15mm 15mm;
-            }
+            body { background: none; padding: 0; }
+            .page { box-shadow: none; width: 100%; padding: 0; min-height: 100vh; }
+            .action-buttons { display: none !important; }
+            @page { size: A4; margin: 15mm; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Botones de Acción -->
-    <div class="action-bar">
-        <button class="btn btn-outline" onclick="imprimirInforme()">
-            <i class="fa-solid fa-print"></i> Imprimir
-        </button>
-        <button class="btn" onclick="exportarPDF()">
-            <i class="fa-solid fa-file-pdf"></i> Guardar PDF
-        </button>
-    </div>
-
-    <!-- Contenido del Informe -->
-    <div class="page-container" id="informe-contenido">
-        <div>
-            <!-- Encabezado -->
-            <header>
-                <div class="header-content">
-                    <div class="header-titles">
-                        <h1 id="field-Titulo">CONSULTORIO MÉDICO</h1>
-                        <h2 id="field-Subtitulo">INFORME MÉDICO</h2>
-                    </div>
-                    <div class="doctor-info">
-                        <h3 id="field-Medico-tratante">Dra. Carolina Párraga</h3>
-                        <p id="field-Especialidad-Medica">Especialista en Medicina Interna</p>
-                    </div>
+    <div class="page" id="informe-content">
+        <div class="content-area">
+            <div class="header">
+                <div style="width: 170px;">
+                    <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" alt="Logo" class="header-logo" id="logo-centro">
                 </div>
-            </header>
-
-            <!-- Datos del Paciente -->
-            <div class="patient-card">
-                <div id="sec-Nombre-y-Apellido" style="grid-column: span 2;">
-                    <label>Paciente:</label>
-                    <span id="val-Nombre-y-Apellido"></span>
-                </div>
-                <div id="sec-Cedula">
-                    <label>C.I. / Pasaporte:</label>
-                    <span id="val-Cedula"></span>
-                </div>
-                <div id="sec-Edad">
-                    <label>Edad:</label>
-                    <span id="val-Edad"></span>
-                </div>
-                <div id="sec-FN">
-                    <label>F. Nacimiento:</label>
-                    <span id="val-FN"></span>
-                </div>
-                <div id="sec-Fecha">
-                    <label>Fecha de Consulta:</label>
-                    <span id="val-Fecha"></span>
-                </div>
-                <div id="sec-Telefono">
-                    <label>Teléfono:</label>
-                    <span id="val-Telefono"></span>
-                </div>
-                <div id="sec-Ocupacion">
-                    <label>Ocupación:</label>
-                    <span id="val-Ocupacion"></span>
-                </div>
-                <div id="sec-Aseguradora" style="grid-column: span 2;">
-                    <label>Aseguradora:</label>
-                    <span id="val-Aseguradora"></span>
+                <div class="header-info">
+                    <h2 id="field-Titulo"></h2>
+                    <h3 id="field-Subtitulo"></h3>
+                    <p><span id="field-Medico-tratante"></span> - <span id="field-Especialidad-Medica"></span></p>
                 </div>
             </div>
 
-            <!-- Cuerpo Clínico del Informe -->
+            <div class="patient-info">
+                <div class="date-row" id="sec-Fecha">Fecha: <span id="val-Fecha"></span></div>
+                <div class="patient-grid">
+                    <div id="sec-Nombre-y-Apellido"><strong>Paciente:</strong> <span id="val-Nombre-y-Apellido"></span></div>
+                    <div id="sec-Edad"><strong>Edad:</strong> <span id="val-Edad"></span></div>
+                    <div id="sec-Cedula"><strong>C.I:</strong> <span id="val-Cedula"></span></div>
+                    <div id="sec-FN"><strong>F / N:</strong> <span id="val-FN"></span></div>
+                    <div id="sec-Telefono"><strong>Telf:</strong> <span id="val-Telefono"></span></div>
+                    <div id="sec-Ocupacion"><strong>Ocupación:</strong> <span id="val-Ocupacion"></span></div>
+                    <div id="sec-Aseguradora"><strong>Aseguradora:</strong> <span id="val-Aseguradora"></span></div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+            <div class="report-title">Informe Médico</div>
+
             <div class="report-body">
-                <div class="section-block" id="sec-Enfermedad-Actual">
-                    <div class="section-title">Enfermedad Actual</div>
-                    <div class="section-content" id="val-Enfermedad-Actual"></div>
-                </div>
-
-                <div class="section-block" id="sec-Antecedentes-Personales">
-                    <div class="section-title">Antecedentes Personales</div>
-                    <div class="section-content" id="val-Antecedentes-Personales"></div>
-                </div>
-
-                <div class="section-block" id="sec-Antecedentes-Familiares">
-                    <div class="section-title">Antecedentes Familiares</div>
-                    <div class="section-content" id="val-Antecedentes-Familiares"></div>
-                </div>
-
-                <div class="section-block" id="sec-Examen-Fisico">
-                    <div class="section-title">Examen Físico</div>
-                    <div class="section-content" id="val-Examen-Fisico"></div>
-                </div>
-
-                <div class="section-block" id="sec-IDX-Impresion-Diagnostica">
-                    <div class="section-title">Impresión Diagnóstica</div>
-                    <div class="section-content" id="val-IDX-Impresion-Diagnostica"></div>
-                </div>
-
-                <div class="section-block" id="sec-Plan-Tratamiento">
-                    <div class="section-title">Plan / Conducta y Tratamiento</div>
-                    <div class="section-content" id="val-Plan-Tratamiento"></div>
-                </div>
+                <div class="section-item" id="sec-Enfermedad-Actual"><span id="val-Enfermedad-Actual" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Antecedentes-Personales"><strong>Antecedentes Personales:</strong> <span id="val-Antecedentes-Personales" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Antecedentes-Familiares"><strong>Antecedentes Familiares:</strong> <span id="val-Antecedentes-Familiares" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Examen-Fisico"><strong>Examen Físico:</strong> <span id="val-Examen-Fisico" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-IDX-Impresion-Diagnostica"><strong>Impresión Diagnóstica (IDX):</strong> <span id="val-IDX-Impresion-Diagnostica" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Plan-Tratamiento"><strong>Plan / Tratamiento / Conducta:</strong> <span id="val-Plan-Tratamiento" class="multiline-text"></span></div>
             </div>
         </div>
 
-        <!-- Pie de página -->
-        <footer>
-            <div id="sec-Direccion"><i class="fa-solid fa-location-dot"></i> <span id="field-Direccion"></span></div>
-            <div>
-                <span id="sec-Telefonos"><i class="fa-solid fa-phone"></i> <span id="field-Telefonos"></span></span>
-                <span id="sec-Whatsapp" style="margin-left: 10px;"><i class="fa-brands fa-whatsapp"></i> <span id="field-Whatsapp"></span></span>
-            </div>
-            <div>
-                <span id="sec-Redes"><i class="fa-solid fa-globe"></i> <span id="field-Redes"></span></span>
-                <span id="sec-Correo"><i class="fa-regular fa-envelope"></i> <span id="field-Correo"></span></span>
-            </div>
-        </footer>
+        <!-- PIE DE PÁGINA CON ÍCONOS SVG SOBRIOS -->
+        <div class="footer">
+            <p id="sec-Direccion">
+                <span class="footer-item">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <span id="field-Direccion"></span>
+                </span>
+            </p>
+            <p id="sec-Contactos-Tel">
+                <span id="sec-Telefonos" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    <strong>Telfs:</strong> <span id="field-Telefonos"></span>
+                </span>
+                <span id="sec-Whatsapp" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 16.5c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.22 8.24z"/></svg>
+                    <strong>WhatsApp:</strong> <span id="field-Whatsapp"></span>
+                </span>
+            </p>
+            <p id="sec-Contactos-Digital">
+                <span id="sec-Redes" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7 wonderh-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
+                    <span id="field-Redes"></span>
+                </span>
+                <span id="sec-Correo" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span id="field-Correo"></span>
+                </span>
+            </p>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn" onclick="window.print()">Imprimir PDF</button>
+        <button class="btn" onclick="descargarWord()">Descargar Word</button>
     </div>
 
     <script>
         function obtenerParametros() {
             const params = {};
             const queryString = window.location.search.substring(1);
-            if (!queryString) return params;
-
             const pairs = queryString.split("&");
             for (let i = 0; i < pairs.length; i++) {
                 if (!pairs[i]) continue;
                 const pair = pairs[i].split("=");
-                const key = decodeURIComponent((pair[0] || "").replace(/\+/g, " ")).trim();
+                const key = decodeURIComponent(pair[0].replace(/\+/g, " ")).trim();
                 const value = decodeURIComponent((pair[1] || "").replace(/\+/g, " ")).trim();
                 params[key] = value;
             }
@@ -373,13 +154,11 @@
         window.onload = function() {
             p = obtenerParametros();
 
-            // Encabezado
-            if (p['Titulo']) document.getElementById('field-Titulo').innerText = p['Titulo'];
-            if (p['Subtitulo']) document.getElementById('field-Subtitulo').innerText = p['Subtitulo'];
-            if (p['Medico tratante']) document.getElementById('field-Medico-tratante').innerText = p['Medico tratante'];
-            if (p['Especialidad Medica']) document.getElementById('field-Especialidad-Medica').innerText = p['Especialidad Medica'];
+            document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
+            document.getElementById('field-Subtitulo').innerText = p['Subtitulo'] || '';
+            document.getElementById('field-Medico-tratante').innerText = p['Medico tratante'] || '';
+            document.getElementById('field-Especialidad-Medica').innerText = p['Especialidad Medica'] || '';
 
-            // Dirección y contactos
             if (p['Direccion']) document.getElementById('field-Direccion').innerText = p['Direccion'];
             else document.getElementById('sec-Direccion').style.display = 'none';
 
@@ -388,33 +167,23 @@
             let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
             if (telfsFinal) {
                 document.getElementById('field-Telefonos').innerText = telfsFinal;
-                document.getElementById('sec-Telefonos').style.display = 'inline';
-            } else {
-                document.getElementById('sec-Telefonos').style.display = 'none';
+                document.getElementById('sec-Telefonos').style.display = 'inline-flex';
             }
 
             if (p['Whatsapp']) {
                 document.getElementById('field-Whatsapp').innerText = p['Whatsapp'];
-                document.getElementById('sec-Whatsapp').style.display = 'inline';
-            } else {
-                document.getElementById('sec-Whatsapp').style.display = 'none';
+                document.getElementById('sec-Whatsapp').style.display = 'inline-flex';
             }
 
             if (p['Redes sociales']) {
-                document.getElementById('field-Redes').innerText = p['Redes sociales'] + (p['Correo electronico'] ? ' | ' : '');
-                document.getElementById('sec-Redes').style.display = 'inline';
-            } else {
-                document.getElementById('sec-Redes').style.display = 'none';
+                document.getElementById('field-Redes').innerText = p['Redes sociales'];
+                document.getElementById('sec-Redes').style.display = 'inline-flex';
             }
-
             if (p['Correo electronico']) {
                 document.getElementById('field-Correo').innerText = p['Correo electronico'];
-                document.getElementById('sec-Correo').style.display = 'inline';
-            } else {
-                document.getElementById('sec-Correo').style.display = 'none';
+                document.getElementById('sec-Correo').style.display = 'inline-flex';
             }
 
-            // Mapeo dinamico de campos del Informe
             const mapaCampos = [
                 { key: 'Fecha', target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
                 { key: 'Nombre y Apellido', target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
@@ -447,22 +216,146 @@
             });
         };
 
-        function imprimirInforme() {
-            window.print();
-        }
+        function descargarWord() {
+            var datos = (typeof p !== 'undefined') ? p : {};
 
-        function exportarPDF() {
-            const elemento = document.getElementById('informe-contenido');
-            const nombrePaciente = p['Nombre y Apellido'] || 'Informe_Medico';
-            const opt = {
-                margin:       10,
-                filename:     `Informe_${nombrePaciente.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'letter', orientation: 'portrait' }
-            };
+            var paciente = datos['Nombre y Apellido'] || '';
+            var edad = datos['Edad'] || '';
+            var ci = datos['Cedula'] || '';
+            var fn = datos['F / N'] || '';
+            var telf = datos['Telefono'] || '';
+            var ocupacion = datos['Ocupacion'] || '';
+            var aseguradora = datos['Aseguradora'] || '';
 
-            html2pdf().set(opt).from(elemento).save();
+            var titulo = datos['Titulo'] || 'MEDICINA FÍSICA Y REHABILITACIÓN';
+            var subtitulo = datos['Subtitulo'] || '';
+            var medico = datos['Medico tratante'] || '';
+            var especialidad = datos['Especialidad Medica'] || '';
+            var direccion = datos['Direccion'] || '';
+            var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
+            var logoURL = 'https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW';
+
+            var node = document.getElementById("informe-content");
+            var cuerpoHTML = '';
+
+            if (node) {
+                var clone = node.cloneNode(true);
+                clone.querySelectorAll('.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr').forEach(function(el) { el.remove(); });
+                var reportBody = clone.querySelector('.report-body');
+                if (reportBody) cuerpoHTML = reportBody.innerHTML;
+            }
+
+            var headerHTML = `
+                <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0 0 0 8mm; padding:0;">
+                    <tr>
+                        <td style="width:120px; vertical-align:middle; text-align:left; padding:0;">
+                            <img src="${logoURL}" width="120" height="60" style="width:120px; height:60px; display:block; object-fit:contain;" alt="Logo">
+                        </td>
+                        <td style="width:auto; vertical-align:middle; text-align:center; padding:0 6px 0 18px;">
+                            <div style="font-family:'Times New Roman', serif; font-size:12pt; font-weight:bold; line-height:1.05; margin:0; padding:0;">${titulo}</div>
+                            <div style="font-family:'Times New Roman', serif; font-size:11pt; line-height:1.05; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
+                            <div style="font-family:'Times New Roman', serif; font-size:10pt; font-weight:bold; line-height:1.05; margin:3pt 0 0 0; padding:0;">${medicoEsp}</div>
+                        </td>
+                        <td style="width:70px; padding:0;">&nbsp;</td>
+                    </tr>
+                </table>
+                <div style="border-bottom:1.5pt solid #000000; margin-top:5pt; margin-bottom:8pt; height:1pt; line-height:1pt;"></div>
+            `;
+
+            var patientHTML = `
+                <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman', serif; font-size:10pt; line-height:1; margin:0 0 5pt 0;">
+                    <tr><td style="width:100%; text-align:right; padding:0 0 3pt 0; line-height:1;"><strong>Fecha:</strong> ${datos['Fecha'] ? formatearFechaLatina(datos['Fecha']) : ''}</td></tr>
+                </table>
+                <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-family:'Times New Roman', serif; font-size:10pt; line-height:1; margin:0; padding:0;">
+                    <tr>
+                        <td style="width:55%; padding:1.5pt 0;"><strong>Paciente:</strong> ${paciente}</td>
+                        <td style="width:45%; padding:1.5pt 0;"><strong>Edad:</strong> ${edad}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:1.5pt 0;"><strong>C.I:</strong> ${ci}</td>
+                        <td style="padding:1.5pt 0;"><strong>F / N:</strong> ${fn}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:1.5pt 0;"><strong>Telf:</strong> ${telf}</td>
+                        <td style="padding:1.5pt 0;"><strong>Ocupación:</strong> ${ocupacion}</td>
+                    </tr>
+                    ${aseguradora ? `<tr><td style="padding:1.5pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td><td style="padding:1.5pt 0;">&nbsp;</td></tr>` : ''}
+                </table>
+                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:6pt; margin-bottom:12pt; height:1pt; line-height:1pt;"></div>
+            `;
+
+            // Íconos Unicode sobrios/compatibles para exportación nativa a Word
+            var footerDireccion = direccion ? `<p style="margin:0; padding:0; line-height:1;">📍 ${direccion}</p>` : '';
+            var tel1 = datos['Numero de telefono principal'] || '';
+            var tel2 = datos['Numero secundario'] || '';
+            var telfs = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+            var wa = datos['Whatsapp'] || '';
+            var redes = datos['Redes sociales'] || '';
+            var correo = datos['Correo electronico'] || '';
+
+            var footerTexto = `
+                ${footerDireccion}
+                <p style="margin:2pt 0 0 0; padding:0; line-height:1;">
+                    ${telfs ? `📞 <strong>Telfs:</strong> ${telfs}` : ''} 
+                    ${wa ? ` | 💬 <strong>WhatsApp:</strong> ${wa}` : ''}
+                </p>
+                <p style="margin:2pt 0 0 0; padding:0; line-height:1;">
+                    ${redes ? `🌐 ${redes}` : ''} 
+                    ${correo ? ` | ✉️ ${correo}` : ''}
+                </p>
+            `;
+
+            var preHtml = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="utf-8">
+                    <title>Informe Médico</title>
+                    <style>
+                        @page Section1 {
+                            size:595.3pt 841.9pt;
+                            margin: 0.65in 0.75in 0.80in 0.75in;
+                            mso-header-margin:0.3in;
+                            mso-footer-margin:0.30in;
+                            mso-footer:f1;
+                        }
+                        div.Section1 { page:Section1; }
+                        table#hrdftrtbl { margin: 0in 0in 0in 900in; width:1px; height:1px; overflow:hidden; }
+                        body { font-family:'Times New Roman', serif; font-size:10.5pt; color:#000000; line-height:1.12; margin:0; padding:0; }
+                        .doc-title { font-family:'Times New Roman', serif; text-align:center; font-size:12.5pt; font-weight:bold; text-decoration:underline; line-height:1; margin-top:5pt; margin-bottom:9pt; }
+                        .report-body { font-family:'Times New Roman', serif; font-size:10.5pt; line-height:1.15; text-align:justify; margin:0; padding:0; }
+                        .section-item { margin-top:0pt; margin-bottom:6pt; line-height:1.15; }
+                        .multiline-text { white-space:pre-wrap; }
+                        p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }
+                        div.MsoFooter { font-family:Arial, sans-serif; font-size:8.5pt; color:#333333; text-align:center; border-top:0.75pt solid #555555; padding-top:3pt; line-height:1.05; }
+                    </style>
+                </head>
+                <body>
+                    <div class="Section1">
+                        ${headerHTML}
+                        ${patientHTML}
+                        <div class="doc-title" align="center"><u><b>Informe Médico</b></u></div>
+                        <div class="report-body">${cuerpoHTML}</div>
+                    </div>
+                    <table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
+                        <tr><td>
+                            <div style="mso-element:footer" id="f1">
+                                <div class="MsoFooter">${footerTexto}</div>
+                            </div>
+                        </td></tr>
+                    </table>
+                </body>
+                </html>
+            `;
+
+            var blob = new Blob(['\ufeff', preHtml], { type:'application/msword' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = 'Informe_Medico_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>

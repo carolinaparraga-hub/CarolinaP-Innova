@@ -353,7 +353,6 @@
             for (let i = 0; i < pairs.length; i++) {
                 if (!pairs[i]) continue;
                 const pair = pairs[i].split("=");
-                // Primero convertimos '+' en espacio y luego decodificamos el URI
                 const key = decodeURIComponent((pair[0] || "").replace(/\+/g, " ")).trim();
                 const value = decodeURIComponent((pair[1] || "").replace(/\+/g, " ")).trim();
                 params[key] = value;
@@ -375,16 +374,16 @@
             p = obtenerParametros();
 
             // Encabezado
-            document.getElementById('field-Titulo').innerText = p['Titulo'] || p['titulo'] || 'CONSULTORIO MÉDICO';
-            document.getElementById('field-Subtitulo').innerText = p['Subtitulo'] || p['subtitulo'] || 'INFORME MÉDICO';
-            document.getElementById('field-Medico-tratante').innerText = p['Medico tratante'] || p['Medico_tratante'] || 'Dra. Carolina Párraga';
-            document.getElementById('field-Especialidad-Medica').innerText = p['Especialidad Medica'] || p['Especialidad_Medica'] || '';
+            if (p['Titulo']) document.getElementById('field-Titulo').innerText = p['Titulo'];
+            if (p['Subtitulo']) document.getElementById('field-Subtitulo').innerText = p['Subtitulo'];
+            if (p['Medico tratante']) document.getElementById('field-Medico-tratante').innerText = p['Medico tratante'];
+            if (p['Especialidad Medica']) document.getElementById('field-Especialidad-Medica').innerText = p['Especialidad Medica'];
 
             // Dirección y contactos
             if (p['Direccion']) document.getElementById('field-Direccion').innerText = p['Direccion'];
             else document.getElementById('sec-Direccion').style.display = 'none';
 
-            const tel1 = p['Numero de telefono principal'] || p['Telefono'] || '';
+            const tel1 = p['Numero de telefono principal'] || '';
             const tel2 = p['Numero secundario'] || '';
             let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
             if (telfsFinal) {
@@ -415,33 +414,26 @@
                 document.getElementById('sec-Correo').style.display = 'none';
             }
 
-            // Mapeo flexible de parámetros
+            // Mapeo dinamico de campos del Informe
             const mapaCampos = [
-                { keys: ['Fecha', 'fecha'], target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
-                { keys: ['Nombre y Apellido', 'Paciente', 'paciente'], target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
-                { keys: ['Cedula', 'CI', 'ci'], target: 'val-Cedula', sec: 'sec-Cedula' },
-                { keys: ['Telefono', 'telf'], target: 'val-Telefono', sec: 'sec-Telefono' },
-                { keys: ['F / N', 'FN', 'FechaNacimiento'], target: 'val-FN', sec: 'sec-FN' },
-                { keys: ['Edad', 'edad'], target: 'val-Edad', sec: 'sec-Edad' },
-                { keys: ['Ocupacion', 'ocupacion'], target: 'val-Ocupacion', sec: 'sec-Ocupacion' },
-                { keys: ['Aseguradora', 'aseguradora'], target: 'val-Aseguradora', sec: 'sec-Aseguradora' },
-                { keys: ['Enfermedad Actual', 'Enfermedad_Actual'], target: 'val-Enfermedad-Actual', sec: 'sec-Enfermedad-Actual' },
-                { keys: ['Antecedentes Personales', 'Antecedentes_Personales'], target: 'val-Antecedentes-Personales', sec: 'sec-Antecedentes-Personales' },
-                { keys: ['Antecedentes Familiares', 'Antecedentes_Familiares'], target: 'val-Antecedentes-Familiares', sec: 'sec-Antecedentes-Familiares' },
-                { keys: ['Examen Fisico', 'Examen_Fisico'], target: 'val-Examen-Fisico', sec: 'sec-Examen-Fisico' },
-                { keys: ['IDX Impresion Diagnostica', 'IDX', 'Impresion_Diagnostica'], target: 'val-IDX-Impresion-Diagnostica', sec: 'sec-IDX-Impresion-Diagnostica' },
-                { keys: ['Plan Tratamiento', 'Plan_Tratamiento', 'Conducta'], target: 'val-Plan-Tratamiento', sec: 'sec-Plan-Tratamiento' }
+                { key: 'Fecha', target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
+                { key: 'Nombre y Apellido', target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
+                { key: 'Cedula', target: 'val-Cedula', sec: 'sec-Cedula' },
+                { key: 'Telefono', target: 'val-Telefono', sec: 'sec-Telefono' },
+                { key: 'F / N', target: 'val-FN', sec: 'sec-FN' },
+                { key: 'Edad', target: 'val-Edad', sec: 'sec-Edad' },
+                { key: 'Ocupacion', target: 'val-Ocupacion', sec: 'sec-Ocupacion' },
+                { key: 'Aseguradora', target: 'val-Aseguradora', sec: 'sec-Aseguradora' },
+                { key: 'Enfermedad Actual', target: 'val-Enfermedad-Actual', sec: 'sec-Enfermedad-Actual' },
+                { key: 'Antecedentes Personales', target: 'val-Antecedentes-Personales', sec: 'sec-Antecedentes-Personales' },
+                { key: 'Antecedentes Familiares', target: 'val-Antecedentes-Familiares', sec: 'sec-Antecedentes-Familiares' },
+                { key: 'Examen Fisico', target: 'val-Examen-Fisico', sec: 'sec-Examen-Fisico' },
+                { key: 'IDX Impresion Diagnostica', target: 'val-IDX-Impresion-Diagnostica', sec: 'sec-IDX-Impresion-Diagnostica' },
+                { key: 'Plan Tratamiento', target: 'val-Plan-Tratamiento', sec: 'sec-Plan-Tratamiento' }
             ];
 
             mapaCampos.forEach(c => {
-                let val = null;
-                for (let k of c.keys) {
-                    if (p[k] !== undefined && p[k] !== null && p[k] !== '') {
-                        val = p[k];
-                        break;
-                    }
-                }
-
+                let val = p[c.key];
                 const elTarget = document.getElementById(c.target);
                 const elSec = document.getElementById(c.sec);
 
@@ -461,7 +453,7 @@
 
         function exportarPDF() {
             const elemento = document.getElementById('informe-contenido');
-            const nombrePaciente = p['Nombre y Apellido'] || p['Paciente'] || 'Informe_Medico';
+            const nombrePaciente = p['Nombre y Apellido'] || 'Informe_Medico';
             const opt = {
                 margin:       10,
                 filename:     `Informe_${nombrePaciente.replace(/\s+/g, '_')}.pdf`,

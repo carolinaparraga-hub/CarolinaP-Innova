@@ -88,6 +88,32 @@ body {
 }
 
 /* =========================================================
+   TÍTULO DEL INFORME
+========================================================= */
+
+.doc-title-container {
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+.doc-title-main {
+    font-size: 11pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+.doc-title-sub {
+    font-size: 12pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: underline;
+    margin-top: 2px;
+}
+
+/* =========================================================
    TIPO DE EXAMEN Y NORMA TÉCNICA
 ========================================================= */
 
@@ -341,6 +367,15 @@ body {
         <h2 id="field-Titulo"></h2>
         <h3 id="field-Subtitulo"></h3>
     </div>
+</div>
+
+<!-- =====================================================
+     TÍTULO DEL INFORME
+===================================================== -->
+
+<div class="doc-title-container">
+    <div class="doc-title-main">SERVICIO DE SEGURIDAD Y SALUD EN EL TRABAJO</div>
+    <div class="doc-title-sub">INFORME MEDICO</div>
 </div>
 
 <!-- =====================================================
@@ -836,6 +871,13 @@ function descargarWord() {
         return examen.toLowerCase().includes(tipo.toLowerCase()) ? "●" : "○";
     }
 
+    const docTitleHTML = `
+        <div style="text-align:center; margin-top:8pt; margin-bottom:8pt; font-family:'Times New Roman',serif;">
+            <div style="font-size:11pt; font-weight:bold; text-transform:uppercase;">SERVICIO DE SEGURIDAD Y SALUD EN EL TRABAJO</div>
+            <div style="font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline; margin-top:2pt;">INFORME MEDICO</div>
+        </div>
+    `;
+
     const examenHTML = `
         <div style="font-family:'Times New Roman',serif; font-size:10pt; margin-top:8pt; margin-bottom:4pt;">
             <strong>Examen de salud:</strong> &nbsp;&nbsp;
@@ -1006,6 +1048,7 @@ p { margin-top:0; margin-bottom:3pt; line-height:1.15; }
 <body>
 <div class="Section1">
 ${headerHTML}
+${docTitleHTML}
 ${examenHTML}
 ${workerHTML}
 ${resultadosHTML}

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Evaluación Médica</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #000;
+}
+
+.page {
+    background: #ffffff;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 15mm 15mm 18mm 15mm;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-area {
+    flex-grow: 1;
+}
+
+/* =========================================================
+   MEMBRETE Y ENCABEZADO
+========================================================= */
+
+.header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1.5px solid #000;
+    padding-bottom: 7px;
+    margin-bottom: 12px;
+}
+
+.header-logo-container {
+    width: 150px;
+    min-width: 150px;
+    text-align: left;
+}
+
+.header-logo {
+    max-width: 135px;
+    max-height: 70px;
+    object-fit: contain;
+}
+
+.header-info {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.header-info h2 {
+    margin: 0;
+    font-size: 14pt;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.header-info h3 {
+    margin: 3px 0;
+    font-size: 10.5pt;
+    font-weight: normal;
+}
+
+.doc-title-container {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.doc-title-main {
+    font-size: 12pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: underline;
+    margin: 0;
+}
+
+/* =========================================================
+   DATOS DEL PACIENTE Y CIRUGÍA
+========================================================= */
+
+.patient-info {
+    width: 100%;
+    border: 1px solid #777;
+    border-collapse: collapse;
+    font-size: 9.8pt;
+    margin-bottom: 15px;
+}
+
+.patient-info td {
+    border: 1px solid #777;
+    padding: 6px 8px;
+    vertical-align: top;
+    line-height: 1.25;
+}
+
+.label {
+    font-weight: bold;
+}
+
+/* =========================================================
+   BLOQUES Y FORMATOS ESPECÍFICOS
+========================================================= */
+
+.block-item {
+    font-size: 9.8pt;
+    line-height: 1.35;
+    margin-bottom: 10px;
+    text-align: justify;
+}
+
+/* Viñetas a 3 espacios (~1.5em) del margen */
+.bullet-item {
+    padding-left: 1.5em;
+    text-indent: -0.8em;
+}
+
+/* Sugerencias a 3 espacios (~1.5em) del margen */
+.indented-item {
+    padding-left: 1.5em;
+}
+
+/* Estilo para Escalas de Riesgo Quirúrgico */
+.bold-all {
+    font-weight: bold;
+}
+
+/* Estilo para Conclusión Contraindicación: Negrita, Subrayado y +2em margen superior */
+.conclusion-style {
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: 2em;
+}
+
+/* =========================================================
+   FIRMA Y PIE DE PÁGINA
+========================================================= */
+
+.signature-area {
+    margin-top: 45px;
+    font-size: 9.5pt;
+}
+
+.signature-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.signature-table td {
+    width: 50%;
+    text-align: center;
+    vertical-align: bottom;
+    padding-top: 20px;
+}
+
+.signature-line {
+    border-top: 1px solid #000;
+    width: 75%;
+    margin: 0 auto 4px auto;
+}
+
+.footer {
+    border-top: 1px solid #000;
+    padding-top: 7px;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 8pt;
+    line-height: 1.3;
+    color: #222;
+}
+
+.footer p {
+    margin: 2px 0;
+}
+
+/* =========================================================
+   BOTONES Y MEDIOS
+========================================================= */
+
+.action-buttons {
+    margin-top: 20px;
+    margin-bottom: 25px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn {
+    background-color: #1d5f99;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    font-size: 11pt;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #14436d;
+}
+
+@media print {
+    body { background: none; padding: 0; }
+    .page { box-shadow: none; width: 100%; min-height: 100vh; padding: 0; }
+    .action-buttons { display: none !important; }
+    @page { size: A4; margin: 12mm; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page" id="informe-content">
+<div class="content-area">
+
+<!-- MEMBRETE -->
+<div class="header">
+    <div class="header-logo-container">
+        <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" alt="Logo" class="header-logo">
+    </div>
+    <div class="header-info">
+        <h2 id="field-Titulo"></h2>
+        <h3 id="field-Subtitulo"></h3>
+    </div>
+</div>
+
+<div class="doc-title-container">
+    <div class="doc-title-main">INFORME MÉDICO DE EVALUACIÓN PREOPERATORIA</div>
+</div>
+
+<!-- DATOS DEL PACIENTE -->
+<table class="patient-info">
+    <tr>
+        <td style="width: 50%;">
+            <span class="label">Paciente:</span> <span id="val-Nombre"></span>
+        </td>
+        <td style="width: 50%;">
+            <span class="label">Cédula:</span> <span id="val-Cedula"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span class="label">Edad:</span> <span id="val-Edad"></span>
+        </td>
+        <td>
+            <span class="label">Fecha Informe:</span> <span id="val-Fecha"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <span class="label">Médico Tratante:</span> <span id="val-Medico"></span>
+        </td>
+        <td>
+            <span class="label">Especialidad:</span> <span id="val-Especialidad"></span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <span class="label">Cirugía Propuesta:</span> <span id="val-Cirugia"></span>
+        </td>
+    </tr>
+</table>
+
+<!-- SECCIONES DE CONTENIDO -->
+<div id="container-informe">
+    <div id="wrap-Personales" class="block-item bullet-item">● <strong>Personales:</strong> <span id="val-Personales"></span></div>
+    <div id="wrap-Familiares" class="block-item bullet-item">● <strong>Familiares:</strong> <span id="val-Familiares"></span></div>
+    <div id="wrap-Quirurgicos" class="block-item bullet-item">● <strong>Quirúrgicos:</strong> <span id="val-Quirurgicos"></span></div>
+    <div id="wrap-Vacunacion" class="block-item"><span id="val-Vacunacion"></span></div>
+    <div id="wrap-Sintomas" class="block-item"><span id="val-Sintomas"></span></div>
+    <div id="wrap-ExamenFisico" class="block-item"><strong>Examen Físico:</strong> <span id="val-ExamenFisico"></span></div>
+    <div id="wrap-EKG" class="block-item bullet-item">● <strong>EKG:</strong> <span id="val-EKG"></span></div>
+    <div id="wrap-Radiografia" class="block-item bullet-item">● <strong>Radiografía Tórax:</strong> <span id="val-Radiografia"></span></div>
+    <div id="wrap-Laboratorio" class="block-item bullet-item">● <strong>Laboratorio:</strong> <span id="val-Laboratorio"></span></div>
+    <div id="wrap-Escalas" class="block-item bold-all"><span id="val-Escalas"></span></div>
+    <div id="wrap-Conclusion" class="block-item conclusion-style"><span id="val-Conclusion"></span></div>
+    <div id="wrap-Sugerencias" class="block-item indented-item"><strong>Sugerencias Recomendaciones:</strong> <span id="val-Sugerencias"></span></div>
+</div>
+
+<!-- FIRMAS -->
+<div class="signature-area">
+    <table class="signature-table">
+        <tr>
+            <td>
+                <div class="signature-line"></div>
+                <span id="val-FirmaMedico">Médico Tratante</span><br>
+                <span id="val-FirmaEspecialidad">Especialidad</span>
+            </td>
+            <td>
+                <div class="signature-line"></div>
+                Firma y Sello
+            </td>
+        </tr>
+    </table>
+</div>
+
+</div>
+
+<!-- PIE DE PÁGINA -->
+<div class="footer">
+    <p id="footer-direccion"></p>
+    <p id="footer-contactos"></p>
+    <p id="footer-digital"></p>
+</div>
+
+</div>
+
+<!-- BOTONES DE ACCIÓN -->
+<div class="action-buttons">
+    <button class="btn" onclick="window.print()">Imprimir PDF</button>
+    <button class="btn" onclick="descargarWord()">Descargar Word</button>
+</div>
+
+<script>
+
+function obtenerParametros() {
+    const params = {};
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.forEach((value, key) => {
+        params[key] = value;
+    });
+    return params;
+}
+
+function formatearFechaLatina(fechaStr) {
+    if (!fechaStr) return "";
+    let fecha = fechaStr.trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+        const partes = fecha.split("-");
+        return partes[2] + "/" + partes[1] + "/" + partes[0];
+    }
+    return fecha;
+}
+
+function evaluarYMostrar(idVal, idWrap, valor) {
+    const elemento = document.getElementById(idVal);
+    const wrapper = document.getElementById(idWrap);
+    if (!elemento) return false;
+
+    if (!valor || valor === "null" || valor === "undefined" || valor.toString().trim() === "") {
+        if (wrapper) wrapper.style.display = "none";
+        return false;
+    } else {
+        elemento.innerText = valor;
+        if (wrapper) wrapper.style.display = "block";
+        return true;
+    }
+}
+
+function colocarValor(id, valor) {
+    const elemento = document.getElementById(id);
+    if (elemento) elemento.innerText = (valor && valor !== "null" && valor !== "undefined") ? valor : "";
+}
+
+let p = {};
+
+window.onload = function() {
+    p = obtenerParametros();
+
+    colocarValor("field-Titulo", p["Titulo"] || p["Título"]);
+    colocarValor("field-Subtitulo", p["Subtítulo"] || p["Subtitulo"]);
+
+    // Datos del Paciente
+    colocarValor("val-Nombre", p["Nombre Paciente"]);
+    colocarValor("val-Cedula", p["Cedula Paciente"]);
+    colocarValor("val-Edad", p["Edad Paciente"]);
+    colocarValor("val-Fecha", formatearFechaLatina(p["Fecha Informe"]));
+    colocarValor("val-Medico", p["Medico Tratante"]);
+    colocarValor("val-Especialidad", p["Especialidad Medico"]);
+    colocarValor("val-Cirugia", p["Cirugia Propuesta"]);
+
+    // Firmas
+    colocarValor("val-FirmaMedico", p["Medico Tratante"] || "Médico Tratante");
+    colocarValor("val-FirmaEspecialidad", p["Especialidad Medico"] || "Especialista");
+
+    // Mapeo dinámico de campos con reglas
+    evaluarYMostrar("val-Personales", "wrap-Personales", p["Personales"]);
+    evaluarYMostrar("val-Familiares", "wrap-Familiares", p["Familiares"]);
+    evaluarYMostrar("val-Quirurgicos", "wrap-Quirurgicos", p["Quirurgicos"]);
+    evaluarYMostrar("val-Vacunacion", "wrap-Vacunacion", p["Esquema Vacunacion"]);
+    evaluarYMostrar("val-Sintomas", "wrap-Sintomas", p["Sintomas Cardiovasculares"]);
+    evaluarYMostrar("val-ExamenFisico", "wrap-ExamenFisico", p["Examen Fisico"]);
+    evaluarYMostrar("val-EKG", "wrap-EKG", p["EKG"]);
+    evaluarYMostrar("val-Radiografia", "wrap-Radiografia", p["Radiografia Torax"]);
+    evaluarYMostrar("val-Laboratorio", "wrap-Laboratorio", p["Laboratorio"]);
+    evaluarYMostrar("val-Escalas", "wrap-Escalas", p["Escalas Riesgo Quirurgico"]);
+    evaluarYMostrar("val-Conclusion", "wrap-Conclusion", p["Conclusion Contraindicacion"]);
+    evaluarYMostrar("val-Sugerencias", "wrap-Sugerencias", p["Sugerencias Recomendaciones"]);
+
+    // Pie de Página
+    let direccion = p["Dirección"] || p["Direccion"] || "";
+    let telefono1 = p["Numero de telefono principal"] || "";
+    let telefono2 = p["Numero secundario"] || "";
+    let whatsapp = p["Whatsapp"] || "";
+    let redes = p["Redes sociales"] || "";
+    let correo = p["Correo electronico"] || "";
+
+    if (direccion) document.getElementById("footer-direccion").innerText = "📍 " + direccion;
+
+    let telefonos = (telefono1 && telefono2) ? telefono1 + " / " + telefono2 : (telefono1 || telefono2);
+    let contactos = "";
+    if (telefonos) contactos = "📞 Telfs: " + telefonos;
+    if (whatsapp) {
+        if (contactos) contactos += "   |   ";
+        contactos += "💬 WhatsApp: " + whatsapp;
+    }
+    document.getElementById("footer-contactos").innerText = contactos;
+
+    let digital = "";
+    if (redes) digital = "🌐 " + redes;
+    if (correo) {
+        if (digital) digital += "   |   ";
+        digital += "✉ " + correo;
+    }
+    document.getElementById("footer-digital").innerText = digital;
+};
+
+/* =========================================================
+   DESCARGAR WORD CON PIE DE PÁGINA NATIVO Y FORMATOS ESPECÍFICOS
+========================================================= */
+
+function descargarWord() {
+    const datos = (typeof p !== "undefined") ? p : {};
+    const paciente = datos["Nombre Paciente"] || "Paciente";
+    const titulo = datos["Titulo"] || datos["Título"] || "CENTRO MÉDICO";
+    const subtitulo = datos["Subtítulo"] || datos["Subtitulo"] || "";
+    const logoURL = "https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW";
+
+    function tiene(val) {
+        return val && val !== "null" && val !== "undefined" && val.toString().trim() !== "";
+    }
+
+    const headerHTML = `
+        <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0;">
+            <tr>
+                <td style="width:125px; vertical-align:middle; text-align:left; padding:0;">
+                    <img src="${logoURL}" width="115" height="60" style="width:115px; height:60px; display:block; object-fit:contain;">
+                </td>
+                <td style="vertical-align:middle; text-align:center; padding:0 10px;">
+                    <div style="font-family:Arial,sans-serif; font-size:13pt; font-weight:bold; line-height:1.1;">
+                        ${titulo}
+                    </div>
+                    <div style="font-family:Arial,sans-serif; font-size:10.5pt; margin-top:3pt;">
+                        ${subtitulo}
+                    </div>
+                </td>
+                <td style="width:50px;">&nbsp;</td>
+            </tr>
+        </table>
+        <div style="border-bottom:1.5pt solid #000; margin-top:5pt;"></div>
+    `;
+
+    const docTitleHTML = `
+        <div style="text-align:center; margin-top:10pt; margin-bottom:12pt; font-family:Arial,sans-serif;">
+            <div style="font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline;">INFORME MÉDICO DE EVALUACIÓN PREOPERATORIA</div>
+        </div>
+    `;
+
+    const patientHTML = `
+        <table style="width:100%; border-collapse:collapse; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:12pt;">
+            <tr>
+                <td style="width:50%; border:1px solid #777; padding:5pt;"><strong>Paciente:</strong> ${datos["Nombre Paciente"] || ""}</td>
+                <td style="width:50%; border:1px solid #777; padding:5pt;"><strong>Cédula:</strong> ${datos["Cedula Paciente"] || ""}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #777; padding:5pt;"><strong>Edad:</strong> ${datos["Edad Paciente"] || ""}</td>
+                <td style="border:1px solid #777; padding:5pt;"><strong>Fecha Informe:</strong> ${datos["Fecha Informe"] ? formatearFechaLatina(datos["Fecha Informe"]) : ""}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #777; padding:5pt;"><strong>Médico Tratante:</strong> ${datos["Medico Tratante"] || ""}</td>
+                <td style="border:1px solid #777; padding:5pt;"><strong>Especialidad:</strong> ${datos["Especialidad Medico"] || ""}</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border:1px solid #777; padding:5pt;"><strong>Cirugía Propuesta:</strong> ${datos["Cirugia Propuesta"] || ""}</td>
+            </tr>
+        </table>
+    `;
+
+    // Construcción de Bloques Dinámicos para Word
+    let bodyBlocks = "";
+
+    if (tiene(datos["Personales"])) {
+        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>Personales:</strong> ${datos["Personales"]}</p>`;
+    }
+    if (tiene(datos["Familiares"])) {
+        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>Familiares:</strong> ${datos["Familiares"]}</p>`;
+    }
+    if (tiene(datos["Quirurgicos"])) {
+        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>Quirúrgicos:</strong> ${datos["Quirurgicos"]}</p>`;
+    }
+    if (tiene(datos["Esquema Vacunacion"])) {
+        bodyBlocks += `<p style="font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">${datos["Esquema Vacunacion"]}</p>`;
+    }
+    if (tiene(datos["Sintomas Cardiovasculares"])) {
+        bodyBlocks += `<p style="font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">${datos["Sintomas Cardiovasculares"]}</p>`;
+    }
+    if (tiene(datos["Examen Fisico"])) {
+        bodyBlocks += `<p style="font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;"><strong>Examen Físico:</strong> ${datos["Examen Fisico"]}</p>`;
+    }
+    if (tiene(datos["EKG"])) {
+        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>EKG:</strong> ${datos["EKG"]}</p>`;
+    }
+    if (tiene(datos["Radiografia Torax"])) {
+        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>Radiografía Tórax:</strong> ${datos["Radiografia Torax"]}</p>`;
+    }
+    if (tiene(datos["Laboratorio"])) {
+        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>Laboratorio:</strong> ${datos["Laboratorio"]}</p>`;
+    }
+    if (tiene(datos["Escalas Riesgo Quirurgico"])) {
+        bodyBlocks += `<p style="font-family:Arial,sans-serif; font-size:9.5pt; font-weight:bold; margin-bottom:6pt;">${datos["Escalas Riesgo Quirurgico"]}</p>`;
+    }
+    if (tiene(datos["Conclusion Contraindicacion"])) {
+        bodyBlocks += `<p style="font-family:Arial,sans-serif; font-size:9.5pt; font-weight:bold; text-decoration:underline; margin-top:2em; margin-bottom:6pt;">${datos["Conclusion Contraindicacion"]}</p>`;
+    }
+    if (tiene(datos["Sugerencias Recomendaciones"])) {
+        bodyBlocks += `<p style="margin-left: 1.5em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;"><strong>Sugerencias Recomendaciones:</strong> ${datos["Sugerencias Recomendaciones"]}</p>`;
+    }
+
+    const firmaHTML = `
+        <table style="width:100%; border-collapse:collapse; margin-top:45pt; font-family:Arial,sans-serif; font-size:9pt; text-align:center;">
+            <tr>
+                <td style="width:50%; padding-top:20pt;">
+                    <div style="border-top:1px solid #000; width:75%; margin:auto;"></div><br>${datos["Medico Tratante"] || "Médico Tratante"}<br>${datos["Especialidad Medico"] || "Especialidad"}
+                </td>
+                <td style="width:50%; padding-top:20pt;">
+                    <div style="border-top:1px solid #000; width:75%; margin:auto;"></div><br>Firma y Sello
+                </td>
+            </tr>
+        </table>
+    `;
+
+    // Pie de página Word
+    let direccion = datos["Dirección"] || datos["Direccion"] || "";
+    let telefono1 = datos["Numero de telefono principal"] || "";
+    let telefono2 = datos["Numero secundario"] || "";
+    let whatsapp = datos["Whatsapp"] || "";
+    let redes = datos["Redes sociales"] || "";
+    let correo = datos["Correo electronico"] || "";
+
+    let footerDireccion = direccion ? `📍 ${direccion}` : "";
+    let telefonos = (telefono1 && telefono2) ? telefono1 + " / " + telefono2 : (telefono1 || telefono2);
+    let footerContactos = telefonos ? `📞 Telfs: ${telefonos}` : "";
+    if (whatsapp) {
+        if (footerContactos) footerContactos += "   |   ";
+        footerContactos += `💬 WhatsApp: ${whatsapp}`;
+    }
+    let footerDigital = redes ? `🌐 ${redes}` : "";
+    if (correo) {
+        if (footerDigital) footerDigital += "   |   ";
+        footerDigital += `✉ ${correo}`;
+    }
+
+    const footerHTML = `
+        <div class="MsoFooter" style="font-family:Arial,sans-serif; font-size:8pt; color:#333; text-align:center; border-top:0.75pt solid #555; padding-top:4pt; line-height:1.1;">
+            ${footerDireccion ? `<p>${footerDireccion}</p>` : ""}
+            ${footerContactos ? `<p>${footerContactos}</p>` : ""}
+            ${footerDigital ? `<p>${footerDigital}</p>` : ""}
+        </div>
+    `;
+
+    const preHtml = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>Informe Médicos</title>
+<style>
+@page Section1 {
+    size:595.3pt 841.9pt;
+    margin: 0.55in 0.65in 0.75in 0.65in;
+    mso-header-margin:0.3in;
+    mso-footer-margin:0.30in;
+    mso-footer:f1;
+}
+div.Section1 { page:Section1; }
+table#hrdftrtbl { margin:0in 0in 0in 900in; width:1px; height:1px; overflow:hidden; }
+body { font-family:Arial, sans-serif; font-size:9.5pt; color:#000000; line-height:1.2; margin:0; padding:0; }
+p { margin-top:0; margin-bottom:3pt; }
+</style>
+</head>
+<body>
+<div class="Section1">
+${headerHTML}
+${docTitleHTML}
+${patientHTML}
+${bodyBlocks}
+${firmaHTML}
+</div>
+<table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td>
+<div style="mso-element:footer" id="f1">
+${footerHTML}
+</div>
+</td>
+</tr>
+</table>
+</body>
+</html>
+`;
+
+    const blob = new Blob(["\ufeff", preHtml], { type: "application/msword" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Informe_Medico_" + paciente.replace(/[^\w\sáéíóúÁÉÍÓÚñÑ-]/g, "").replace(/\s+/g, "_") + ".doc";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+</script>
+</body>
+</html>

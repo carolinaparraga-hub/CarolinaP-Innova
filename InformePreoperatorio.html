@@ -1,635 +1,404 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Informe de Evaluación Médica</title>
-
-<style>
-
-* {
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-    background-color: #f2f2f2;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #000;
-}
-
-.page {
-    background: #ffffff;
-    width: 210mm;
-    min-height: 297mm;
-    padding: 15mm 15mm 18mm 15mm;
-    box-shadow: 0 0 10px rgba(0,0,0,0.15);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.content-area {
-    flex-grow: 1;
-}
-
-/* =========================================================
-   MEMBRETE Y ENCABEZADO
-========================================================= */
-
-.header {
-    display: flex;
-    align-items: center;
-    border-bottom: 1.5px solid #000;
-    padding-bottom: 7px;
-    margin-bottom: 12px;
-}
-
-.header-logo-container {
-    width: 150px;
-    min-width: 150px;
-    text-align: left;
-}
-
-.header-logo {
-    max-width: 135px;
-    max-height: 70px;
-    object-fit: contain;
-}
-
-.header-info {
-    flex-grow: 1;
-    text-align: center;
-}
-
-.header-info h2 {
-    margin: 0;
-    font-size: 14pt;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.header-info h3 {
-    margin: 3px 0;
-    font-size: 10.5pt;
-    font-weight: normal;
-}
-
-.doc-title-container {
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 15px;
-}
-
-.doc-title-main {
-    font-size: 12pt;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-decoration: underline;
-    margin: 0;
-}
-
-/* =========================================================
-   DATOS DEL PACIENTE Y CIRUGÍA
-========================================================= */
-
-.patient-info {
-    width: 100%;
-    border: 1px solid #777;
-    border-collapse: collapse;
-    font-size: 9.8pt;
-    margin-bottom: 15px;
-}
-
-.patient-info td {
-    border: 1px solid #777;
-    padding: 6px 8px;
-    vertical-align: top;
-    line-height: 1.25;
-}
-
-.label {
-    font-weight: bold;
-}
-
-/* =========================================================
-   BLOQUES Y FORMATOS ESPECÍFICOS
-========================================================= */
-
-.block-item {
-    font-size: 9.8pt;
-    line-height: 1.35;
-    margin-bottom: 10px;
-    text-align: justify;
-}
-
-/* Viñetas a 3 espacios (~1.5em) del margen */
-.bullet-item {
-    padding-left: 1.5em;
-    text-indent: -0.8em;
-}
-
-/* Sugerencias a 3 espacios (~1.5em) del margen */
-.indented-item {
-    padding-left: 1.5em;
-}
-
-/* Estilo para Escalas de Riesgo Quirúrgico */
-.bold-all {
-    font-weight: bold;
-}
-
-/* Estilo para Conclusión Contraindicación: Negrita, Subrayado y +2em margen superior */
-.conclusion-style {
-    font-weight: bold;
-    text-decoration: underline;
-    margin-top: 2em;
-}
-
-/* =========================================================
-   FIRMA Y PIE DE PÁGINA
-========================================================= */
-
-.signature-area {
-    margin-top: 45px;
-    font-size: 9.5pt;
-}
-
-.signature-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.signature-table td {
-    width: 50%;
-    text-align: center;
-    vertical-align: bottom;
-    padding-top: 20px;
-}
-
-.signature-line {
-    border-top: 1px solid #000;
-    width: 75%;
-    margin: 0 auto 4px auto;
-}
-
-.footer {
-    border-top: 1px solid #000;
-    padding-top: 7px;
-    margin-top: 15px;
-    text-align: center;
-    font-size: 8pt;
-    line-height: 1.3;
-    color: #222;
-}
-
-.footer p {
-    margin: 2px 0;
-}
-
-/* =========================================================
-   BOTONES Y MEDIOS
-========================================================= */
-
-.action-buttons {
-    margin-top: 20px;
-    margin-bottom: 25px;
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-}
-
-.btn {
-    background-color: #1d5f99;
-    color: white;
-    border: none;
-    padding: 10px 22px;
-    font-size: 11pt;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.btn:hover {
-    background-color: #14436d;
-}
-
-@media print {
-    body { background: none; padding: 0; }
-    .page { box-shadow: none; width: 100%; min-height: 100vh; padding: 0; }
-    .action-buttons { display: none !important; }
-    @page { size: A4; margin: 12mm; }
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="page" id="informe-content">
-<div class="content-area">
-
-<!-- MEMBRETE -->
-<div class="header">
-    <div class="header-logo-container">
-        <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" alt="Logo" class="header-logo">
-    </div>
-    <div class="header-info">
-        <h2 id="field-Titulo"></h2>
-        <h3 id="field-Subtitulo"></h3>
-    </div>
-</div>
-
-<div class="doc-title-container">
-    <div class="doc-title-main">INFORME MÉDICO DE EVALUACIÓN PREOPERATORIA</div>
-</div>
-
-<!-- DATOS DEL PACIENTE -->
-<table class="patient-info">
-    <tr>
-        <td style="width: 50%;">
-            <span class="label">Paciente:</span> <span id="val-Nombre"></span>
-        </td>
-        <td style="width: 50%;">
-            <span class="label">Cédula:</span> <span id="val-Cedula"></span>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="label">Edad:</span> <span id="val-Edad"></span>
-        </td>
-        <td>
-            <span class="label">Fecha Informe:</span> <span id="val-Fecha"></span>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <span class="label">Médico Tratante:</span> <span id="val-Medico"></span>
-        </td>
-        <td>
-            <span class="label">Especialidad:</span> <span id="val-Especialidad"></span>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <span class="label">Cirugía Propuesta:</span> <span id="val-Cirugia"></span>
-        </td>
-    </tr>
-</table>
-
-<!-- SECCIONES DE CONTENIDO -->
-<div id="container-informe">
-    <div id="wrap-Personales" class="block-item bullet-item">● <strong>Personales:</strong> <span id="val-Personales"></span></div>
-    <div id="wrap-Familiares" class="block-item bullet-item">● <strong>Familiares:</strong> <span id="val-Familiares"></span></div>
-    <div id="wrap-Quirurgicos" class="block-item bullet-item">● <strong>Quirúrgicos:</strong> <span id="val-Quirurgicos"></span></div>
-    <div id="wrap-Vacunacion" class="block-item"><span id="val-Vacunacion"></span></div>
-    <div id="wrap-Sintomas" class="block-item"><span id="val-Sintomas"></span></div>
-    <div id="wrap-ExamenFisico" class="block-item"><strong>Examen Físico:</strong> <span id="val-ExamenFisico"></span></div>
-    <div id="wrap-EKG" class="block-item bullet-item">● <strong>EKG:</strong> <span id="val-EKG"></span></div>
-    <div id="wrap-Radiografia" class="block-item bullet-item">● <strong>Radiografía Tórax:</strong> <span id="val-Radiografia"></span></div>
-    <div id="wrap-Laboratorio" class="block-item bullet-item">● <strong>Laboratorio:</strong> <span id="val-Laboratorio"></span></div>
-    <div id="wrap-Escalas" class="block-item bold-all"><span id="val-Escalas"></span></div>
-    <div id="wrap-Conclusion" class="block-item conclusion-style"><span id="val-Conclusion"></span></div>
-    <div id="wrap-Sugerencias" class="block-item indented-item"><strong>Sugerencias Recomendaciones:</strong> <span id="val-Sugerencias"></span></div>
-</div>
-
-<!-- FIRMAS -->
-<div class="signature-area">
-    <table class="signature-table">
-        <tr>
-            <td>
-                <div class="signature-line"></div>
-                <span id="val-FirmaMedico">Médico Tratante</span><br>
-                <span id="val-FirmaEspecialidad">Especialidad</span>
-            </td>
-            <td>
-                <div class="signature-line"></div>
-                Firma y Sello
-            </td>
-        </tr>
-    </table>
-</div>
-
-</div>
-
-<!-- PIE DE PÁGINA -->
-<div class="footer">
-    <p id="footer-direccion"></p>
-    <p id="footer-contactos"></p>
-    <p id="footer-digital"></p>
-</div>
-
-</div>
-
-<!-- BOTONES DE ACCIÓN -->
-<div class="action-buttons">
-    <button class="btn" onclick="window.print()">Imprimir PDF</button>
-    <button class="btn" onclick="descargarWord()">Descargar Word</button>
-</div>
-
-<script>
-
-function obtenerParametros() {
-    const params = {};
-    const searchParams = new URLSearchParams(window.location.search);
-    searchParams.forEach((value, key) => {
-        params[key] = value;
-    });
-    return params;
-}
-
-function formatearFechaLatina(fechaStr) {
-    if (!fechaStr) return "";
-    let fecha = fechaStr.trim();
-    if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
-        const partes = fecha.split("-");
-        return partes[2] + "/" + partes[1] + "/" + partes[0];
-    }
-    return fecha;
-}
-
-function evaluarYMostrar(idVal, idWrap, valor) {
-    const elemento = document.getElementById(idVal);
-    const wrapper = document.getElementById(idWrap);
-    if (!elemento) return false;
-
-    if (!valor || valor === "null" || valor === "undefined" || valor.toString().trim() === "") {
-        if (wrapper) wrapper.style.display = "none";
-        return false;
-    } else {
-        elemento.innerText = valor;
-        if (wrapper) wrapper.style.display = "block";
-        return true;
-    }
-}
-
-function colocarValor(id, valor) {
-    const elemento = document.getElementById(id);
-    if (elemento) elemento.innerText = (valor && valor !== "null" && valor !== "undefined") ? valor : "";
-}
-
-let p = {};
-
-window.onload = function() {
-    p = obtenerParametros();
-
-    colocarValor("field-Titulo", p["Titulo"] || p["Título"]);
-    colocarValor("field-Subtitulo", p["Subtítulo"] || p["Subtitulo"]);
-
-    // Datos del Paciente
-    colocarValor("val-Nombre", p["Nombre Paciente"]);
-    colocarValor("val-Cedula", p["Cedula Paciente"]);
-    colocarValor("val-Edad", p["Edad Paciente"]);
-    colocarValor("val-Fecha", formatearFechaLatina(p["Fecha Informe"]));
-    colocarValor("val-Medico", p["Medico Tratante"]);
-    colocarValor("val-Especialidad", p["Especialidad Medico"]);
-    colocarValor("val-Cirugia", p["Cirugia Propuesta"]);
-
-    // Firmas
-    colocarValor("val-FirmaMedico", p["Medico Tratante"] || "Médico Tratante");
-    colocarValor("val-FirmaEspecialidad", p["Especialidad Medico"] || "Especialista");
-
-    // Mapeo dinámico de campos con reglas
-    evaluarYMostrar("val-Personales", "wrap-Personales", p["Personales"]);
-    evaluarYMostrar("val-Familiares", "wrap-Familiares", p["Familiares"]);
-    evaluarYMostrar("val-Quirurgicos", "wrap-Quirurgicos", p["Quirurgicos"]);
-    evaluarYMostrar("val-Vacunacion", "wrap-Vacunacion", p["Esquema Vacunacion"]);
-    evaluarYMostrar("val-Sintomas", "wrap-Sintomas", p["Sintomas Cardiovasculares"]);
-    evaluarYMostrar("val-ExamenFisico", "wrap-ExamenFisico", p["Examen Fisico"]);
-    evaluarYMostrar("val-EKG", "wrap-EKG", p["EKG"]);
-    evaluarYMostrar("val-Radiografia", "wrap-Radiografia", p["Radiografia Torax"]);
-    evaluarYMostrar("val-Laboratorio", "wrap-Laboratorio", p["Laboratorio"]);
-    evaluarYMostrar("val-Escalas", "wrap-Escalas", p["Escalas Riesgo Quirurgico"]);
-    evaluarYMostrar("val-Conclusion", "wrap-Conclusion", p["Conclusion Contraindicacion"]);
-    evaluarYMostrar("val-Sugerencias", "wrap-Sugerencias", p["Sugerencias Recomendaciones"]);
-
-    // Pie de Página
-    let direccion = p["Dirección"] || p["Direccion"] || "";
-    let telefono1 = p["Numero de telefono principal"] || "";
-    let telefono2 = p["Numero secundario"] || "";
-    let whatsapp = p["Whatsapp"] || "";
-    let redes = p["Redes sociales"] || "";
-    let correo = p["Correo electronico"] || "";
-
-    if (direccion) document.getElementById("footer-direccion").innerText = "📍 " + direccion;
-
-    let telefonos = (telefono1 && telefono2) ? telefono1 + " / " + telefono2 : (telefono1 || telefono2);
-    let contactos = "";
-    if (telefonos) contactos = "📞 Telfs: " + telefonos;
-    if (whatsapp) {
-        if (contactos) contactos += "   |   ";
-        contactos += "💬 WhatsApp: " + whatsapp;
-    }
-    document.getElementById("footer-contactos").innerText = contactos;
-
-    let digital = "";
-    if (redes) digital = "🌐 " + redes;
-    if (correo) {
-        if (digital) digital += "   |   ";
-        digital += "✉ " + correo;
-    }
-    document.getElementById("footer-digital").innerText = digital;
-};
-
-/* =========================================================
-   DESCARGAR WORD CON PIE DE PÁGINA NATIVO Y FORMATOS ESPECÍFICOS
-========================================================= */
-
-function descargarWord() {
-    const datos = (typeof p !== "undefined") ? p : {};
-    const paciente = datos["Nombre Paciente"] || "Paciente";
-    const titulo = datos["Titulo"] || datos["Título"] || "CENTRO MÉDICO";
-    const subtitulo = datos["Subtítulo"] || datos["Subtitulo"] || "";
-    const logoURL = "https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW";
-
-    function tiene(val) {
-        return val && val !== "null" && val !== "undefined" && val.toString().trim() !== "";
-    }
-
-    const headerHTML = `
-        <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0;">
-            <tr>
-                <td style="width:125px; vertical-align:middle; text-align:left; padding:0;">
-                    <img src="${logoURL}" width="115" height="60" style="width:115px; height:60px; display:block; object-fit:contain;">
-                </td>
-                <td style="vertical-align:middle; text-align:center; padding:0 10px;">
-                    <div style="font-family:Arial,sans-serif; font-size:13pt; font-weight:bold; line-height:1.1;">
-                        ${titulo}
-                    </div>
-                    <div style="font-family:Arial,sans-serif; font-size:10.5pt; margin-top:3pt;">
-                        ${subtitulo}
-                    </div>
-                </td>
-                <td style="width:50px;">&nbsp;</td>
-            </tr>
-        </table>
-        <div style="border-bottom:1.5pt solid #000; margin-top:5pt;"></div>
-    `;
-
-    const docTitleHTML = `
-        <div style="text-align:center; margin-top:10pt; margin-bottom:12pt; font-family:Arial,sans-serif;">
-            <div style="font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline;">INFORME MÉDICO DE EVALUACIÓN PREOPERATORIA</div>
-        </div>
-    `;
-
-    const patientHTML = `
-        <table style="width:100%; border-collapse:collapse; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:12pt;">
-            <tr>
-                <td style="width:50%; border:1px solid #777; padding:5pt;"><strong>Paciente:</strong> ${datos["Nombre Paciente"] || ""}</td>
-                <td style="width:50%; border:1px solid #777; padding:5pt;"><strong>Cédula:</strong> ${datos["Cedula Paciente"] || ""}</td>
-            </tr>
-            <tr>
-                <td style="border:1px solid #777; padding:5pt;"><strong>Edad:</strong> ${datos["Edad Paciente"] || ""}</td>
-                <td style="border:1px solid #777; padding:5pt;"><strong>Fecha Informe:</strong> ${datos["Fecha Informe"] ? formatearFechaLatina(datos["Fecha Informe"]) : ""}</td>
-            </tr>
-            <tr>
-                <td style="border:1px solid #777; padding:5pt;"><strong>Médico Tratante:</strong> ${datos["Medico Tratante"] || ""}</td>
-                <td style="border:1px solid #777; padding:5pt;"><strong>Especialidad:</strong> ${datos["Especialidad Medico"] || ""}</td>
-            </tr>
-            <tr>
-                <td colspan="2" style="border:1px solid #777; padding:5pt;"><strong>Cirugía Propuesta:</strong> ${datos["Cirugia Propuesta"] || ""}</td>
-            </tr>
-        </table>
-    `;
-
-    // Construcción de Bloques Dinámicos para Word
-    let bodyBlocks = "";
-
-    if (tiene(datos["Personales"])) {
-        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>Personales:</strong> ${datos["Personales"]}</p>`;
-    }
-    if (tiene(datos["Familiares"])) {
-        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>Familiares:</strong> ${datos["Familiares"]}</p>`;
-    }
-    if (tiene(datos["Quirurgicos"])) {
-        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>Quirúrgicos:</strong> ${datos["Quirurgicos"]}</p>`;
-    }
-    if (tiene(datos["Esquema Vacunacion"])) {
-        bodyBlocks += `<p style="font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">${datos["Esquema Vacunacion"]}</p>`;
-    }
-    if (tiene(datos["Sintomas Cardiovasculares"])) {
-        bodyBlocks += `<p style="font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">${datos["Sintomas Cardiovasculares"]}</p>`;
-    }
-    if (tiene(datos["Examen Fisico"])) {
-        bodyBlocks += `<p style="font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;"><strong>Examen Físico:</strong> ${datos["Examen Fisico"]}</p>`;
-    }
-    if (tiene(datos["EKG"])) {
-        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>EKG:</strong> ${datos["EKG"]}</p>`;
-    }
-    if (tiene(datos["Radiografia Torax"])) {
-        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>Radiografía Tórax:</strong> ${datos["Radiografia Torax"]}</p>`;
-    }
-    if (tiene(datos["Laboratorio"])) {
-        bodyBlocks += `<p style="margin-left: 1.5em; text-indent: -0.8em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;">● <strong>Laboratorio:</strong> ${datos["Laboratorio"]}</p>`;
-    }
-    if (tiene(datos["Escalas Riesgo Quirurgico"])) {
-        bodyBlocks += `<p style="font-family:Arial,sans-serif; font-size:9.5pt; font-weight:bold; margin-bottom:6pt;">${datos["Escalas Riesgo Quirurgico"]}</p>`;
-    }
-    if (tiene(datos["Conclusion Contraindicacion"])) {
-        bodyBlocks += `<p style="font-family:Arial,sans-serif; font-size:9.5pt; font-weight:bold; text-decoration:underline; margin-top:2em; margin-bottom:6pt;">${datos["Conclusion Contraindicacion"]}</p>`;
-    }
-    if (tiene(datos["Sugerencias Recomendaciones"])) {
-        bodyBlocks += `<p style="margin-left: 1.5em; font-family:Arial,sans-serif; font-size:9.5pt; margin-bottom:6pt;"><strong>Sugerencias Recomendaciones:</strong> ${datos["Sugerencias Recomendaciones"]}</p>`;
-    }
-
-    const firmaHTML = `
-        <table style="width:100%; border-collapse:collapse; margin-top:45pt; font-family:Arial,sans-serif; font-size:9pt; text-align:center;">
-            <tr>
-                <td style="width:50%; padding-top:20pt;">
-                    <div style="border-top:1px solid #000; width:75%; margin:auto;"></div><br>${datos["Medico Tratante"] || "Médico Tratante"}<br>${datos["Especialidad Medico"] || "Especialidad"}
-                </td>
-                <td style="width:50%; padding-top:20pt;">
-                    <div style="border-top:1px solid #000; width:75%; margin:auto;"></div><br>Firma y Sello
-                </td>
-            </tr>
-        </table>
-    `;
-
-    // Pie de página Word
-    let direccion = datos["Dirección"] || datos["Direccion"] || "";
-    let telefono1 = datos["Numero de telefono principal"] || "";
-    let telefono2 = datos["Numero secundario"] || "";
-    let whatsapp = datos["Whatsapp"] || "";
-    let redes = datos["Redes sociales"] || "";
-    let correo = datos["Correo electronico"] || "";
-
-    let footerDireccion = direccion ? `📍 ${direccion}` : "";
-    let telefonos = (telefono1 && telefono2) ? telefono1 + " / " + telefono2 : (telefono1 || telefono2);
-    let footerContactos = telefonos ? `📞 Telfs: ${telefonos}` : "";
-    if (whatsapp) {
-        if (footerContactos) footerContactos += "   |   ";
-        footerContactos += `💬 WhatsApp: ${whatsapp}`;
-    }
-    let footerDigital = redes ? `🌐 ${redes}` : "";
-    if (correo) {
-        if (footerDigital) footerDigital += "   |   ";
-        footerDigital += `✉ ${correo}`;
-    }
-
-    const footerHTML = `
-        <div class="MsoFooter" style="font-family:Arial,sans-serif; font-size:8pt; color:#333; text-align:center; border-top:0.75pt solid #555; padding-top:4pt; line-height:1.1;">
-            ${footerDireccion ? `<p>${footerDireccion}</p>` : ""}
-            ${footerContactos ? `<p>${footerContactos}</p>` : ""}
-            ${footerDigital ? `<p>${footerDigital}</p>` : ""}
-        </div>
-    `;
-
-    const preHtml = `
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head>
-<meta charset="utf-8">
-<title>Informe Médicos</title>
-<style>
-@page Section1 {
-    size:595.3pt 841.9pt;
-    margin: 0.55in 0.65in 0.75in 0.65in;
-    mso-header-margin:0.3in;
-    mso-footer-margin:0.30in;
-    mso-footer:f1;
-}
-div.Section1 { page:Section1; }
-table#hrdftrtbl { margin:0in 0in 0in 900in; width:1px; height:1px; overflow:hidden; }
-body { font-family:Arial, sans-serif; font-size:9.5pt; color:#000000; line-height:1.2; margin:0; padding:0; }
-p { margin-top:0; margin-bottom:3pt; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Preoperatoria</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Times New Roman', Times, serif; }
+        body { background-color: #f2f2f2; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #000; }
+        .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 20mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+        .content-area { flex-grow: 1; }
+        
+        /* Membrete estilo Captura */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; }
+        .header-logo { max-width: 170px; max-height: 85px; object-fit: contain; }
+        .header-info { text-align: center; flex-grow: 1; }
+        .header-info h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
+        .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
+        .header-info p { margin: 1px 0; font-size: 10pt; font-weight: bold; }
+        
+        /* Datos Paciente estilo Captura */
+        .patient-info { width: 100%; margin-bottom: 15px; font-size: 10.5pt; line-height: 1.4; }
+        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 10px; }
+        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 4px; column-gap: 20px; }
+        .divider { border-bottom: 1px solid #ccc; margin: 10px 0 15px 0; }
+        
+        /* Cuerpo del Informe */
+        .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 15px 0 15px 0; }
+        .report-body { font-size: 10.5pt; line-height: 1.45; text-align: justify; }
+        .section-item { margin-bottom: 10px; }
+        .multiline-text { white-space: pre-wrap; }
+        
+        /* Pie de página e Íconos */
+        .footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 20px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
+        .footer p { margin: 3px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .footer-item { display: inline-flex; align-items: center; gap: 4px; }
+        .icon { width: 11px; height: 11px; fill: #333; vertical-align: middle; display: inline-block; }
+        
+        /* Botones Acción */
+        .action-buttons { margin-top: 25px; margin-bottom: 30px; display: flex; gap: 15px; justify-content: center; }
+        .btn { background-color: #1d5f99; color: #ffffff; border: none; padding: 10px 22px; font-size: 11pt; font-weight: bold; border-radius: 4px; cursor: pointer; font-family: Arial, sans-serif; }
+        .btn:hover { background-color: #14436d; }
+        
+        @media print {
+            body { background: none; padding: 0; }
+            .page { box-shadow: none; width: 100%; padding: 0; min-height: 100vh; }
+            .action-buttons { display: none !important; }
+            @page { size: A4; margin: 15mm; }
+        }
+    </style>
 </head>
 <body>
-<div class="Section1">
-${headerHTML}
-${docTitleHTML}
-${patientHTML}
-${bodyBlocks}
-${firmaHTML}
-</div>
-<table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td>
-<div style="mso-element:footer" id="f1">
-${footerHTML}
-</div>
-</td>
-</tr>
-</table>
-</body>
-</html>
-`;
 
-    const blob = new Blob(["\ufeff", preHtml], { type: "application/msword" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Informe_Medico_" + paciente.replace(/[^\w\sáéíóúÁÉÍÓÚñÑ-]/g, "").replace(/\s+/g, "_") + ".doc";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
+    <div class="page" id="informe-content">
+        <div class="content-area">
+            <!-- MEMBRETE ESTILO CAPTURA -->
+            <div class="header">
+                <div style="width: 170px;">
+                    <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" alt="Logo" class="header-logo" id="logo-centro">
+                </div>
+                <div class="header-info">
+                    <h2 id="field-Titulo"></h2>
+                    <h3 id="field-Subtitulo"></h3>
+                    <p><span id="field-Medico-tratante"></span> - <span id="field-Especialidad-Medica"></span></p>
+                </div>
+            </div>
 
-</script>
+            <!-- DATOS DEL PACIENTE ESTILO CAPTURA -->
+            <div class="patient-info">
+                <div class="date-row" id="sec-Fecha">Fecha: <span id="val-Fecha"></span></div>
+                <div class="patient-grid">
+                    <div id="sec-Nombre-y-Apellido"><strong>Paciente:</strong> <span id="val-Nombre-y-Apellido"></span></div>
+                    <div id="sec-Edad"><strong>Edad:</strong> <span id="val-Edad"></span></div>
+                    <div id="sec-Cedula"><strong>C.I:</strong> <span id="val-Cedula"></span></div>
+                    <div id="sec-FN"><strong>F / N:</strong> <span id="val-FN"></span></div>
+                    <div id="sec-Telefono"><strong>Telf:</strong> <span id="val-Telefono"></span></div>
+                    <div id="sec-Ocupacion"><strong>Ocupación:</strong> <span id="val-Ocupacion"></span></div>
+                    <div id="sec-Aseguradora"><strong>Aseguradora:</strong> <span id="val-Aseguradora"></span></div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+            <div class="report-title">Evaluación Preoperatoria</div>
+
+            <!-- CUERPO COMPLETO DE EVALUACIÓN PREOPERATORIA -->
+            <div class="report-body">
+                <div class="section-item" id="sec-Cirugia-Propuesta"><strong>Cirugía Propuesta:</strong> <span id="val-Cirugia-Propuesta" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Antecedentes-Personales"><strong>Antecedentes Personales:</strong> <span id="val-Antecedentes-Personales" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Antecedentes-Familiares"><strong>Antecedentes Familiares:</strong> <span id="val-Antecedentes-Familiares" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Antecedentes-Quirurgicos"><strong>Antecedentes Quirúrgicos:</strong> <span id="val-Antecedentes-Quirurgicos" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Esquema-Vacunacion"><strong>Esquema de Vacunación:</strong> <span id="val-Esquema-Vacunacion" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Sintomas-Cardiovasculares"><strong>Síntomas Cardiovasculares:</strong> <span id="val-Sintomas-Cardiovasculares" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Examen-Fisico"><strong>Examen Físico:</strong> <span id="val-Examen-Fisico" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-EKG"><strong>EKG:</strong> <span id="val-EKG" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Radiografia-Torax"><strong>Radiografía de Tórax:</strong> <span id="val-Radiografia-Torax" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Laboratorio"><strong>Laboratorio:</strong> <span id="val-Laboratorio" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Escalas-Riesgo"><strong>Escalas de Riesgo Quirúrgico:</strong> <span id="val-Escalas-Riesgo" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Conclusion-Contraindicacion"><strong>Conclusión / Contraindicación:</strong> <span id="val-Conclusion-Contraindicacion" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Sugerencias-Recomendaciones"><strong>Sugerencias / Recomendaciones:</strong> <span id="val-Sugerencias-Recomendaciones" class="multiline-text"></span></div>
+            </div>
+        </div>
+
+        <!-- PIE DE PÁGINA -->
+        <div class="footer">
+            <p id="sec-Direccion">
+                <span class="footer-item">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <span id="field-Direccion"></span>
+                </span>
+            </p>
+            <p id="sec-Contactos-Tel">
+                <span id="sec-Telefonos" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    <strong>Telfs:</strong> <span id="field-Telefonos"></span>
+                </span>
+                <span id="sec-Whatsapp" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 16.5c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.22 8.24z"/></svg>
+                    <strong>WhatsApp:</strong> <span id="field-Whatsapp"></span>
+                </span>
+            </p>
+            <p id="sec-Contactos-Digital">
+                <span id="sec-Redes" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7 wonderh-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
+                    <span id="field-Redes"></span>
+                </span>
+                <span id="sec-Correo" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span id="field-Correo"></span>
+                </span>
+            </p>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn" onclick="window.print()">Imprimir PDF</button>
+        <button class="btn" onclick="descargarWord()">Descargar Word</button>
+    </div>
+
+    <script>
+        function obtenerParametros() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const pairs = queryString.split("&");
+            for (let i = 0; i < pairs.length; i++) {
+                if (!pairs[i]) continue;
+                const pair = pairs[i].split("=");
+                const key = decodeURIComponent(pair[0].replace(/\+/g, " ")).trim();
+                const value = decodeURIComponent((pair[1] || "").replace(/\+/g, " ")).trim();
+                params[key] = value;
+            }
+            return params;
+        }
+
+        function formatearFechaLatina(fechaStr) {
+            if (!fechaStr) return '';
+            let partes = fechaStr.split(/[-/]/);
+            if (partes[0].length === 4) return `${partes[2].padStart(2, '0')}/${partes[1].padStart(2, '0')}/${partes[0]}`;
+            if (partes.length === 3 && partes[2].length === 4) return `${partes[1].padStart(2, '0')}/${partes[0].padStart(2, '0')}/${partes[2]}`;
+            return fechaStr;
+        }
+
+        let p = {};
+
+        window.onload = function() {
+            p = obtenerParametros();
+
+            document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
+            document.getElementById('field-Subtitulo').innerText = p['Subtítulo'] || p['Subtitulo'] || '';
+            document.getElementById('field-Medico-tratante').innerText = p['Medico Tratante'] || p['Medico tratante'] || '';
+            document.getElementById('field-Especialidad-Medica').innerText = p['Especialidad Medico'] || p['Especialidad Medica'] || '';
+
+            if (p['Dirección'] || p['Direccion']) document.getElementById('field-Direccion').innerText = p['Dirección'] || p['Direccion'];
+            else document.getElementById('sec-Direccion').style.display = 'none';
+
+            const tel1 = p['Numero de telefono principal'] || '';
+            const tel2 = p['Numero secundario'] || '';
+            let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+            if (telfsFinal) {
+                document.getElementById('field-Telefonos').innerText = telfsFinal;
+                document.getElementById('sec-Telefonos').style.display = 'inline-flex';
+            }
+
+            if (p['Whatsapp']) {
+                document.getElementById('field-Whatsapp').innerText = p['Whatsapp'];
+                document.getElementById('sec-Whatsapp').style.display = 'inline-flex';
+            }
+
+            if (p['Redes sociales']) {
+                document.getElementById('field-Redes').innerText = p['Redes sociales'];
+                document.getElementById('sec-Redes').style.display = 'inline-flex';
+            }
+            if (p['Correo electronico']) {
+                document.getElementById('field-Correo').innerText = p['Correo electronico'];
+                document.getElementById('sec-Correo').style.display = 'inline-flex';
+            }
+
+            const mapaCampos = [
+                { key: 'Fecha Informe', target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
+                { key: 'Fecha', target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
+                { key: 'Nombre Paciente', target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
+                { key: 'Nombre y Apellido', target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
+                { key: 'Cedula Paciente', target: 'val-Cedula', sec: 'sec-Cedula' },
+                { key: 'Cedula', target: 'val-Cedula', sec: 'sec-Cedula' },
+                { key: 'Telefono', target: 'val-Telefono', sec: 'sec-Telefono' },
+                { key: 'F / N', target: 'val-FN', sec: 'sec-FN' },
+                { key: 'Edad Paciente', target: 'val-Edad', sec: 'sec-Edad' },
+                { key: 'Edad', target: 'val-Edad', sec: 'sec-Edad' },
+                { key: 'Ocupacion', target: 'val-Ocupacion', sec: 'sec-Ocupacion' },
+                { key: 'Aseguradora', target: 'val-Aseguradora', sec: 'sec-Aseguradora' },
+
+                /* Campos específicos de la Evaluación Preoperatoria */
+                { key: 'Cirugia Propuesta', target: 'val-Cirugia-Propuesta', sec: 'sec-Cirugia-Propuesta' },
+                { key: 'Personales', target: 'val-Antecedentes-Personales', sec: 'sec-Antecedentes-Personales' },
+                { key: 'Familiares', target: 'val-Antecedentes-Familiares', sec: 'sec-Antecedentes-Familiares' },
+                { key: 'Quirurgicos', target: 'val-Antecedentes-Quirurgicos', sec: 'sec-Antecedentes-Quirurgicos' },
+                { key: 'Esquema Vacunacion', target: 'val-Esquema-Vacunacion', sec: 'sec-Esquema-Vacunacion' },
+                { key: 'Sintomas Cardiovasculares', target: 'val-Sintomas-Cardiovasculares', sec: 'sec-Sintomas-Cardiovasculares' },
+                { key: 'Examen Fisico', target: 'val-Examen-Fisico', sec: 'sec-Examen-Fisico' },
+                { key: 'EKG', target: 'val-EKG', sec: 'sec-EKG' },
+                { key: 'Radiografia Torax', target: 'val-Radiografia-Torax', sec: 'sec-Radiografia-Torax' },
+                { key: 'Laboratorio', target: 'val-Laboratorio', sec: 'sec-Laboratorio' },
+                { key: 'Escalas Riesgo Quirurgico', target: 'val-Escalas-Riesgo', sec: 'sec-Escalas-Riesgo' },
+                { key: 'Conclusion Contraindicacion', target: 'val-Conclusion-Contraindicacion', sec: 'sec-Conclusion-Contraindicacion' },
+                { key: 'Sugerencias Recomendaciones', target: 'val-Sugerencias-Recomendaciones', sec: 'sec-Sugerencias-Recomendaciones' }
+            ];
+
+            mapaCampos.forEach(c => {
+                let val = p[c.key];
+                const elTarget = document.getElementById(c.target);
+                const elSec = document.getElementById(c.sec);
+
+                if (val && val !== 'null' && val !== 'undefined') {
+                    if (c.fecha) val = formatearFechaLatina(val);
+                    if (elTarget) elTarget.innerText = val;
+                    if (elSec) elSec.style.display = 'block';
+                }
+            });
+        };
+
+        function descargarWord() {
+            var datos = (typeof p !== 'undefined') ? p : {};
+
+            var paciente = datos['Nombre Paciente'] || datos['Nombre y Apellido'] || '';
+            var edad = datos['Edad Paciente'] || datos['Edad'] || '';
+            var ci = datos['Cedula Paciente'] || datos['Cedula'] || '';
+            var fn = datos['F / N'] || '';
+            var telf = datos['Telefono'] || '';
+            var ocupacion = datos['Ocupacion'] || '';
+            var aseguradora = datos['Aseguradora'] || '';
+
+            var titulo = datos['Titulo'] || '';
+            var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
+            var medico = datos['Medico Tratante'] || datos['Medico tratante'] || '';
+            var especialidad = datos['Especialidad Medico'] || datos['Especialidad Medica'] || '';
+            var direccion = datos['Dirección'] || datos['Direccion'] || '';
+            var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
+            var logoURL = 'https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW';
+
+            var node = document.getElementById("informe-content");
+            var cuerpoHTML = '';
+
+            if (node) {
+                var clone = node.cloneNode(true);
+                clone.querySelectorAll('.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr').forEach(function(el) { el.remove(); });
+                var reportBody = clone.querySelector('.report-body');
+                if (reportBody) cuerpoHTML = reportBody.innerHTML;
+            }
+
+            var headerHTML = `
+                <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0 0 0 8mm; padding:0;">
+                    <tr>
+                        <td style="width:120px; vertical-align:middle; text-align:left; padding:0;">
+                            <img src="${logoURL}" width="120" height="60" style="width:120px; height:60px; display:block; object-fit:contain;" alt="Logo">
+                        </td>
+                        <td style="width:auto; vertical-align:middle; text-align:center; padding:0 6px 0 18px;">
+                            <div style="font-family:'Times New Roman', serif; font-size:12pt; font-weight:bold; line-height:1.05; margin:0; padding:0;">${titulo}</div>
+                            <div style="font-family:'Times New Roman', serif; font-size:11pt; line-height:1.05; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
+                            <div style="font-family:'Times New Roman', serif; font-size:10pt; font-weight:bold; line-height:1.05; margin:3pt 0 0 0; padding:0;">${medicoEsp}</div>
+                        </td>
+                        <td style="width:70px; padding:0;">&nbsp;</td>
+                    </tr>
+                </table>
+                <div style="border-bottom:1.5pt solid #000000; margin-top:5pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
+            `;
+
+            var espaciadorMembreteFecha = `
+                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+            `;
+
+            var espaciadorFechaPaciente = `
+                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+            `;
+
+            var espaciadorDatosTitulo = `
+                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+            `;
+
+            var fechaInforme = datos['Fecha Informe'] || datos['Fecha'] || '';
+
+            var patientHTML = `
+                ${espaciadorMembreteFecha}
+                <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman', serif; font-size:10pt; line-height:1; margin:0;">
+                    <tr><td style="width:100%; text-align:right; padding:0; line-height:1;"><strong>Fecha:</strong> ${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</td></tr>
+                </table>
+                
+                ${espaciadorFechaPaciente}
+                
+                <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-family:'Times New Roman', serif; font-size:10pt; line-height:1; margin:0; padding:0;">
+                    <tr>
+                        <td style="width:55%; padding:1.5pt 0;"><strong>Paciente:</strong> ${paciente}</td>
+                        <td style="width:45%; padding:1.5pt 0;"><strong>Edad:</strong> ${edad}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:1.5pt 0;"><strong>C.I:</strong> ${ci}</td>
+                        <td style="padding:1.5pt 0;"><strong>F / N:</strong> ${fn}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:1.5pt 0;"><strong>Telf:</strong> ${telf}</td>
+                        <td style="padding:1.5pt 0;"><strong>Ocupación:</strong> ${ocupacion}</td>
+                    </tr>
+                    ${aseguradora ? `<tr><td style="padding:1.5pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td><td style="padding:1.5pt 0;">&nbsp;</td></tr>` : ''}
+                </table>
+                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:6pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
+                
+                ${espaciadorDatosTitulo}
+            `;
+
+            var footerDireccion = direccion ? `<p style="margin:0; padding:0; line-height:1;">📍 ${direccion}</p>` : '';
+            var tel1 = datos['Numero de telefono principal'] || '';
+            var tel2 = datos['Numero secundario'] || '';
+            var telfs = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+            var wa = datos['Whatsapp'] || '';
+            var redes = datos['Redes sociales'] || '';
+            var correo = datos['Correo electronico'] || '';
+
+            var footerTexto = `
+                ${footerDireccion}
+                <p style="margin:2pt 0 0 0; padding:0; line-height:1;">
+                    ${telfs ? `📞 <strong>Telfs:</strong> ${telfs}` : ''} 
+                    ${wa ? ` | 💬 <strong>WhatsApp:</strong> ${wa}` : ''}
+                </p>
+                <p style="margin:2pt 0 0 0; padding:0; line-height:1;">
+                    ${redes ? `🌐 ${redes}` : ''} 
+                    ${correo ? ` | ✉️ ${correo}` : ''}
+                </p>
+            `;
+
+            var preHtml = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="utf-8">
+                    <title>Evaluación Preoperatoria</title>
+                    <style>
+                        @page Section1 {
+                            size:595.3pt 841.9pt;
+                            margin: 0.65in 0.75in 0.80in 0.75in;
+                            mso-header-margin:0.3in;
+                            mso-footer-margin:0.30in;
+                            mso-footer:f1;
+                        }
+                        div.Section1 { page:Section1; }
+                        table#hrdftrtbl { margin: 0in 0in 0in 900in; width:1px; height:1px; overflow:hidden; }
+                        body { font-family:'Times New Roman', serif; font-size:10.5pt; color:#000000; line-height:1.12; margin:0; padding:0; }
+                        .doc-title { font-family:'Times New Roman', serif; text-align:center; font-size:12.5pt; font-weight:bold; text-decoration:underline; line-height:1; margin-top:0pt; margin-bottom:9pt; }
+                        .report-body { font-family:'Times New Roman', serif; font-size:10.5pt; line-height:1.15; text-align:justify; margin:0; padding:0; }
+                        .section-item { margin-top:0pt; margin-bottom:6pt; line-height:1.15; }
+                        .multiline-text { white-space:pre-wrap; }
+                        p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }
+                        div.MsoFooter { font-family:Arial, sans-serif; font-size:8.5pt; color:#333333; text-align:center; border-top:0.75pt solid #555555; padding-top:3pt; line-height:1.05; }
+                    </style>
+                </head>
+                <body>
+                    <div class="Section1">
+                        ${headerHTML}
+                        ${patientHTML}
+                        <div class="doc-title" align="center"><u><b>Evaluación Preoperatoria</b></u></div>
+                        <div class="report-body">${cuerpoHTML}</div>
+                    </div>
+                    <table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
+                        <tr><td>
+                            <div style="mso-element:footer" id="f1">
+                                <div class="MsoFooter">${footerTexto}</div>
+                            </div>
+                        </td></tr>
+                    </table>
+                </body>
+                </html>
+            `;
+
+            var blob = new Blob(['\ufeff', preHtml], { type:'application/msword' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = 'Evaluacion_Preoperatoria_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
 </body>
 </html>

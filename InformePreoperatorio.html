@@ -208,11 +208,12 @@
             document.getElementById('field-Subtitulo').innerText = p['Subtítulo'] || p['Subtitulo'] || '';
             
             // Extracción dinámica del médico desde los parámetros
-            let nombreMedico = obtenerMedico(p);
-            let especialidad = p['Especialidad'] || p['Especialidad Medica'] || p['Especialidad medica'] || 'Fisiatría';
+          // Remplaza estas líneas en tu script:
+let nombreMedico = obtenerMedico(p);
+let especialidad = p['Especialidad Medico'] || p['Especialidad'] || p['Especialidad Medica'] || p['Especialidad medica'] || (p['Medico'] ? p['Medico].[Especialidad]'] : '') || '';
 
-            document.getElementById('field-Medico-tratante').innerText = nombreMedico;
-            document.getElementById('field-Especialidad-Medica').innerText = especialidad;
+document.getElementById('field-Medico-tratante').innerText = nombreMedico;
+document.getElementById('field-Especialidad-Medica').innerText = especialidad;
 
             if (!nombreMedico) {
                 document.getElementById('sec-Firma-Medico').style.display = 'none';

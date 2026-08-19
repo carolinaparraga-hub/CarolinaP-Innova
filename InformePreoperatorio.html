@@ -133,7 +133,6 @@
         <!-- FIRMA / DATOS DEL MÉDICO -->
         <div class="doctor-signature" id="sec-Firma-Medico">
             <span class="doc-name" id="field-Medico-tratante"></span>
-            <span class="doc-spec" id="field-Especialidad-Medica"></span>
         </div>
 
         <!-- PIE DE PÁGINA -->
@@ -203,14 +202,13 @@
             document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
             document.getElementById('field-Subtitulo').innerText = p['Subtítulo'] || p['Subtitulo'] || '';
             
-            // Prioriza estrictamente el parámetro 'Medico Tratante' con nombre y apellido
-            const nombreMedico = p['Medico Tratante'] || p['Medico tratante'] || '';
-            const especialidadMedica = p['Especialidad Medico'] || p['Especialidad Medica'] || '';
+            // Extrae el valor y remueve cualquier coincidencia con especialidades para dejar solo el nombre
+            let rawMedico = p['Medico Tratante'] || p['Medico tratante'] || '';
+            let nombreMedico = rawMedico.replace(/Fisiatría|Fisiatria/gi, '').trim();
 
             document.getElementById('field-Medico-tratante').innerText = nombreMedico;
-            document.getElementById('field-Especialidad-Medica').innerText = especialidadMedica;
 
-            if (!nombreMedico && !especialidadMedica) {
+            if (!nombreMedico) {
                 document.getElementById('sec-Firma-Medico').style.display = 'none';
             }
 
@@ -322,8 +320,10 @@
 
             var titulo = datos['Titulo'] || '';
             var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
-            var medico = datos['Medico Tratante'] || datos['Medico tratante'] || '';
-            var especialidad = datos['Especialidad Medico'] || datos['Especialidad Medica'] || '';
+            
+            var rawMedico = datos['Medico Tratante'] || datos['Medico tratante'] || '';
+            var medico = rawMedico.replace(/Fisiatría|Fisiatria/gi, '').trim();
+
             var direccion = datos['Dirección'] || datos['Direccion'] || '';
             var logoURL = 'https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW';
 
@@ -381,10 +381,9 @@
                 <p style="margin:0; padding:0; line-height:1; font-size:10pt;">&nbsp;</p>
             `;
 
-            var docFirmaWordHTML = (medico || especialidad) ? `
+            var docFirmaWordHTML = medico ? `
                 <p style="text-align:center; margin-top:25pt; margin-bottom:15pt; font-family:'Times New Roman', serif; font-size:11pt; line-height:1.2;">
-                    ${medico ? `<strong>${medico}</strong><br>` : ''}
-                    ${especialidad ? `<span>${especialidad}</span>` : ''}
+                    <strong>${medico}</strong>
                 </p>
             ` : '';
 

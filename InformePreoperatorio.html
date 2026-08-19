@@ -10,27 +10,28 @@
         .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 20mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
         .content-area { flex-grow: 1; }
         
-        /* Membrete estilo Captura */
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; }
+        /* Membrete */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
         .header-logo { max-width: 170px; max-height: 85px; object-fit: contain; }
         .header-info { text-align: center; flex-grow: 1; }
         .header-info h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
         .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
         .header-info p { margin: 1px 0; font-size: 10pt; font-weight: bold; }
         
-        /* Datos Paciente estilo Captura */
-        .patient-info { width: 100%; margin-bottom: 15px; font-size: 10.5pt; line-height: 1.4; }
-        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 10px; }
-        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 4px; column-gap: 20px; }
-        .divider { border-bottom: 1px solid #ccc; margin: 10px 0 15px 0; }
+        /* Datos Paciente con Interlineado Compacto */
+        .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.15; }
+        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 4px; }
+        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 1px; column-gap: 20px; }
+        .divider { border-bottom: 1px solid #ccc; margin: 8px 0 12px 0; }
         
         /* Cuerpo del Informe */
-        .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 15px 0 15px 0; }
-        .report-body { font-size: 10.5pt; line-height: 1.45; text-align: justify; }
-        .section-item { margin-bottom: 10px; }
+        .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 12px 0 12px 0; }
+        .report-body { font-size: 10.5pt; line-height: 1.35; text-align: justify; }
+        .section-item { margin-bottom: 8px; }
+        .bullet-item { display: list-item; list-style-type: disc; list-style-position: inside; }
         .multiline-text { white-space: pre-wrap; }
         
-        /* Pie de página e Íconos */
+        /* Pie de página */
         .footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 20px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
         .footer p { margin: 3px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .footer-item { display: inline-flex; align-items: center; gap: 4px; }
@@ -53,7 +54,7 @@
 
     <div class="page" id="informe-content">
         <div class="content-area">
-            <!-- MEMBRETE ESTILO CAPTURA -->
+            <!-- MEMBRETE -->
             <div class="header">
                 <div style="width: 170px;">
                     <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" alt="Logo" class="header-logo" id="logo-centro">
@@ -65,7 +66,7 @@
                 </div>
             </div>
 
-            <!-- DATOS DEL PACIENTE ESTILO CAPTURA -->
+            <!-- DATOS DEL PACIENTE COMPACTOS -->
             <div class="patient-info">
                 <div class="date-row" id="sec-Fecha">Fecha: <span id="val-Fecha"></span></div>
                 <div class="patient-grid">
@@ -82,21 +83,28 @@
             <div class="divider"></div>
             <div class="report-title">Evaluación Preoperatoria</div>
 
-            <!-- CUERPO COMPLETO DE EVALUACIÓN PREOPERATORIA -->
+            <!-- CUERPO DE LA EVALUACIÓN -->
             <div class="report-body">
                 <div class="section-item" id="sec-Cirugia-Propuesta"><strong>Cirugía Propuesta:</strong> <span id="val-Cirugia-Propuesta" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-Antecedentes-Personales"><strong>Antecedentes Personales:</strong> <span id="val-Antecedentes-Personales" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-Antecedentes-Familiares"><strong>Antecedentes Familiares:</strong> <span id="val-Antecedentes-Familiares" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-Antecedentes-Quirurgicos"><strong>Antecedentes Quirúrgicos:</strong> <span id="val-Antecedentes-Quirurgicos" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-Esquema-Vacunacion"><strong>Esquema de Vacunación:</strong> <span id="val-Esquema-Vacunacion" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-Sintomas-Cardiovasculares"><strong>Síntomas Cardiovasculares:</strong> <span id="val-Sintomas-Cardiovasculares" class="multiline-text"></span></div>
+                
+                <!-- VIÑETAS REDONDAS RESTAURADAS -->
+                <div class="section-item bullet-item" id="sec-Antecedentes-Personales"><strong>Antecedentes Personales:</strong> <span id="val-Antecedentes-Personales" class="multiline-text"></span></div>
+                <div class="section-item bullet-item" id="sec-Antecedentes-Familiares"><strong>Antecedentes Familiares:</strong> <span id="val-Antecedentes-Familiares" class="multiline-text"></span></div>
+                <div class="section-item bullet-item" id="sec-Antecedentes-Quirurgicos"><strong>Antecedentes Quirúrgicos:</strong> <span id="val-Antecedentes-Quirurgicos" class="multiline-text"></span></div>
+                
+                <!-- TÍTULOS ELIMINADOS: SOLO VALOR -->
+                <div class="section-item" id="sec-Esquema-Vacunacion"><span id="val-Esquema-Vacunacion" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Sintomas-Cardiovasculares"><span id="val-Sintomas-Cardiovasculares" class="multiline-text"></span></div>
+                
                 <div class="section-item" id="sec-Examen-Fisico"><strong>Examen Físico:</strong> <span id="val-Examen-Fisico" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-EKG"><strong>EKG:</strong> <span id="val-EKG" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-Radiografia-Torax"><strong>Radiografía de Tórax:</strong> <span id="val-Radiografia-Torax" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-Laboratorio"><strong>Laboratorio:</strong> <span id="val-Laboratorio" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-Escalas-Riesgo"><strong>Escalas de Riesgo Quirúrgico:</strong> <span id="val-Escalas-Riesgo" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-Conclusion-Contraindicacion"><strong>Conclusión / Contraindicación:</strong> <span id="val-Conclusion-Contraindicacion" class="multiline-text"></span></div>
-                <div class="section-item" id="sec-Sugerencias-Recomendaciones"><strong>Sugerencias / Recomendaciones:</strong> <span id="val-Sugerencias-Recomendaciones" class="multiline-text"></span></div>
+                
+                <!-- VIÑETAS REDONDAS RESTAURADAS -->
+                <div class="section-item bullet-item" id="sec-EKG"><strong>EKG:</strong> <span id="val-EKG" class="multiline-text"></span></div>
+                <div class="section-item bullet-item" id="sec-Radiografia-Torax"><strong>Radiografía de Tórax:</strong> <span id="val-Radiografia-Torax" class="multiline-text"></span></div>
+                <div class="section-item bullet-item" id="sec-Laboratorio"><strong>Laboratorio:</strong> <span id="val-Laboratorio" class="multiline-text"></span></div>
+                <div class="section-item bullet-item" id="sec-Escalas-Riesgo"><strong>Escalas de Riesgo Quirúrgico:</strong> <span id="val-Escalas-Riesgo" class="multiline-text"></span></div>
+                <div class="section-item bullet-item" id="sec-Conclusion-Contraindicacion"><strong>Conclusión / Contraindicación:</strong> <span id="val-Conclusion-Contraindicacion" class="multiline-text"></span></div>
+                <div class="section-item bullet-item" id="sec-Sugerencias-Recomendaciones"><strong>Sugerencias / Recomendaciones:</strong> <span id="val-Sugerencias-Recomendaciones" class="multiline-text"></span></div>
             </div>
         </div>
 
@@ -208,7 +216,6 @@
                 { key: 'Ocupacion', target: 'val-Ocupacion', sec: 'sec-Ocupacion' },
                 { key: 'Aseguradora', target: 'val-Aseguradora', sec: 'sec-Aseguradora' },
 
-                /* Campos específicos de la Evaluación Preoperatoria */
                 { key: 'Cirugia Propuesta', target: 'val-Cirugia-Propuesta', sec: 'sec-Cirugia-Propuesta' },
                 { key: 'Personales', target: 'val-Antecedentes-Personales', sec: 'sec-Antecedentes-Personales' },
                 { key: 'Familiares', target: 'val-Antecedentes-Familiares', sec: 'sec-Antecedentes-Familiares' },
@@ -232,7 +239,9 @@
                 if (val && val !== 'null' && val !== 'undefined') {
                     if (c.fecha) val = formatearFechaLatina(val);
                     if (elTarget) elTarget.innerText = val;
-                    if (elSec) elSec.style.display = 'block';
+                    if (elSec) elSec.style.display = elSec.classList.contains('bullet-item') ? 'list-item' : 'block';
+                } else {
+                    if (elSec) elSec.style.display = 'none';
                 }
             });
         };
@@ -283,48 +292,31 @@
                 <div style="border-bottom:1.5pt solid #000000; margin-top:5pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
             `;
 
-            var espaciadorMembreteFecha = `
-                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
-                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
-            `;
-
-            var espaciadorFechaPaciente = `
-                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
-            `;
-
-            var espaciadorDatosTitulo = `
-                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
-                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
-            `;
-
             var fechaInforme = datos['Fecha Informe'] || datos['Fecha'] || '';
 
             var patientHTML = `
-                ${espaciadorMembreteFecha}
+                <p style="margin:0; padding:0; line-height:1; font-size:10pt;">&nbsp;</p>
                 <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman', serif; font-size:10pt; line-height:1; margin:0;">
                     <tr><td style="width:100%; text-align:right; padding:0; line-height:1;"><strong>Fecha:</strong> ${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</td></tr>
                 </table>
-                
-                ${espaciadorFechaPaciente}
-                
+                <p style="margin:0; padding:0; line-height:0.5; font-size:10pt;">&nbsp;</p>
                 <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-family:'Times New Roman', serif; font-size:10pt; line-height:1; margin:0; padding:0;">
                     <tr>
-                        <td style="width:55%; padding:1.5pt 0;"><strong>Paciente:</strong> ${paciente}</td>
-                        <td style="width:45%; padding:1.5pt 0;"><strong>Edad:</strong> ${edad}</td>
+                        <td style="width:55%; padding:0.5pt 0;"><strong>Paciente:</strong> ${paciente}</td>
+                        <td style="width:45%; padding:0.5pt 0;"><strong>Edad:</strong> ${edad}</td>
                     </tr>
                     <tr>
-                        <td style="padding:1.5pt 0;"><strong>C.I:</strong> ${ci}</td>
-                        <td style="padding:1.5pt 0;"><strong>F / N:</strong> ${fn}</td>
+                        <td style="padding:0.5pt 0;"><strong>C.I:</strong> ${ci}</td>
+                        <td style="padding:0.5pt 0;"><strong>F / N:</strong> ${fn}</td>
                     </tr>
                     <tr>
-                        <td style="padding:1.5pt 0;"><strong>Telf:</strong> ${telf}</td>
-                        <td style="padding:1.5pt 0;"><strong>Ocupación:</strong> ${ocupacion}</td>
+                        <td style="padding:0.5pt 0;"><strong>Telf:</strong> ${telf}</td>
+                        <td style="padding:0.5pt 0;"><strong>Ocupación:</strong> ${ocupacion}</td>
                     </tr>
-                    ${aseguradora ? `<tr><td style="padding:1.5pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td><td style="padding:1.5pt 0;">&nbsp;</td></tr>` : ''}
+                    ${aseguradora ? `<tr><td style="padding:0.5pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td><td style="padding:0.5pt 0;">&nbsp;</td></tr>` : ''}
                 </table>
-                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:6pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
-                
-                ${espaciadorDatosTitulo}
+                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:4pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
+                <p style="margin:0; padding:0; line-height:1; font-size:10pt;">&nbsp;</p>
             `;
 
             var footerDireccion = direccion ? `<p style="margin:0; padding:0; line-height:1;">📍 ${direccion}</p>` : '';
@@ -365,7 +357,8 @@
                         body { font-family:'Times New Roman', serif; font-size:10.5pt; color:#000000; line-height:1.12; margin:0; padding:0; }
                         .doc-title { font-family:'Times New Roman', serif; text-align:center; font-size:12.5pt; font-weight:bold; text-decoration:underline; line-height:1; margin-top:0pt; margin-bottom:9pt; }
                         .report-body { font-family:'Times New Roman', serif; font-size:10.5pt; line-height:1.15; text-align:justify; margin:0; padding:0; }
-                        .section-item { margin-top:0pt; margin-bottom:6pt; line-height:1.15; }
+                        .section-item { margin-top:0pt; margin-bottom:5pt; line-height:1.15; }
+                        .bullet-item { display: list-item; list-style-type: disc; list-style-position: inside; }
                         .multiline-text { white-space:pre-wrap; }
                         p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }
                         div.MsoFooter { font-family:Arial, sans-serif; font-size:8.5pt; color:#333333; text-align:center; border-top:0.75pt solid #555555; padding-top:3pt; line-height:1.05; }

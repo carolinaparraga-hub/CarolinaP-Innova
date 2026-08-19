@@ -18,10 +18,10 @@
         .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
         .header-info p { margin: 1px 0; font-size: 10pt; font-weight: bold; }
         
-        /* Datos Paciente con Interlineado Compacto */
+        /* Datos Paciente Compactos */
         .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.15; }
         .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 4px; }
-        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 1px; column-gap: 20px; }
+        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 2px; column-gap: 20px; }
         .divider { border-bottom: 1px solid #ccc; margin: 8px 0 12px 0; }
         
         /* Cuerpo del Informe */
@@ -31,6 +31,12 @@
         .bullet-item { display: list-item; list-style-type: disc; list-style-position: inside; }
         .multiline-text { white-space: pre-wrap; }
         
+        /* Estilo especial para Conclusión / Contraindicación */
+        .conclusion-style { font-weight: bold; text-decoration: underline; font-size: 12.5pt; }
+        
+        /* Estilo normal para Sugerencias / Recomendaciones */
+        .sugerencias-style { font-weight: normal; font-size: 10.5pt; }
+
         /* Pie de página */
         .footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 20px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
         .footer p { margin: 3px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
@@ -66,7 +72,7 @@
                 </div>
             </div>
 
-            <!-- DATOS DEL PACIENTE COMPACTOS -->
+            <!-- DATOS DEL PACIENTE -->
             <div class="patient-info">
                 <div class="date-row" id="sec-Fecha">Fecha: <span id="val-Fecha"></span></div>
                 <div class="patient-grid">
@@ -87,24 +93,30 @@
             <div class="report-body">
                 <div class="section-item" id="sec-Cirugia-Propuesta"><strong>Cirugía Propuesta:</strong> <span id="val-Cirugia-Propuesta" class="multiline-text"></span></div>
                 
-                <!-- VIÑETAS REDONDAS RESTAURADAS -->
-                <div class="section-item bullet-item" id="sec-Antecedentes-Personales"><strong>Antecedentes Personales:</strong> <span id="val-Antecedentes-Personales" class="multiline-text"></span></div>
-                <div class="section-item bullet-item" id="sec-Antecedentes-Familiares"><strong>Antecedentes Familiares:</strong> <span id="val-Antecedentes-Familiares" class="multiline-text"></span></div>
-                <div class="section-item bullet-item" id="sec-Antecedentes-Quirurgicos"><strong>Antecedentes Quirúrgicos:</strong> <span id="val-Antecedentes-Quirurgicos" class="multiline-text"></span></div>
+                <!-- PALABRA 'ANTECEDENTES' ELIMINADA -->
+                <div class="section-item bullet-item" id="sec-Antecedentes-Personales"><strong>Personales:</strong> <span id="val-Antecedentes-Personales" class="multiline-text"></span></div>
+                <div class="section-item bullet-item" id="sec-Antecedentes-Familiares"><strong>Familiares:</strong> <span id="val-Antecedentes-Familiares" class="multiline-text"></span></div>
+                <div class="section-item bullet-item" id="sec-Antecedentes-Quirurgicos"><strong>Quirúrgicos:</strong> <span id="val-Antecedentes-Quirurgicos" class="multiline-text"></span></div>
                 
-                <!-- TÍTULOS ELIMINADOS: SOLO VALOR -->
+                <!-- SIN TÍTULOS -->
                 <div class="section-item" id="sec-Esquema-Vacunacion"><span id="val-Esquema-Vacunacion" class="multiline-text"></span></div>
                 <div class="section-item" id="sec-Sintomas-Cardiovasculares"><span id="val-Sintomas-Cardiovasculares" class="multiline-text"></span></div>
                 
                 <div class="section-item" id="sec-Examen-Fisico"><strong>Examen Físico:</strong> <span id="val-Examen-Fisico" class="multiline-text"></span></div>
                 
-                <!-- VIÑETAS REDONDAS RESTAURADAS -->
+                <!-- VIÑETAS REDONDAS -->
                 <div class="section-item bullet-item" id="sec-EKG"><strong>EKG:</strong> <span id="val-EKG" class="multiline-text"></span></div>
                 <div class="section-item bullet-item" id="sec-Radiografia-Torax"><strong>Radiografía de Tórax:</strong> <span id="val-Radiografia-Torax" class="multiline-text"></span></div>
                 <div class="section-item bullet-item" id="sec-Laboratorio"><strong>Laboratorio:</strong> <span id="val-Laboratorio" class="multiline-text"></span></div>
-                <div class="section-item bullet-item" id="sec-Escalas-Riesgo"><strong>Escalas de Riesgo Quirúrgico:</strong> <span id="val-Escalas-Riesgo" class="multiline-text"></span></div>
-                <div class="section-item bullet-item" id="sec-Conclusion-Contraindicacion"><strong>Conclusión / Contraindicación:</strong> <span id="val-Conclusion-Contraindicacion" class="multiline-text"></span></div>
-                <div class="section-item bullet-item" id="sec-Sugerencias-Recomendaciones"><strong>Sugerencias / Recomendaciones:</strong> <span id="val-Sugerencias-Recomendaciones" class="multiline-text"></span></div>
+                
+                <!-- ESCALAS DE RIESGO: SIN TÍTULO Y SIN VIÑETA -->
+                <div class="section-item" id="sec-Escalas-Riesgo"><span id="val-Escalas-Riesgo" class="multiline-text"></span></div>
+                
+                <!-- CONCLUSIÓN / CONTRAINDICACIÓN: SIN TÍTULO, SIN VIÑETA, NEGRITA, SUBRAYADO Y 2PT MÁS GRANDE -->
+                <div class="section-item conclusion-style" id="sec-Conclusion-Contraindicacion"><span id="val-Conclusion-Contraindicacion" class="multiline-text"></span></div>
+                
+                <!-- SUGERENCIAS / RECOMENDACIONES: SIN TÍTULO, SIN VIÑETA, SIN NEGRITA -->
+                <div class="section-item sugerencias-style" id="sec-Sugerencias-Recomendaciones"><span id="val-Sugerencias-Recomendaciones" class="multiline-text"></span></div>
             </div>
         </div>
 
@@ -203,43 +215,45 @@
             }
 
             const mapaCampos = [
-                { key: 'Fecha Informe', target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
-                { key: 'Fecha', target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
-                { key: 'Nombre Paciente', target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
-                { key: 'Nombre y Apellido', target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
-                { key: 'Cedula Paciente', target: 'val-Cedula', sec: 'sec-Cedula' },
-                { key: 'Cedula', target: 'val-Cedula', sec: 'sec-Cedula' },
-                { key: 'Telefono', target: 'val-Telefono', sec: 'sec-Telefono' },
-                { key: 'F / N', target: 'val-FN', sec: 'sec-FN' },
-                { key: 'Edad Paciente', target: 'val-Edad', sec: 'sec-Edad' },
-                { key: 'Edad', target: 'val-Edad', sec: 'sec-Edad' },
-                { key: 'Ocupacion', target: 'val-Ocupacion', sec: 'sec-Ocupacion' },
-                { key: 'Aseguradora', target: 'val-Aseguradora', sec: 'sec-Aseguradora' },
+                { keys: ['Fecha Informe', 'Fecha'], target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
+                { keys: ['Nombre Paciente', 'Nombre y Apellido', 'Paciente'], target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
+                { keys: ['Cedula Paciente', 'Cedula', 'C.I'], target: 'val-Cedula', sec: 'sec-Cedula' },
+                { keys: ['Telefono', 'Telf'], target: 'val-Telefono', sec: 'sec-Telefono' },
+                { keys: ['F / N', 'FN', 'Fecha de Nacimiento'], target: 'val-FN', sec: 'sec-FN' },
+                { keys: ['Edad Paciente', 'Edad'], target: 'val-Edad', sec: 'sec-Edad' },
+                { keys: ['Ocupacion'], target: 'val-Ocupacion', sec: 'sec-Ocupacion' },
+                { keys: ['Aseguradora'], target: 'val-Aseguradora', sec: 'sec-Aseguradora' },
 
-                { key: 'Cirugia Propuesta', target: 'val-Cirugia-Propuesta', sec: 'sec-Cirugia-Propuesta' },
-                { key: 'Personales', target: 'val-Antecedentes-Personales', sec: 'sec-Antecedentes-Personales' },
-                { key: 'Familiares', target: 'val-Antecedentes-Familiares', sec: 'sec-Antecedentes-Familiares' },
-                { key: 'Quirurgicos', target: 'val-Antecedentes-Quirurgicos', sec: 'sec-Antecedentes-Quirurgicos' },
-                { key: 'Esquema Vacunacion', target: 'val-Esquema-Vacunacion', sec: 'sec-Esquema-Vacunacion' },
-                { key: 'Sintomas Cardiovasculares', target: 'val-Sintomas-Cardiovasculares', sec: 'sec-Sintomas-Cardiovasculares' },
-                { key: 'Examen Fisico', target: 'val-Examen-Fisico', sec: 'sec-Examen-Fisico' },
-                { key: 'EKG', target: 'val-EKG', sec: 'sec-EKG' },
-                { key: 'Radiografia Torax', target: 'val-Radiografia-Torax', sec: 'sec-Radiografia-Torax' },
-                { key: 'Laboratorio', target: 'val-Laboratorio', sec: 'sec-Laboratorio' },
-                { key: 'Escalas Riesgo Quirurgico', target: 'val-Escalas-Riesgo', sec: 'sec-Escalas-Riesgo' },
-                { key: 'Conclusion Contraindicacion', target: 'val-Conclusion-Contraindicacion', sec: 'sec-Conclusion-Contraindicacion' },
-                { key: 'Sugerencias Recomendaciones', target: 'val-Sugerencias-Recomendaciones', sec: 'sec-Sugerencias-Recomendaciones' }
+                { keys: ['Cirugia Propuesta'], target: 'val-Cirugia-Propuesta', sec: 'sec-Cirugia-Propuesta' },
+                { keys: ['Personales', 'Antecedentes Personales'], target: 'val-Antecedentes-Personales', sec: 'sec-Antecedentes-Personales' },
+                { keys: ['Familiares', 'Antecedentes Familiares'], target: 'val-Antecedentes-Familiares', sec: 'sec-Antecedentes-Familiares' },
+                { keys: ['Quirurgicos', 'Antecedentes Quirurgicos'], target: 'val-Antecedentes-Quirurgicos', sec: 'sec-Antecedentes-Quirurgicos' },
+                { keys: ['Esquema Vacunacion'], target: 'val-Esquema-Vacunacion', sec: 'sec-Esquema-Vacunacion' },
+                { keys: ['Sintomas Cardiovasculares'], target: 'val-Sintomas-Cardiovasculares', sec: 'sec-Sintomas-Cardiovasculares' },
+                { keys: ['Examen Fisico'], target: 'val-Examen-Fisico', sec: 'sec-Examen-Fisico' },
+                { keys: ['EKG'], target: 'val-EKG', sec: 'sec-EKG' },
+                { keys: ['Radiografia Torax'], target: 'val-Radiografia-Torax', sec: 'sec-Radiografia-Torax' },
+                { keys: ['Laboratorio'], target: 'val-Laboratorio', sec: 'sec-Laboratorio' },
+                { keys: ['Escalas Riesgo Quirurgico'], target: 'val-Escalas-Riesgo', sec: 'sec-Escalas-Riesgo' },
+                { keys: ['Conclusion Contraindicacion'], target: 'val-Conclusion-Contraindicacion', sec: 'sec-Conclusion-Contraindicacion' },
+                { keys: ['Sugerencias Recomendaciones'], target: 'val-Sugerencias-Recomendaciones', sec: 'sec-Sugerencias-Recomendaciones' }
             ];
 
             mapaCampos.forEach(c => {
-                let val = p[c.key];
+                let val = null;
+                for (let k of c.keys) {
+                    if (p[k] !== undefined && p[k] !== null && p[k] !== 'null' && p[k] !== 'undefined') {
+                        val = p[k];
+                        break;
+                    }
+                }
+
                 const elTarget = document.getElementById(c.target);
                 const elSec = document.getElementById(c.sec);
 
-                if (val && val !== 'null' && val !== 'undefined') {
+                if (val && val !== '') {
                     if (c.fecha) val = formatearFechaLatina(val);
                     if (elTarget) elTarget.innerText = val;
-                    if (elSec) elSec.style.display = elSec.classList.contains('bullet-item') ? 'list-item' : 'block';
                 } else {
                     if (elSec) elSec.style.display = 'none';
                 }
@@ -249,11 +263,11 @@
         function descargarWord() {
             var datos = (typeof p !== 'undefined') ? p : {};
 
-            var paciente = datos['Nombre Paciente'] || datos['Nombre y Apellido'] || '';
+            var paciente = datos['Nombre Paciente'] || datos['Nombre y Apellido'] || datos['Paciente'] || '';
             var edad = datos['Edad Paciente'] || datos['Edad'] || '';
-            var ci = datos['Cedula Paciente'] || datos['Cedula'] || '';
-            var fn = datos['F / N'] || '';
-            var telf = datos['Telefono'] || '';
+            var ci = datos['Cedula Paciente'] || datos['Cedula'] || datos['C.I'] || '';
+            var fn = datos['F / N'] || datos['FN'] || '';
+            var telf = datos['Telefono'] || datos['Telf'] || '';
             var ocupacion = datos['Ocupacion'] || '';
             var aseguradora = datos['Aseguradora'] || '';
 
@@ -360,6 +374,8 @@
                         .section-item { margin-top:0pt; margin-bottom:5pt; line-height:1.15; }
                         .bullet-item { display: list-item; list-style-type: disc; list-style-position: inside; }
                         .multiline-text { white-space:pre-wrap; }
+                        .conclusion-style { font-weight: bold; text-decoration: underline; font-size: 12.5pt; }
+                        .sugerencias-style { font-weight: normal; font-size: 10.5pt; }
                         p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }
                         div.MsoFooter { font-family:Arial, sans-serif; font-size:8.5pt; color:#333333; text-align:center; border-top:0.75pt solid #555555; padding-top:3pt; line-height:1.05; }
                     </style>

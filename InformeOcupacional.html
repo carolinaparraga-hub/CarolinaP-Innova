@@ -11,7 +11,7 @@
 
 * {
     box-sizing: border-box;
-    font-family: "Times New Roman", Times, serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -184,7 +184,7 @@ body {
     margin-bottom: 10px;
     padding: 7px 9px;
     font-size: 9.8pt;
-    line-height: 1.25;
+    line-height: 1.3;
     text-align: justify;
 }
 
@@ -197,24 +197,8 @@ body {
     white-space: pre-wrap;
 }
 
-/* =========================================================
-   SIGNOS / MEDIDAS
-========================================================= */
-
-.measure-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 4px;
-    font-size: 9.5pt;
-}
-
-.measure-table td {
-    padding: 2px 5px;
-    vertical-align: top;
-}
-
 .measure-label {
-    font-weight: bold;
+    font-weight: normal;
 }
 
 /* =========================================================
@@ -235,12 +219,9 @@ body {
    CONCLUSIÓN Y MEDIDAS
 ========================================================= */
 
-.conclusion, .measures {
-    min-height: 55px;
-}
-
 .conclusion-text, .measures-text {
     white-space: pre-wrap;
+    font-weight: normal;
 }
 
 /* =========================================================
@@ -480,76 +461,28 @@ body {
      RESULTADOS DE LA EVALUACIÓN
 ===================================================== -->
 
-<div class="section">
+<div class="section" id="sec-evaluacion">
     <div class="section-title">
         Resultados de la evaluación realizada al trabajador:
     </div>
 
-    <table class="measure-table">
-        <tr>
-            <td>
-                <span class="measure-label">Peso:</span>
-                <span id="val-Peso"></span>
-            </td>
-            <td>
-                <span class="measure-label">Talla:</span>
-                <span id="val-Talla"></span>
-            </td>
-            <td>
-                <span class="measure-label">TA:</span>
-                <span id="val-TA"></span>
-            </td>
-            <td>
-                <span class="measure-label">Observación:</span>
-                <span id="val-observacion"></span>
-            </td>
-        </tr>
-    </table>
-
-    <div style="margin-top:5px;">
-        <strong>Piel:</strong>
-        <span id="val-Piel"></span>
-        &nbsp;&nbsp;
-        <strong>Cabeza y cuello:</strong>
-        <span id="val-Cabeza-cuello"></span>
-        &nbsp;&nbsp;
-        <strong>Ojos:</strong>
-        <span id="val-Ojos"></span>
-        &nbsp;&nbsp;
-        <strong>ORL:</strong>
-        <span id="val-ORL"></span>
-    </div>
-
-    <div style="margin-top:4px;">
-        <strong>Extremidades Sup.:</strong>
-        <span id="val-Extremidades"></span>
-        &nbsp;&nbsp;
-        <strong>Linfáticos:</strong>
-        <span id="val-Linfaticos"></span>
-        &nbsp;&nbsp;
-        <strong>Tórax:</strong>
-        <span id="val-Torax"></span>
-    </div>
-
-    <div style="margin-top:4px;">
-        <strong>Cardiopulmonar:</strong>
-        <span id="val-Cardiopulmonar"></span>
-        &nbsp;&nbsp;
-        <strong>Abdomen:</strong>
-        <span id="val-Abdomen"></span>
-    </div>
-
-    <div style="margin-top:4px;">
-        <strong>Zona inguino-genital:</strong>
-        <span id="val-Zona"></span>
-        &nbsp;&nbsp;
-        <strong>Musculo esquelética:</strong>
-        <span id="val-Musculo"></span>
-    </div>
-
-    <div style="margin-top:4px;">
-        <strong>Resultados adicionales:</strong>
-        <span id="val-Resultados"></span>
+    <div id="container-evaluacion" style="display:inline;">
+        <span id="wrap-Peso"><span class="measure-label">Peso: </span><span id="val-Peso"></span> </span>
+        <span id="wrap-Talla"><span class="measure-label">Talla: </span><span id="val-Talla"></span> </span>
+        <span id="wrap-TA"><span class="measure-label">TA: </span><span id="val-TA"></span> </span>
+        <span id="wrap-observacion"><span class="measure-label">Observación: </span><span id="val-observacion"></span> </span>
+        <span id="wrap-Piel"><span class="measure-label">Piel: </span><span id="val-Piel"></span> </span>
+        <span id="wrap-Cabeza-cuello"><span class="measure-label">Cabeza y cuello: </span><span id="val-Cabeza-cuello"></span> </span>
+        <span id="wrap-Ojos"><span class="measure-label">Ojos: </span><span id="val-Ojos"></span> </span>
+        <span id="wrap-ORL"><span class="measure-label">ORL: </span><span id="val-ORL"></span> </span>
+        <span id="wrap-Extremidades"><span class="measure-label">Extremidades Sup.: </span><span id="val-Extremidades"></span> </span>
+        <span id="wrap-Linfaticos"><span class="measure-label">Linfáticos: </span><span id="val-Linfaticos"></span> </span>
+        <span id="wrap-Torax"><span class="measure-label">Tórax: </span><span id="val-Torax"></span> </span>
+        <span id="wrap-Cardiopulmonar"><span class="measure-label">Cardiopulmonar: </span><span id="val-Cardiopulmonar"></span> </span>
+        <span id="wrap-Abdomen"><span class="measure-label">Abdomen: </span><span id="val-Abdomen"></span> </span>
+        <span id="wrap-Zona"><span class="measure-label">Zona inguino-genital: </span><span id="val-Zona"></span> </span>
+        <span id="wrap-Musculo"><span class="measure-label">Musculo esquelética: </span><span id="val-Musculo"></span> </span>
+        <span id="wrap-Resultados"><span class="measure-label">Resultados adicionales: </span><span id="val-Resultados"></span></span>
     </div>
 </div>
 
@@ -557,58 +490,58 @@ body {
      EVALUACIONES CLÍNICAS Y PARACLÍNICAS
 ===================================================== -->
 
-<div class="section">
+<div class="section" id="sec-paraclinicos">
     <div class="section-title">
         Evaluación clínicas y paraclínicas practicadas al trabajador:
     </div>
 
     <div class="paraclinical">
-        <span class="paraclinical-item">
-            <strong>HGB:</strong>
+        <span class="paraclinical-item" id="wrap-HGB">
+            <span class="measure-label">HGB: </span>
             <span id="val-HGB"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>HTO:</strong>
+        <span class="paraclinical-item" id="wrap-HTO">
+            <span class="measure-label">HTO: </span>
             <span id="val-HTO"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>GB:</strong>
+        <span class="paraclinical-item" id="wrap-GB">
+            <span class="measure-label">GB: </span>
             <span id="val-GB"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>PLT:</strong>
+        <span class="paraclinical-item" id="wrap-PLT">
+            <span class="measure-label">PLT: </span>
             <span id="val-PLT"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>Glicemi:</strong>
+        <span class="paraclinical-item" id="wrap-Glicemi">
+            <span class="measure-label">Glicemi: </span>
             <span id="val-Glicemi"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>Urea:</strong>
+        <span class="paraclinical-item" id="wrap-Urea">
+            <span class="measure-label">Urea: </span>
             <span id="val-Urea"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>Creatinina:</strong>
+        <span class="paraclinical-item" id="wrap-Creatinina">
+            <span class="measure-label">Creatinina: </span>
             <span id="val-Creatinina"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>Colesterol:</strong>
+        <span class="paraclinical-item" id="wrap-Colesterol">
+            <span class="measure-label">Colesterol: </span>
             <span id="val-Colesterol"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>Triglicéridos:</strong>
+        <span class="paraclinical-item" id="wrap-Trigliceridos">
+            <span class="measure-label">Triglicéridos: </span>
             <span id="val-Trigliceridos"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>Ácido úrico:</strong>
+        <span class="paraclinical-item" id="wrap-Acido-urico">
+            <span class="measure-label">Ácido úrico: </span>
             <span id="val-Acido-urico"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>Uroanálisis:</strong>
+        <span class="paraclinical-item" id="wrap-Uroanalisis">
+            <span class="measure-label">Uroanálisis: </span>
             <span id="val-Uroanalisis"></span>
         </span>
-        <span class="paraclinical-item">
-            <strong>EKG:</strong>
+        <span class="paraclinical-item" id="wrap-Ekg">
+            <span class="measure-label">EKG: </span>
             <span id="val-Ekg"></span>
         </span>
     </div>
@@ -618,7 +551,7 @@ body {
      CONCLUSIÓN
 ===================================================== -->
 
-<div class="section conclusion">
+<div class="section conclusion" id="sec-conclusion">
     <div class="section-title">
         Conclusión de aptitud:
     </div>
@@ -629,7 +562,7 @@ body {
      MEDIDAS
 ===================================================== -->
 
-<div class="section measures">
+<div class="section measures" id="sec-medidas">
     <div class="section-title">
         Medidas de adecuación de tareas o reubicación de puesto de trabajo:
     </div>
@@ -720,8 +653,30 @@ function formatearFechaLatina(fechaStr) {
 }
 
 /* =========================================================
-   MOSTRAR / OCULTAR VALORES
+   MOSTRAR / OCULTAR VALORES Y SECCIONES
 ========================================================= */
+
+function colocarValorOcultar(idVal, idWrap, valor) {
+    const elemento = document.getElementById(idVal);
+    const wrapper = document.getElementById(idWrap);
+    if (!elemento) return false;
+
+    if (
+        valor === undefined ||
+        valor === null ||
+        valor === "" ||
+        valor === "null" ||
+        valor === "undefined"
+    ) {
+        elemento.innerText = "";
+        if (wrapper) wrapper.style.display = "none";
+        return false;
+    } else {
+        elemento.innerText = valor;
+        if (wrapper) wrapper.style.display = "inline";
+        return true;
+    }
+}
 
 function colocarValor(id, valor) {
     const elemento = document.getElementById(id);
@@ -787,38 +742,60 @@ window.onload = function() {
     colocarValor("val-Fecha", formatearFechaLatina(p["Fecha"]));
     colocarValor("val-Fecha-emision", formatearFechaLatina(p["Fecha de emisión del informe"]));
 
-    colocarValor("val-Peso", p["Peso"]);
-    colocarValor("val-Talla", p["Talla"]);
-    colocarValor("val-TA", p["TA"]);
-    colocarValor("val-observacion", p["observación"]);
-    colocarValor("val-Piel", p["Piel"]);
-    colocarValor("val-Cabeza-cuello", p["Cabeza y cuello"]);
-    colocarValor("val-Ojos", p["Ojos"]);
-    colocarValor("val-ORL", p["ORL"]);
-    colocarValor("val-Extremidades", p["Extremidades Sup."]);
-    colocarValor("val-Linfaticos", p["Linfáticos"]);
-    colocarValor("val-Torax", p["Tórax"]);
-    colocarValor("val-Cardiopulmonar", p["Cardiopulmonar"]);
-    colocarValor("val-Abdomen", p["Abdomen"]);
-    colocarValor("val-Zona", p["Zona inguino-genital"]);
-    colocarValor("val-Musculo", p["Musculo esquelética"]);
-    colocarValor("val-Resultados", p["Resultados de la evaluación realizada al trabajador"]);
+    // Evaluación física
+    let hasPeso = colocarValorOcultar("val-Peso", "wrap-Peso", p["Peso"]);
+    let hasTalla = colocarValorOcultar("val-Talla", "wrap-Talla", p["Talla"]);
+    let hasTA = colocarValorOcultar("val-TA", "wrap-TA", p["TA"]);
+    let hasObs = colocarValorOcultar("val-observacion", "wrap-observacion", p["observación"]);
+    let hasPiel = colocarValorOcultar("val-Piel", "wrap-Piel", p["Piel"]);
+    let hasCabeza = colocarValorOcultar("val-Cabeza-cuello", "wrap-Cabeza-cuello", p["Cabeza y cuello"]);
+    let hasOjos = colocarValorOcultar("val-Ojos", "wrap-Ojos", p["Ojos"]);
+    let hasORL = colocarValorOcultar("val-ORL", "wrap-ORL", p["ORL"]);
+    let hasExtr = colocarValorOcultar("val-Extremidades", "wrap-Extremidades", p["Extremidades Sup."]);
+    let hasLinf = colocarValorOcultar("val-Linfaticos", "wrap-Linfaticos", p["Linfáticos"]);
+    let hasTorax = colocarValorOcultar("val-Torax", "wrap-Torax", p["Tórax"]);
+    let hasCardio = colocarValorOcultar("val-Cardiopulmonar", "wrap-Cardiopulmonar", p["Cardiopulmonar"]);
+    let hasAbd = colocarValorOcultar("val-Abdomen", "wrap-Abdomen", p["Abdomen"]);
+    let hasZona = colocarValorOcultar("val-Zona", "wrap-Zona", p["Zona inguino-genital"]);
+    let hasMusc = colocarValorOcultar("val-Musculo", "wrap-Musculo", p["Musculo esquelética"]);
+    let hasRes = colocarValorOcultar("val-Resultados", "wrap-Resultados", p["Resultados de la evaluación realizada al trabajador"]);
 
-    colocarValor("val-HGB", p["HGB"]);
-    colocarValor("val-HTO", p["HTO"]);
-    colocarValor("val-GB", p["GB"]);
-    colocarValor("val-PLT", p["PLT"]);
-    colocarValor("val-Glicemi", p["Glicemi"]);
-    colocarValor("val-Urea", p["Urea"]);
-    colocarValor("val-Creatinina", p["Creatinina"]);
-    colocarValor("val-Colesterol", p["Colesterol"]);
-    colocarValor("val-Trigliceridos", p["Triglicéridos"]);
-    colocarValor("val-Acido-urico", p["Ácido úrico"]);
-    colocarValor("val-Uroanalisis", p["Uroanálisis"]);
-    colocarValor("val-Ekg", p["Ekg"]);
+    if (!hasPeso && !hasTalla && !hasTA && !hasObs && !hasPiel && !hasCabeza && !hasOjos && !hasORL && !hasExtr && !hasLinf && !hasTorax && !hasCardio && !hasAbd && !hasZona && !hasMusc && !hasRes) {
+        document.getElementById("sec-evaluacion").style.display = "none";
+    }
 
-    colocarValor("val-Conclusion", p["Conclusión de Aptitud"]);
-    colocarValor("val-Medidas", p["Medidas de adecuación de tareas o reubicación de puesto de trabajo:"]);
+    // Paraclínicos
+    let hasHGB = colocarValorOcultar("val-HGB", "wrap-HGB", p["HGB"]);
+    let hasHTO = colocarValorOcultar("val-HTO", "wrap-HTO", p["HTO"]);
+    let hasGB = colocarValorOcultar("val-GB", "wrap-GB", p["GB"]);
+    let hasPLT = colocarValorOcultar("val-PLT", "wrap-PLT", p["PLT"]);
+    let hasGlic = colocarValorOcultar("val-Glicemi", "wrap-Glicemi", p["Glicemi"]);
+    let hasUrea = colocarValorOcultar("val-Urea", "wrap-Urea", p["Urea"]);
+    let hasCreat = colocarValorOcultar("val-Creatinina", "wrap-Creatinina", p["Creatinina"]);
+    let hasCol = colocarValorOcultar("val-Colesterol", "wrap-Colesterol", p["Colesterol"]);
+    let hasTrig = colocarValorOcultar("val-Trigliceridos", "wrap-Trigliceridos", p["Triglicéridos"]);
+    let hasAcido = colocarValorOcultar("val-Acido-urico", "wrap-Acido-urico", p["Ácido úrico"]);
+    let hasUro = colocarValorOcultar("val-Uroanalisis", "wrap-Uroanalisis", p["Uroanálisis"]);
+    let hasEkg = colocarValorOcultar("val-Ekg", "wrap-Ekg", p["Ekg"]);
+
+    if (!hasHGB && !hasHTO && !hasGB && !hasPLT && !hasGlic && !hasUrea && !hasCreat && !hasCol && !hasTrig && !hasAcido && !hasUro && !hasEkg) {
+        document.getElementById("sec-paraclinicos").style.display = "none";
+    }
+
+    // Conclusión y Medidas
+    let valConc = p["Conclusión de Aptitud"];
+    if (valConc && valConc !== "null" && valConc !== "undefined" && valConc.trim() !== "") {
+        document.getElementById("val-Conclusion").innerText = valConc;
+    } else {
+        document.getElementById("sec-conclusion").style.display = "none";
+    }
+
+    let valMed = p["Medidas de adecuación de tareas o reubicación de puesto de trabajo:"];
+    if (valMed && valMed !== "null" && valMed !== "undefined" && valMed.trim() !== "") {
+        document.getElementById("val-Medidas").innerText = valMed;
+    } else {
+        document.getElementById("sec-medidas").style.display = "none";
+    }
 
     let direccion = p["Dirección"] || "";
     let telefono1 = p["Numero de telefono principal"] || "";
@@ -871,15 +848,19 @@ function descargarWord() {
         return examen.toLowerCase().includes(tipo.toLowerCase()) ? "●" : "○";
     }
 
+    function tieneValor(val) {
+        return val && val !== "null" && val !== "undefined" && val.toString().trim() !== "";
+    }
+
     const docTitleHTML = `
-        <div style="text-align:center; margin-top:8pt; margin-bottom:8pt; font-family:'Times New Roman',serif;">
+        <div style="text-align:center; margin-top:8pt; margin-bottom:8pt; font-family:Arial,sans-serif;">
             <div style="font-size:11pt; font-weight:bold; text-transform:uppercase;">SERVICIO DE SEGURIDAD Y SALUD EN EL TRABAJO</div>
             <div style="font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline; margin-top:2pt;">INFORME MEDICO</div>
         </div>
     `;
 
     const examenHTML = `
-        <div style="font-family:'Times New Roman',serif; font-size:10pt; margin-top:8pt; margin-bottom:4pt;">
+        <div style="font-family:Arial,sans-serif; font-size:10pt; margin-top:8pt; margin-bottom:4pt;">
             <strong>Examen de salud:</strong> &nbsp;&nbsp;
             ${circulo("ingreso")} Ingreso &nbsp;&nbsp;
             ${circulo("egreso")} Egreso &nbsp;&nbsp;
@@ -887,7 +868,7 @@ function descargarWord() {
             ${circulo("post")} Post-vacacional &nbsp;&nbsp;
             ${circulo("anual")} Anual
         </div>
-        <div style="font-family:'Times New Roman',serif; font-size:8.5pt; font-style:italic; line-height:1.2; text-align:justify; margin-bottom:8pt;">
+        <div style="font-family:Arial,sans-serif; font-size:8.5pt; font-style:italic; line-height:1.2; text-align:justify; margin-bottom:8pt;">
             <strong>NORMA TÉCNICA DE LOS SERVICIOS DE SEGURIDAD Y SALUD EN EL TRABAJO</strong> Artículo 33. Al término de cualquier evaluación de salud que se practique al trabajador o trabajadora, el médico o médica ocupacional o el profesional que haya realizado la evaluación, debe redactar un informe, que contenga como mínimo lo siguiente:
         </div>
     `;
@@ -899,10 +880,10 @@ function descargarWord() {
                     <img src="${logoURL}" width="115" height="60" style="width:115px; height:60px; display:block; object-fit:contain;">
                 </td>
                 <td style="vertical-align:middle; text-align:center; padding:0 10px;">
-                    <div style="font-family:'Times New Roman',serif; font-size:13pt; font-weight:bold; line-height:1.1;">
+                    <div style="font-family:Arial,sans-serif; font-size:13pt; font-weight:bold; line-height:1.1;">
                         ${titulo}
                     </div>
-                    <div style="font-family:'Times New Roman',serif; font-size:10.5pt; margin-top:3pt;">
+                    <div style="font-family:Arial,sans-serif; font-size:10.5pt; margin-top:3pt;">
                         ${subtitulo}
                     </div>
                 </td>
@@ -913,7 +894,7 @@ function descargarWord() {
     `;
 
     const workerHTML = `
-        <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman',serif; font-size:9.5pt; margin-top:8pt;">
+        <table style="width:100%; border-collapse:collapse; font-family:Arial,sans-serif; font-size:9.5pt; margin-top:8pt;">
             <tr>
                 <td style="width:50%; border:1px solid #777; padding:5pt; vertical-align:top;">
                     <strong>Número de cédula del trabajador:</strong><br>${datos["Cedula"] || ""}
@@ -941,59 +922,81 @@ function descargarWord() {
         </table>
     `;
 
-    const resultadosHTML = `
-        <div style="border:1px solid #777; padding:7pt 8pt; margin-top:10pt; font-family:'Times New Roman',serif; font-size:9.5pt; line-height:1.25; text-align:justify;">
-            <strong>Resultados de la evaluación realizada al trabajador:</strong>
-            <table style="width:100%; border-collapse:collapse; margin-top:5pt;">
-                <tr>
-                    <td><strong>Peso:</strong> ${datos["Peso"] || ""}</td>
-                    <td><strong>Talla:</strong> ${datos["Talla"] || ""}</td>
-                    <td><strong>TA:</strong> ${datos["TA"] || ""}</td>
-                    <td><strong>Observación:</strong> ${datos["observación"] || ""}</td>
-                </tr>
-            </table>
-            <p><strong>Piel:</strong> ${datos["Piel"] || ""} &nbsp;&nbsp; <strong>Cabeza y cuello:</strong> ${datos["Cabeza y cuello"] || ""} &nbsp;&nbsp; <strong>Ojos:</strong> ${datos["Ojos"] || ""} &nbsp;&nbsp; <strong>ORL:</strong> ${datos["ORL"] || ""}</p>
-            <p><strong>Extremidades Sup.:</strong> ${datos["Extremidades Sup."] || ""} &nbsp;&nbsp; <strong>Linfáticos:</strong> ${datos["Linfáticos"] || ""} &nbsp;&nbsp; <strong>Tórax:</strong> ${datos["Tórax"] || ""}</p>
-            <p><strong>Cardiopulmonar:</strong> ${datos["Cardiopulmonar"] || ""} &nbsp;&nbsp; <strong>Abdomen:</strong> ${datos["Abdomen"] || ""}</p>
-            <p><strong>Zona inguino-genital:</strong> ${datos["Zona inguino-genital"] || ""} &nbsp;&nbsp; <strong>Musculo esquelética:</strong> ${datos["Musculo esquelética"] || ""}</p>
-            ${datos["Resultados de la evaluación realizada al trabajador"] ? `<p>${datos["Resultados de la evaluación realizada al trabajador"]}</p>` : ""}
-        </div>
-    `;
+    // Generar Evaluación Física Dinámica para Word
+    let arrEval = [];
+    if (tieneValor(datos["Peso"])) arrEval.push(`Peso: ${datos["Peso"]}`);
+    if (tieneValor(datos["Talla"])) arrEval.push(`Talla: ${datos["Talla"]}`);
+    if (tieneValor(datos["TA"])) arrEval.push(`TA: ${datos["TA"]}`);
+    if (tieneValor(datos["observación"])) arrEval.push(`Observación: ${datos["observación"]}`);
+    if (tieneValor(datos["Piel"])) arrEval.push(`Piel: ${datos["Piel"]}`);
+    if (tieneValor(datos["Cabeza y cuello"])) arrEval.push(`Cabeza y cuello: ${datos["Cabeza y cuello"]}`);
+    if (tieneValor(datos["Ojos"])) arrEval.push(`Ojos: ${datos["Ojos"]}`);
+    if (tieneValor(datos["ORL"])) arrEval.push(`ORL: ${datos["ORL"]}`);
+    if (tieneValor(datos["Extremidades Sup."])) arrEval.push(`Extremidades Sup.: ${datos["Extremidades Sup."]}`);
+    if (tieneValor(datos["Linfáticos"])) arrEval.push(`Linfáticos: ${datos["Linfáticos"]}`);
+    if (tieneValor(datos["Tórax"])) arrEval.push(`Tórax: ${datos["Tórax"]}`);
+    if (tieneValor(datos["Cardiopulmonar"])) arrEval.push(`Cardiopulmonar: ${datos["Cardiopulmonar"]}`);
+    if (tieneValor(datos["Abdomen"])) arrEval.push(`Abdomen: ${datos["Abdomen"]}`);
+    if (tieneValor(datos["Zona inguino-genital"])) arrEval.push(`Zona inguino-genital: ${datos["Zona inguino-genital"]}`);
+    if (tieneValor(datos["Musculo esquelética"])) arrEval.push(`Musculo esquelética: ${datos["Musculo esquelética"]}`);
+    if (tieneValor(datos["Resultados de la evaluación realizada al trabajador"])) arrEval.push(`Resultados adicionales: ${datos["Resultados de la evaluación realizada al trabajador"]}`);
 
-    const paraclinicosHTML = `
-        <div style="border:1px solid #777; padding:7pt 8pt; margin-top:10pt; font-family:'Times New Roman',serif; font-size:9.5pt; line-height:1.35; text-align:justify;">
-            <strong>Evaluación clínicas y paraclínicas practicadas al trabajador:</strong>
-            <p>
-                <strong>HGB:</strong> ${datos["HGB"] || ""} &nbsp;&nbsp;
-                <strong>HTO:</strong> ${datos["HTO"] || ""} &nbsp;&nbsp;
-                <strong>GB:</strong> ${datos["GB"] || ""} &nbsp;&nbsp;
-                <strong>PLT:</strong> ${datos["PLT"] || ""} &nbsp;&nbsp;
-                <strong>Glicemi:</strong> ${datos["Glicemi"] || ""} &nbsp;&nbsp;
-                <strong>Urea:</strong> ${datos["Urea"] || ""} &nbsp;&nbsp;
-                <strong>Creatinina:</strong> ${datos["Creatinina"] || ""} &nbsp;&nbsp;
-                <strong>Colesterol:</strong> ${datos["Colesterol"] || ""} &nbsp;&nbsp;
-                <strong>Triglicéridos:</strong> ${datos["Triglicéridos"] || ""} &nbsp;&nbsp;
-                <strong>Ácido úrico:</strong> ${datos["Ácido úrico"] || ""} &nbsp;&nbsp;
-                <strong>Uroanálisis:</strong> ${datos["Uroanálisis"] || ""} &nbsp;&nbsp;
-                <strong>EKG:</strong> ${datos["Ekg"] || ""}
-            </p>
-        </div>
-    `;
+    let resultadosHTML = "";
+    if (arrEval.length > 0) {
+        resultadosHTML = `
+            <div style="border:1px solid #777; padding:7pt 8pt; margin-top:10pt; font-family:Arial,sans-serif; font-size:9.5pt; line-height:1.3; text-align:justify;">
+                <strong>Resultados de la evaluación realizada al trabajador:</strong><br>
+                <span>${arrEval.join(" ")}</span>
+            </div>
+        `;
+    }
 
-    const conclusionHTML = `
-        <div style="border:1px solid #777; padding:7pt 8pt; margin-top:10pt; font-family:'Times New Roman',serif; font-size:9.5pt; line-height:1.3; min-height:45pt;">
-            <strong>Conclusión de aptitud:</strong><br>${datos["Conclusión de Aptitud"] || ""}
-        </div>
-    `;
+    // Generar Paraclínicos Dinámicos para Word
+    let arrPara = [];
+    if (tieneValor(datos["HGB"])) arrPara.push(`HGB: ${datos["HGB"]}`);
+    if (tieneValor(datos["HTO"])) arrPara.push(`HTO: ${datos["HTO"]}`);
+    if (tieneValor(datos["GB"])) arrPara.push(`GB: ${datos["GB"]}`);
+    if (tieneValor(datos["PLT"])) arrPara.push(`PLT: ${datos["PLT"]}`);
+    if (tieneValor(datos["Glicemi"])) arrPara.push(`Glicemi: ${datos["Glicemi"]}`);
+    if (tieneValor(datos["Urea"])) arrPara.push(`Urea: ${datos["Urea"]}`);
+    if (tieneValor(datos["Creatinina"])) arrPara.push(`Creatinina: ${datos["Creatinina"]}`);
+    if (tieneValor(datos["Colesterol"])) arrPara.push(`Colesterol: ${datos["Colesterol"]}`);
+    if (tieneValor(datos["Triglicéridos"])) arrPara.push(`Triglicéridos: ${datos["Triglicéridos"]}`);
+    if (tieneValor(datos["Ácido úrico"])) arrPara.push(`Ácido úrico: ${datos["Ácido úrico"]}`);
+    if (tieneValor(datos["Uroanálisis"])) arrPara.push(`Uroanálisis: ${datos["Uroanálisis"]}`);
+    if (tieneValor(datos["Ekg"])) arrPara.push(`EKG: ${datos["Ekg"]}`);
 
-    const medidasHTML = `
-        <div style="border:1px solid #777; padding:7pt 8pt; margin-top:10pt; font-family:'Times New Roman',serif; font-size:9.5pt; line-height:1.3; min-height:45pt;">
-            <strong>Medidas de adecuación de tareas o reubicación de puesto de trabajo:</strong><br>${datos["Medidas de adecuación de tareas o reubicación de puesto de trabajo:"] || ""}
-        </div>
-    `;
+    let paraclinicosHTML = "";
+    if (arrPara.length > 0) {
+        paraclinicosHTML = `
+            <div style="border:1px solid #777; padding:7pt 8pt; margin-top:10pt; font-family:Arial,sans-serif; font-size:9.5pt; line-height:1.35; text-align:justify;">
+                <strong>Evaluación clínicas y paraclínicas practicadas al trabajador:</strong><br>
+                <span>${arrPara.join("&nbsp;&nbsp;&nbsp;&nbsp;")}</span>
+            </div>
+        `;
+    }
+
+    // Conclusión y Medidas Dinámicas para Word
+    let conclusionHTML = "";
+    if (tieneValor(datos["Conclusión de Aptitud"])) {
+        conclusionHTML = `
+            <div style="border:1px solid #777; padding:7pt 8pt; margin-top:10pt; font-family:Arial,sans-serif; font-size:9.5pt; line-height:1.3; min-height:45pt;">
+                <strong>Conclusión de aptitud:</strong><br>${datos["Conclusión de Aptitud"]}
+            </div>
+        `;
+    }
+
+    let medidasHTML = "";
+    if (tieneValor(datos["Medidas de adecuación de tareas o reubicación de puesto de trabajo:"])) {
+        medidasHTML = `
+            <div style="border:1px solid #777; padding:7pt 8pt; margin-top:10pt; font-family:Arial,sans-serif; font-size:9.5pt; line-height:1.3; min-height:45pt;">
+                <strong>Medidas de adecuación de tareas o reubicación de puesto de trabajo:</strong><br>${datos["Medidas de adecuación de tareas o reubicación de puesto de trabajo:"]}
+            </div>
+        `;
+    }
 
     const firmaHTML = `
-        <table style="width:100%; border-collapse:collapse; margin-top:25pt; font-family:'Times New Roman',serif; font-size:9pt; text-align:center;">
+        <table style="width:100%; border-collapse:collapse; margin-top:25pt; font-family:Arial,sans-serif; font-size:9pt; text-align:center;">
             <tr>
                 <td style="width:50%; padding-top:20pt;">
                     <div style="border-top:1px solid #000; width:75%; margin:auto;"></div><br>Nombres y apellidos del profesional<br>Número de Colegio Médico (CM)
@@ -1041,7 +1044,7 @@ function descargarWord() {
 }
 div.Section1 { page:Section1; }
 table#hrdftrtbl { margin:0in 0in 0in 900in; width:1px; height:1px; overflow:hidden; }
-body { font-family:'Times New Roman', serif; font-size:9.5pt; color:#000000; line-height:1.15; margin:0; padding:0; }
+body { font-family:Arial, sans-serif; font-size:9.5pt; color:#000000; line-height:1.15; margin:0; padding:0; }
 p { margin-top:0; margin-bottom:3pt; line-height:1.15; }
 </style>
 </head>

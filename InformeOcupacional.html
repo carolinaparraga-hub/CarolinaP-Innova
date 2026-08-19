@@ -168,99 +168,99 @@
 
     <script>
         function obtenerParametros() {
-            const params = {};
-            const queryString = window.location.search.substring(1);
-            const pairs = queryString.split("&");
-            for (let i = 0; i < pairs.length; i++) {
-                if (!pairs[i]) continue;
-                const pair = pairs[i].split("=");
-                const key = decodeURIComponent(pair[0].replace(/\+/g, " ")).trim();
-                const value = decodeURIComponent((pair[1] || "").replace(/\+/g, " ")).trim();
-                params[key] = value;
-            }
-            return params;
+    const params = {};
+    // Elimina múltiples '?' al inicio si los hay
+    let queryString = window.location.search.replace(/^\?+/, '');
+    const pairs = queryString.split("&");
+    
+    for (let i = 0; i < pairs.length; i++) {
+        if (!pairs[i]) continue;
+        const pair = pairs[i].split("=");
+        // Normaliza las llaves a minúsculas y sin espacios extra
+        const key = decodeURIComponent(pair[0].replace(/\+/g, " ")).trim().toLowerCase();
+        const value = decodeURIComponent((pair[1] || "").replace(/\+/g, " ")).trim();
+        params[key] = value;
+    }
+    return params;
+}
+
+window.onload = function() {
+    p = obtenerParametros();
+
+    // Llenar Membrete (Búsqueda tolerante a minúsculas/mayúsculas)
+    document.getElementById('field-Titulo').innerText = p['titulo'] || '';
+    document.getElementById('field-Subtitulo').innerText = p['subtitulo'] || '';
+    document.getElementById('field-Medico-tratante').innerText = p['medico tratante'] || p['medico'] || '';
+    document.getElementById('field-Especialidad-Medica').innerText = p['especialidad medica'] || p['especialidad'] || '';
+
+    if (p['direccion']) document.getElementById('field-Direccion').innerText = p['direccion'];
+    else document.getElementById('sec-Direccion').style.display = 'none';
+
+    const tel1 = p['numero de telefono principal'] || p['telefono'] || '';
+    const tel2 = p['numero secundario'] || '';
+    let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+    if (telfsFinal) {
+        document.getElementById('field-Telefonos').innerText = telfsFinal;
+        document.getElementById('sec-Telefonos').style.display = 'inline-flex';
+    }
+
+    if (p['whatsapp']) {
+        document.getElementById('field-Whatsapp').innerText = p['whatsapp'];
+        document.getElementById('sec-Whatsapp').style.display = 'inline-flex';
+    }
+    if (p['redes sociales'] || p['redes']) {
+        document.getElementById('field-Redes').innerText = p['redes sociales'] || p['redes'];
+        document.getElementById('sec-Redes').style.display = 'inline-flex';
+    }
+    if (p['correo electronico'] || p['correo']) {
+        document.getElementById('field-Correo').innerText = p['correo electronico'] || p['correo'];
+        document.getElementById('sec-Correo').style.display = 'inline-flex';
+    }
+
+    // Marcar tipo de examen
+    const tipoExamen = (p['tipo'] || p['tipoexamen'] || '').toLowerCase();
+    if (tipoExamen.includes('ingreso')) document.getElementById('chk-ingreso').checked = true;
+    if (tipoExamen.includes('egreso')) document.getElementById('chk-egreso').checked = true;
+    if (tipoExamen.includes('pre')) document.getElementById('chk-prevacacional').checked = true;
+    if (tipoExamen.includes('post')) document.getElementById('chk-postvacacional').checked = true;
+    if (tipoExamen.includes('anual')) document.getElementById('chk-anual').checked = true;
+
+    // Mapeo de Campos Ocupacionales (Soporta llaves con o sin espacios)
+    const mapaCampos = [
+        { keys: ['nombre', 'nombretrabajador'], target: 'val-Nombre', sec: 'sec-Nombre' },
+        { keys: ['cedula', 'cedulatrabajador'], target: 'val-Cedula', sec: 'sec-Cedula' },
+        { keys: ['cargo'], target: 'val-Cargo', sec: 'sec-Cargo' },
+        { keys: ['area'], target: 'val-Area', sec: 'sec-Area' },
+        { keys: ['fecharealizacion', 'fechaeval', 'fecha'], target: 'val-FechaEval', sec: 'sec-FechaEval', fecha: true },
+        { keys: ['fechaemision'], target: 'val-FechaEmision', sec: 'sec-FechaEmision', fecha: true },
+        { keys: ['resultados'], target: 'val-Resultados', sec: 'sec-Resultados' },
+        { keys: ['paraclinicos'], target: 'val-Paraclinicos', sec: 'sec-Paraclinicos' },
+        { keys: ['aptitud'], target: 'val-Aptitud', sec: 'sec-Aptitud' },
+        { keys: ['adecuacion'], target: 'val-Adecuacion', sec: 'sec-Adecuacion' }
+    ];
+
+    mapaCampos.forEach(c => {
+        // Busca el primer parámetro que coincida
+        let val = '';
+        for (let key of c.keys) {
+            if (p[key]) { val = p[key]; break; }
         }
 
-        function formatearFechaLatina(fechaStr) {
-            if (!fechaStr) return '';
-            let partes = fechaStr.split(/[-/]/);
-            if (partes[0].length === 4) return `${partes[2].padStart(2, '0')}/${partes[1].padStart(2, '0')}/${partes[0]}`;
-            if (partes.length === 3 && partes[2].length === 4) return `${partes[1].padStart(2, '0')}/${partes[0].padStart(2, '0')}/${partes[2]}`;
-            return fechaStr;
+        const elTarget = document.getElementById(c.target);
+        const elSec = document.getElementById(c.sec);
+
+        if (val && val !== 'null' && val !== 'undefined') {
+            if (c.fecha) val = formatearFechaLatina(val);
+            if (elTarget) elTarget.innerText = val;
+            if (elSec) elSec.style.display = 'block';
+        } else {
+            // Mantiene visible la etiqueta si quieres que el campo aparezca vacío en lugar de ocultarlo
+            if (elTarget) elTarget.innerText = 'N/A';
+            if (elSec) elSec.style.display = 'block'; 
         }
-
-        let p = {};
-
-        window.onload = function() {
-            p = obtenerParametros();
-
-            // Llenar Membrete
-            document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
-            document.getElementById('field-Subtitulo').innerText = p['Subtitulo'] || '';
-            document.getElementById('field-Medico-tratante').innerText = p['Medico tratante'] || '';
-            document.getElementById('field-Especialidad-Medica').innerText = p['Especialidad Medica'] || '';
-
-            if (p['Direccion']) document.getElementById('field-Direccion').innerText = p['Direccion'];
-            else document.getElementById('sec-Direccion').style.display = 'none';
-
-            const tel1 = p['Numero de telefono principal'] || '';
-            const tel2 = p['Numero secundario'] || '';
-            let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
-            if (telfsFinal) {
-                document.getElementById('field-Telefonos').innerText = telfsFinal;
-                document.getElementById('sec-Telefonos').style.display = 'inline-flex';
-            }
-
-            if (p['Whatsapp']) {
-                document.getElementById('field-Whatsapp').innerText = p['Whatsapp'];
-                document.getElementById('sec-Whatsapp').style.display = 'inline-flex';
-            }
-            if (p['Redes sociales']) {
-                document.getElementById('field-Redes').innerText = p['Redes sociales'];
-                document.getElementById('sec-Redes').style.display = 'inline-flex';
-            }
-            if (p['Correo electronico']) {
-                document.getElementById('field-Correo').innerText = p['Correo electronico'];
-                document.getElementById('sec-Correo').style.display = 'inline-flex';
-            }
-
-            // Marcar tipo de examen
-            const tipoExamen = (p['tipo'] || p['TipoExamen'] || '').toLowerCase();
-            if (tipoExamen.includes('ingreso')) document.getElementById('chk-ingreso').checked = true;
-            if (tipoExamen.includes('egreso')) document.getElementById('chk-egreso').checked = true;
-            if (tipoExamen.includes('pre')) document.getElementById('chk-prevacacional').checked = true;
-            if (tipoExamen.includes('post')) document.getElementById('chk-postvacacional').checked = true;
-            if (tipoExamen.includes('anual')) document.getElementById('chk-anual').checked = true;
-
-            // Mapeo de Campos Ocupacionales
-            const mapaCampos = [
-                { key: 'nombre', target: 'val-Nombre', sec: 'sec-Nombre' },
-                { key: 'cedula', target: 'val-Cedula', sec: 'sec-Cedula' },
-                { key: 'cargo', target: 'val-Cargo', sec: 'sec-Cargo' },
-                { key: 'area', target: 'val-Area', sec: 'sec-Area' },
-                { key: 'fecharealizacion', target: 'val-FechaEval', sec: 'sec-FechaEval', fecha: true },
-                { key: 'fechaemision', target: 'val-FechaEmision', sec: 'sec-FechaEmision', fecha: true },
-                { key: 'resultados', target: 'val-Resultados', sec: 'sec-Resultados' },
-                { key: 'paraclinicos', target: 'val-Paraclinicos', sec: 'sec-Paraclinicos' },
-                { key: 'aptitud', target: 'val-Aptitud', sec: 'sec-Aptitud' },
-                { key: 'adecuacion', target: 'val-Adecuacion', sec: 'sec-Adecuacion' }
-            ];
-
-            mapaCampos.forEach(c => {
-                let val = p[c.key];
-                const elTarget = document.getElementById(c.target);
-                const elSec = document.getElementById(c.sec);
-
-                if (val && val !== 'null' && val !== 'undefined') {
-                    if (c.fecha) val = formatearFechaLatina(val);
-                    if (elTarget) elTarget.innerText = val;
-                    if (elSec) elSec.style.display = 'block';
-                } else {
-                    if (elSec) elSec.style.display = 'none';
-                }
-            });
-        };
-
+    });
+};
+        
         function descargarWord() {
             var datos = (typeof p !== 'undefined') ? p : {};
             var nombre = datos['nombre'] || 'Trabajador';

@@ -112,8 +112,11 @@
                 
                 <div class="section-item conclusion-style" id="sec-Conclusion-Contraindicacion"><span id="val-Conclusion-Contraindicacion" class="multiline-text"></span></div>
                 
-                <!-- SUGERENCIAS / RECOMENDACIONES: CON TÍTULO EN NEGRITA, SIN VIÑETA -->
-                <div class="section-item sugerencias-style" id="sec-Sugerencias-Recomendaciones"><strong>Sugerencias / Recomendaciones:</strong> <span id="val-Sugerencias-Recomendaciones" class="multiline-text"></span></div>
+                <!-- SUGERENCIAS / RECOMENDACIONES: TEXTO COMIENZA EN EL SIGUIENTE PÁRRAFO -->
+                <div class="section-item sugerencias-style" id="sec-Sugerencias-Recomendaciones">
+                    <strong>Sugerencias / Recomendaciones:</strong>
+                    <div id="val-Sugerencias-Recomendaciones" class="multiline-text" style="margin-top: 4px;"></div>
+                </div>
             </div>
         </div>
 
@@ -261,7 +264,6 @@
                 }
             });
 
-            // Manejo de la línea combinada Vacunación + Síntomas
             const secVacunaSintomas = document.getElementById('sec-Vacunacion-Sintomas');
             const separador = document.getElementById('separador-vacuna-sintoma');
             if (!hayVacuna && !haySintoma) {

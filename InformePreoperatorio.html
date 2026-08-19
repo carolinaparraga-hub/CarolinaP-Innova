@@ -203,18 +203,14 @@
             document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
             document.getElementById('field-Subtitulo').innerText = p['Subtítulo'] || p['Subtitulo'] || '';
             
-            // Separar y limpiar nombre y especialidad si vienen concatenados o desde sus parámetros
-            let rawMedico = p['Medico Tratante'] || p['Medico tratante'] || '';
+            // Obtener datos del médico y especialidad
+            let rawMedico = p['Medico Tratante'] || p['Medico tratante'] || p['Medico'] || p['Doctor'] || '';
             let especialidad = p['Especialidad'] || p['Especialidad Medica'] || p['Especialidad medica'] || 'Fisiatría';
 
-            let nombreMedico = rawMedico.replace(/Fisiatría|Fisiatria/gi, '').trim();
+            let nombreMedico = rawMedico ? rawMedico.replace(/Fisiatría|Fisiatria/gi, '').trim() : 'Dra. Carolina Párraga';
 
             document.getElementById('field-Medico-tratante').innerText = nombreMedico;
             document.getElementById('field-Especialidad-Medica').innerText = especialidad;
-
-            if (!nombreMedico) {
-                document.getElementById('sec-Firma-Medico').style.display = 'none';
-            }
 
             if (p['Dirección'] || p['Direccion']) document.getElementById('field-Direccion').innerText = p['Dirección'] || p['Direccion'];
             else document.getElementById('sec-Direccion').style.display = 'none';
@@ -325,8 +321,8 @@
             var titulo = datos['Titulo'] || '';
             var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
             
-            var rawMedico = datos['Medico Tratante'] || datos['Medico tratante'] || '';
-            var medico = rawMedico.replace(/Fisiatría|Fisiatria/gi, '').trim();
+            var rawMedico = datos['Medico Tratante'] || datos['Medico tratante'] || datos['Medico'] || datos['Doctor'] || '';
+            var medico = rawMedico ? rawMedico.replace(/Fisiatría|Fisiatria/gi, '').trim() : 'Dra. Carolina Párraga';
             var especialidad = datos['Especialidad'] || datos['Especialidad Medica'] || datos['Especialidad medica'] || 'Fisiatría';
 
             var direccion = datos['Dirección'] || datos['Direccion'] || '';
@@ -386,12 +382,12 @@
                 <p style="margin:0; padding:0; line-height:1; font-size:10pt;">&nbsp;</p>
             `;
 
-            var docFirmaWordHTML = medico ? `
+            var docFirmaWordHTML = `
                 <p style="text-align:center; margin-top:25pt; margin-bottom:15pt; font-family:'Times New Roman', serif; font-size:11pt; line-height:1.2;">
                     <strong>${medico}</strong><br>
                     <span>${especialidad}</span>
                 </p>
-            ` : '';
+            `;
 
             var footerDireccion = direccion ? `<p style="margin:0; padding:0; line-height:1;">📍 ${direccion}</p>` : '';
             var tel1 = datos['Numero de telefono principal'] || '';

@@ -22,12 +22,14 @@
         .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.15; }
         .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 4px; }
         .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 2px; column-gap: 20px; }
+        .patient-grid .full-width { grid-column: span 2; }
         .divider { border-bottom: 1px solid #ccc; margin: 8px 0 12px 0; }
         
         /* Cuerpo del Informe */
         .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 12px 0 12px 0; }
         .report-body { font-size: 10.5pt; line-height: 1.35; text-align: justify; }
         .section-item { margin-bottom: 8px; }
+        .section-subtitle { font-weight: bold; font-size: 11pt; margin-top: 10px; margin-bottom: 4px; text-decoration: underline; }
         .bullet-item { display: list-item; list-style-type: disc; list-style-position: inside; }
         .multiline-text { white-space: pre-wrap; }
         
@@ -86,6 +88,7 @@
                     <div id="sec-Telefono"><strong>Telf:</strong> <span id="val-Telefono"></span></div>
                     <div id="sec-Ocupacion"><strong>Ocupación:</strong> <span id="val-Ocupacion"></span></div>
                     <div id="sec-Aseguradora"><strong>Aseguradora:</strong> <span id="val-Aseguradora"></span></div>
+                    <div id="sec-Cirugia-Propuesta" class="full-width"><strong>Cirugía Propuesta:</strong> <span id="val-Cirugia-Propuesta" class="multiline-text"></span></div>
                 </div>
             </div>
 
@@ -94,8 +97,8 @@
 
             <!-- CUERPO DE LA EVALUACIÓN -->
             <div class="report-body">
-                <div class="section-item" id="sec-Cirugia-Propuesta"><strong>Cirugía Propuesta:</strong> <span id="val-Cirugia-Propuesta" class="multiline-text"></span></div>
-                
+                <!-- SUBTÍTULO ANTECEDENTES -->
+                <div class="section-subtitle" id="sec-Subtitulo-Antecedentes">Antecedentes:</div>
                 <div class="section-item bullet-item" id="sec-Antecedentes-Personales"><strong>Personales:</strong> <span id="val-Antecedentes-Personales" class="multiline-text"></span></div>
                 <div class="section-item bullet-item" id="sec-Antecedentes-Familiares"><strong>Familiares:</strong> <span id="val-Antecedentes-Familiares" class="multiline-text"></span></div>
                 <div class="section-item bullet-item" id="sec-Antecedentes-Quirurgicos"><strong>Quirúrgicos:</strong> <span id="val-Antecedentes-Quirurgicos" class="multiline-text"></span></div>
@@ -227,8 +230,8 @@
                 { keys: ['Edad Paciente', 'Edad'], target: 'val-Edad', sec: 'sec-Edad' },
                 { keys: ['Ocupacion'], target: 'val-Ocupacion', sec: 'sec-Ocupacion' },
                 { keys: ['Aseguradora'], target: 'val-Aseguradora', sec: 'sec-Aseguradora' },
-
                 { keys: ['Cirugia Propuesta'], target: 'val-Cirugia-Propuesta', sec: 'sec-Cirugia-Propuesta' },
+
                 { keys: ['Personales', 'Antecedentes Personales'], target: 'val-Antecedentes-Personales', sec: 'sec-Antecedentes-Personales' },
                 { keys: ['Familiares', 'Antecedentes Familiares'], target: 'val-Antecedentes-Familiares', sec: 'sec-Antecedentes-Familiares' },
                 { keys: ['Quirurgicos', 'Antecedentes Quirurgicos'], target: 'val-Antecedentes-Quirurgicos', sec: 'sec-Antecedentes-Quirurgicos' },
@@ -268,6 +271,14 @@
                 }
             });
 
+            // Ocultar subtítulo de antecedentes si no existe ninguno
+            const antPers = p['Personales'] || p['Antecedentes Personales'];
+            const antFam = p['Familiares'] || p['Antecedentes Familiares'];
+            const antQuir = p['Quirurgicos'] || p['Antecedentes Quirurgicos'];
+            if (!antPers && !antFam && !antQuir) {
+                document.getElementById('sec-Subtitulo-Antecedentes').style.display = 'none';
+            }
+
             const secVacunaSintomas = document.getElementById('sec-Vacunacion-Sintomas');
             const separador = document.getElementById('separador-vacuna-sintoma');
             if (!hayVacuna && !haySintoma) {
@@ -289,6 +300,7 @@
             var telf = datos['Telefono'] || datos['Telf'] || '';
             var ocupacion = datos['Ocupacion'] || '';
             var aseguradora = datos['Aseguradora'] || '';
+            var cirugia = datos['Cirugia Propuesta'] || '';
 
             var titulo = datos['Titulo'] || '';
             var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
@@ -347,6 +359,7 @@
                         <td style="padding:0.5pt 0;"><strong>Ocupación:</strong> ${ocupacion}</td>
                     </tr>
                     ${aseguradora ? `<tr><td style="padding:0.5pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td><td style="padding:0.5pt 0;">&nbsp;</td></tr>` : ''}
+                    ${cirugia ? `<tr><td colspan="2" style="padding:0.5pt 0;"><strong>Cirugía Propuesta:</strong> ${cirugia}</td></tr>` : ''}
                 </table>
                 <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:4pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
                 <p style="margin:0; padding:0; line-height:1; font-size:10pt;">&nbsp;</p>
@@ -391,6 +404,7 @@
                         .doc-title { font-family:'Times New Roman', serif; text-align:center; font-size:12.5pt; font-weight:bold; text-decoration:underline; line-height:1; margin-top:0pt; margin-bottom:9pt; }
                         .report-body { font-family:'Times New Roman', serif; font-size:10.5pt; line-height:1.15; text-align:justify; margin:0; padding:0; }
                         .section-item { margin-top:0pt; margin-bottom:5pt; line-height:1.15; }
+                        .section-subtitle { font-weight:bold; font-size:11pt; margin-top:8pt; margin-bottom:3pt; text-decoration:underline; }
                         .bullet-item { display: list-item; list-style-type: disc; list-style-position: inside; }
                         .multiline-text { white-space:pre-wrap; }
                         .escalas-riesgo-style { font-weight: bold; }

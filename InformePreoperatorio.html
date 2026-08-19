@@ -16,7 +16,6 @@
         .header-info { text-align: center; flex-grow: 1; }
         .header-info h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
         .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
-        .header-info p { margin: 1px 0; font-size: 10pt; font-weight: bold; }
         
         /* Datos Paciente Compactos */
         .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.15; }
@@ -42,8 +41,13 @@
         /* Estilo para Sugerencias / Recomendaciones */
         .sugerencias-style { font-weight: normal; font-size: 10.5pt; }
 
+        /* Firma del Médico al final */
+        .doctor-signature { text-align: center; margin-top: 30px; margin-bottom: 10px; font-size: 11pt; line-height: 1.3; }
+        .doctor-signature .doc-name { font-weight: bold; display: block; }
+        .doctor-signature .doc-spec { display: block; }
+
         /* Pie de página */
-        .footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 20px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
+        .footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 10px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
         .footer p { margin: 3px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .footer-item { display: inline-flex; align-items: center; gap: 4px; }
         .icon { width: 11px; height: 11px; fill: #333; vertical-align: middle; display: inline-block; }
@@ -73,7 +77,6 @@
                 <div class="header-info">
                     <h2 id="field-Titulo"></h2>
                     <h3 id="field-Subtitulo"></h3>
-                    <p><span id="field-Medico-tratante"></span> - <span id="field-Especialidad-Medica"></span></p>
                 </div>
             </div>
 
@@ -125,6 +128,12 @@
                     <div id="val-Sugerencias-Recomendaciones" class="multiline-text" style="margin-top: 4px;"></div>
                 </div>
             </div>
+        </div>
+
+        <!-- FIRMA / DATOS DEL MÉDICO -->
+        <div class="doctor-signature" id="sec-Firma-Medico">
+            <span class="doc-name" id="field-Medico-tratante"></span>
+            <span class="doc-spec" id="field-Especialidad-Medica"></span>
         </div>
 
         <!-- PIE DE PÁGINA -->
@@ -195,6 +204,10 @@
             document.getElementById('field-Subtitulo').innerText = p['Subtítulo'] || p['Subtitulo'] || '';
             document.getElementById('field-Medico-tratante').innerText = p['Medico Tratante'] || p['Medico tratante'] || '';
             document.getElementById('field-Especialidad-Medica').innerText = p['Especialidad Medico'] || p['Especialidad Medica'] || '';
+
+            if (!p['Medico Tratante'] && !p['Medico tratante'] && !p['Especialidad Medico'] && !p['Especialidad Medica']) {
+                document.getElementById('sec-Firma-Medico').style.display = 'none';
+            }
 
             if (p['Dirección'] || p['Direccion']) document.getElementById('field-Direccion').innerText = p['Dirección'] || p['Direccion'];
             else document.getElementById('sec-Direccion').style.display = 'none';
@@ -307,7 +320,6 @@
             var medico = datos['Medico Tratante'] || datos['Medico tratante'] || '';
             var especialidad = datos['Especialidad Medico'] || datos['Especialidad Medica'] || '';
             var direccion = datos['Dirección'] || datos['Direccion'] || '';
-            var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
             var logoURL = 'https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW';
 
             var node = document.getElementById("informe-content");
@@ -315,7 +327,7 @@
 
             if (node) {
                 var clone = node.cloneNode(true);
-                clone.querySelectorAll('.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr').forEach(function(el) { el.remove(); });
+                clone.querySelectorAll('.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr, .doctor-signature').forEach(function(el) { el.remove(); });
                 var reportBody = clone.querySelector('.report-body');
                 if (reportBody) cuerpoHTML = reportBody.innerHTML;
             }
@@ -329,7 +341,6 @@
                         <td style="width:auto; vertical-align:middle; text-align:center; padding:0 6px 0 18px;">
                             <div style="font-family:'Times New Roman', serif; font-size:12pt; font-weight:bold; line-height:1.05; margin:0; padding:0;">${titulo}</div>
                             <div style="font-family:'Times New Roman', serif; font-size:11pt; line-height:1.05; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
-                            <div style="font-family:'Times New Roman', serif; font-size:10pt; font-weight:bold; line-height:1.05; margin:3pt 0 0 0; padding:0;">${medicoEsp}</div>
                         </td>
                         <td style="width:70px; padding:0;">&nbsp;</td>
                     </tr>
@@ -364,6 +375,13 @@
                 <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:4pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
                 <p style="margin:0; padding:0; line-height:1; font-size:10pt;">&nbsp;</p>
             `;
+
+            var docFirmaWordHTML = (medico || especialidad) ? `
+                <p style="text-align:center; margin-top:25pt; margin-bottom:15pt; font-family:'Times New Roman', serif; font-size:11pt; line-height:1.2;">
+                    ${medico ? `<strong>${medico}</strong><br>` : ''}
+                    ${especialidad ? `<span>${especialidad}</span>` : ''}
+                </p>
+            ` : '';
 
             var footerDireccion = direccion ? `<p style="margin:0; padding:0; line-height:1;">📍 ${direccion}</p>` : '';
             var tel1 = datos['Numero de telefono principal'] || '';
@@ -420,6 +438,7 @@
                         ${patientHTML}
                         <div class="doc-title" align="center"><u><b>Evaluación Preoperatoria</b></u></div>
                         <div class="report-body">${cuerpoHTML}</div>
+                        ${docFirmaWordHTML}
                     </div>
                     <table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
                         <tr><td>

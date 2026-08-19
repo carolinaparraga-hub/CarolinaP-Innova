@@ -1,309 +1,2601 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informe Médico Ocupacional</title>
-    <style>
-        * { box-sizing: border-box; font-family: 'Times New Roman', Times, serif; }
-        body { background-color: #f2f2f2; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #000; }
-        .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 20mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
-        .content-area { flex-grow: 1; }
-        
-        /* Membrete */
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; }
-        .header-logo { max-width: 170px; max-height: 85px; object-fit: contain; }
-        .header-info { text-align: center; flex-grow: 1; }
-        .header-info h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
-        .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
-        .header-info p { margin: 1px 0; font-size: 10pt; font-weight: bold; }
-        
-        /* Datos del Informe / Ocupacional */
-        .report-header-title { text-align: center; font-size: 12pt; font-weight: bold; text-transform: uppercase; margin-bottom: 4px; }
-        .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 5px 0 10px 0; }
-        
-        .exam-types { display: flex; justify-content: center; gap: 12px; font-size: 10pt; margin-bottom: 8px; flex-wrap: wrap; }
-        .exam-types label { display: inline-flex; align-items: center; gap: 4px; }
-        .norma-text { font-size: 8pt; text-align: justify; margin-bottom: 12px; font-style: italic; color: #333; }
-        
-        /* Grilla del Trabajador */
-        .patient-info { width: 100%; margin-bottom: 15px; font-size: 10.5pt; line-height: 1.4; }
-        .patient-grid { display: grid; grid-template-columns: 1fr 1fr; row-gap: 6px; column-gap: 20px; }
-        .divider { border-bottom: 1px solid #ccc; margin: 12px 0 15px 0; }
-        
-        /* Cuerpo del Informe */
-        .report-body { font-size: 10.5pt; line-height: 1.45; text-align: justify; }
-        .section-item { margin-bottom: 12px; }
-        .multiline-text { white-space: pre-wrap; }
-        
-        /* Pie de página e Íconos */
-        .footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 20px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
-        .footer p { margin: 3px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .footer-item { display: inline-flex; align-items: center; gap: 4px; }
-        .icon { width: 11px; height: 11px; fill: #333; vertical-align: middle; display: inline-block; }
-        
-        /* Botones Acción */
-        .action-buttons { margin-top: 25px; margin-bottom: 30px; display: flex; gap: 15px; justify-content: center; }
-        .btn { background-color: #1d5f99; color: #ffffff; border: none; padding: 10px 22px; font-size: 11pt; font-weight: bold; border-radius: 4px; cursor: pointer; font-family: Arial, sans-serif; }
-        .btn:hover { background-color: #14436d; }
-        
-        @media print {
-            body { background: none; padding: 0; }
-            .page { box-shadow: none; width: 100%; padding: 0; min-height: 100vh; }
-            .action-buttons { display: none !important; }
-            @page { size: A4; margin: 15mm; }
-        }
-    </style>
-</head>
-<body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <div class="page" id="informe-content">
-        <div class="content-area">
-            <!-- MEMBRETE ORIGINAL -->
-            <div class="header">
-                <div style="width: 170px;">
-                    <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" alt="Logo" class="header-logo" id="logo-centro">
-                </div>
-                <div class="header-info">
-                    <h2 id="field-Titulo"></h2>
-                    <h3 id="field-Subtitulo"></h3>
-                    <p><span id="field-Medico-tratante"></span> - <span id="field-Especialidad-Medica"></span></p>
-                </div>
-            </div>
+<title>Informe de Salud Ocupacional</title>
 
-            <!-- ENCABEZADO OCUPACIONAL -->
-            <div class="report-header-title">Servicio de Seguridad y Salud en el Trabajo</div>
-            <div class="report-title">INFORME MEDICO OCUPACIONAL</div>
-            
-            <div class="exam-types">
-                <strong>Examen de salud:</strong>
-                <label><input type="checkbox" id="chk-ingreso"> Ingreso</label>
-                <label><input type="checkbox" id="chk-egreso"> Egreso</label>
-                <label><input type="checkbox" id="chk-prevacacional"> Pre-vacacional</label>
-                <label><input type="checkbox" id="chk-postvacacional"> Post-vacacional</label>
-                <label><input type="checkbox" id="chk-anual"> Anual</label>
-            </div>
-            
-            <div class="norma-text">
-                <strong>NORMA TÉCNICA DE LOS SERVICIOS DE SEGURIDAD Y SALUD EN EL TRABAJO Artículo 33.</strong> Al término de cualquier evaluación de salud que se practique al trabajador o trabajadora, el médico o médica ocupacional o el profesional que haya realizado la evaluación, debe redactar un informe que contenga como mínimo lo siguiente:
-            </div>
+<style>
 
-            <div class="divider"></div>
-
-            <!-- DATOS TRABAJADOR Y EVALUACIÓN -->
-            <div class="patient-info">
-                <div class="patient-grid">
-                    <div id="sec-Nombre"><strong>Nombres y apellidos del trabajador:</strong> <span id="val-Nombre"></span></div>
-                    <div id="sec-FechaEmision"><strong>Fecha de emisión del informe:</strong> <span id="val-FechaEmision"></span></div>
-                    
-                    <div id="sec-Cedula"><strong>Número de cédula del trabajador:</strong> <span id="val-Cedula"></span></div>
-                    <div id="sec-Cargo"><strong>Cargo del Trabajador:</strong> <span id="val-Cargo"></span></div>
-                    
-                    <div id="sec-Area"><strong>Área donde labora y ha laborado:</strong> <span id="val-Area"></span></div>
-                    <div id="sec-FechaEval"><strong>Fecha de la evaluación:</strong> <span id="val-FechaEval"></span></div>
-                </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <!-- RESULTADOS Y EVALUACIONES -->
-            <div class="report-body">
-                <div class="section-item" id="sec-Resultados">
-                    <strong>Resultados de la evaluación realizada al trabajador:</strong><br>
-                    <span id="val-Resultados" class="multiline-text"></span>
-                </div>
-                
-                <div class="section-item" id="sec-Paraclinicos">
-                    <strong>Evaluaciones clínicas y paraclínicas practicadas al trabajador:</strong><br>
-                    <span id="val-Paraclinicos" class="multiline-text"></span>
-                </div>
-                
-                <div class="section-item" id="sec-Aptitud">
-                    <strong>Conclusión de aptitud:</strong><br>
-                    <span id="val-Aptitud" class="multiline-text"></span>
-                </div>
-                
-                <div class="section-item" id="sec-Adecuacion">
-                    <strong>Medidas de adecuación de tareas o reubicación de puesto de trabajo:</strong><br>
-                    <span id="val-Adecuacion" class="multiline-text"></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- PIE DE PÁGINA ORIGINAL -->
-        <div class="footer">
-            <p id="sec-Direccion">
-                <span class="footer-item">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                    <span id="field-Direccion"></span>
-                </span>
-            </p>
-            <p id="sec-Contactos-Tel">
-                <span id="sec-Telefonos" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                    <strong>Telfs:</strong> <span id="field-Telefonos"></span>
-                </span>
-                <span id="sec-Whatsapp" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 16.5c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.22 8.24z"/></svg>
-                    <strong>WhatsApp:</strong> <span id="field-Whatsapp"></span>
-                </span>
-            </p>
-            <p id="sec-Contactos-Digital">
-                <span id="sec-Redes" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7 wonderh-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
-                    <span id="field-Redes"></span>
-                </span>
-                <span id="sec-Correo" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                    <span id="field-Correo"></span>
-                </span>
-            </p>
-        </div>
-    </div>
-
-    <div class="action-buttons">
-        <button class="btn" onclick="window.print()">Imprimir PDF</button>
-        <button class="btn" onclick="descargarWord()">Descargar Word</button>
-    </div>
-
-    <script>
-        function obtenerParametros() {
-    const params = {};
-    // Elimina múltiples '?' al inicio si los hay
-    let queryString = window.location.search.replace(/^\?+/, '');
-    const pairs = queryString.split("&");
-    
-    for (let i = 0; i < pairs.length; i++) {
-        if (!pairs[i]) continue;
-        const pair = pairs[i].split("=");
-        // Normaliza las llaves a minúsculas y sin espacios extra
-        const key = decodeURIComponent(pair[0].replace(/\+/g, " ")).trim().toLowerCase();
-        const value = decodeURIComponent((pair[1] || "").replace(/\+/g, " ")).trim();
-        params[key] = value;
-    }
-    return params;
+* {
+    box-sizing: border-box;
+    font-family: "Times New Roman", Times, serif;
 }
 
+body {
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #000;
+}
+
+.page {
+    background: #ffffff;
+    width: 210mm;
+    min-height: 297mm;
+
+    padding: 15mm 15mm 18mm 15mm;
+
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.content-area {
+    flex-grow: 1;
+}
+
+
+/* =========================================================
+   MEMBRETE
+========================================================= */
+
+.header {
+    display: flex;
+    align-items: center;
+
+    border-bottom: 1.5px solid #000;
+
+    padding-bottom: 7px;
+    margin-bottom: 12px;
+}
+
+.header-logo-container {
+    width: 150px;
+    min-width: 150px;
+
+    text-align: left;
+}
+
+.header-logo {
+    max-width: 135px;
+    max-height: 70px;
+
+    object-fit: contain;
+}
+
+.header-info {
+    flex-grow: 1;
+
+    text-align: center;
+}
+
+.header-info h2 {
+    margin: 0;
+
+    font-size: 14pt;
+
+    font-weight: bold;
+
+    text-transform: uppercase;
+}
+
+.header-info h3 {
+    margin: 3px 0;
+
+    font-size: 10.5pt;
+
+    font-weight: normal;
+}
+
+.header-info p {
+    margin: 2px 0;
+
+    font-size: 9.5pt;
+
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   TIPO DE EXAMEN
+========================================================= */
+
+.exam-type {
+    width: 100%;
+
+    margin-top: 4px;
+    margin-bottom: 12px;
+
+    font-size: 10pt;
+}
+
+.exam-type-title {
+    font-weight: bold;
+    margin-right: 12px;
+}
+
+.exam-option {
+    margin-right: 13px;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   DATOS DEL TRABAJADOR
+========================================================= */
+
+.worker-info {
+    width: 100%;
+
+    border: 1px solid #777;
+
+    border-collapse: collapse;
+
+    font-size: 9.8pt;
+
+    margin-bottom: 12px;
+}
+
+.worker-info td {
+    border: 1px solid #777;
+
+    padding: 5px 7px;
+
+    vertical-align: top;
+
+    line-height: 1.2;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.worker-info .left {
+    width: 50%;
+}
+
+.worker-info .right {
+    width: 50%;
+}
+
+
+/* =========================================================
+   SECCIONES
+========================================================= */
+
+.section {
+    width: 100%;
+
+    border: 1px solid #777;
+
+    margin-bottom: 10px;
+
+    padding: 7px 9px;
+
+    font-size: 9.8pt;
+
+    line-height: 1.25;
+
+    text-align: justify;
+}
+
+.section-title {
+    font-weight: bold;
+
+    margin-bottom: 4px;
+}
+
+.section-text {
+    white-space: pre-wrap;
+}
+
+
+/* =========================================================
+   SIGNOS / MEDIDAS
+========================================================= */
+
+.measure-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 4px;
+
+    font-size: 9.5pt;
+}
+
+.measure-table td {
+    padding: 2px 5px;
+
+    vertical-align: top;
+}
+
+.measure-label {
+    font-weight: bold;
+}
+
+
+/* =========================================================
+   PARACLÍNICOS
+========================================================= */
+
+.paraclinical {
+    line-height: 1.45;
+
+    text-align: justify;
+}
+
+.paraclinical-item {
+    display: inline;
+    margin-right: 8px;
+}
+
+
+/* =========================================================
+   CONCLUSIÓN
+========================================================= */
+
+.conclusion {
+    min-height: 55px;
+}
+
+.conclusion-text {
+    white-space: pre-wrap;
+}
+
+
+/* =========================================================
+   MEDIDAS
+========================================================= */
+
+.measures {
+    min-height: 55px;
+}
+
+.measures-text {
+    white-space: pre-wrap;
+}
+
+
+/* =========================================================
+   FIRMA
+========================================================= */
+
+.signature-area {
+
+    margin-top: 18px;
+
+    font-size: 9.5pt;
+
+}
+
+.signature-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+.signature-table td {
+
+    width: 50%;
+
+    text-align: center;
+
+    vertical-align: bottom;
+
+    padding-top: 20px;
+
+}
+
+.signature-line {
+
+    border-top: 1px solid #000;
+
+    width: 80%;
+
+    margin: 0 auto 4px auto;
+
+}
+
+
+/* =========================================================
+   PIE DE PÁGINA
+========================================================= */
+
+.footer {
+
+    border-top: 1px solid #000;
+
+    padding-top: 7px;
+
+    margin-top: 15px;
+
+    text-align: center;
+
+    font-size: 8pt;
+
+    line-height: 1.3;
+
+    color: #222;
+}
+
+.footer p {
+
+    margin: 2px 0;
+
+}
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.action-buttons {
+
+    margin-top: 20px;
+
+    margin-bottom: 25px;
+
+    display: flex;
+
+    gap: 15px;
+
+    justify-content: center;
+}
+
+.btn {
+
+    background-color: #1d5f99;
+
+    color: white;
+
+    border: none;
+
+    padding: 10px 22px;
+
+    font-size: 11pt;
+
+    font-weight: bold;
+
+    border-radius: 4px;
+
+    cursor: pointer;
+
+    font-family: Arial, sans-serif;
+}
+
+.btn:hover {
+
+    background-color: #14436d;
+
+}
+
+
+/* =========================================================
+   IMPRESIÓN
+========================================================= */
+
+@media print {
+
+    body {
+
+        background: none;
+
+        padding: 0;
+
+    }
+
+    .page {
+
+        box-shadow: none;
+
+        width: 100%;
+
+        min-height: 100vh;
+
+        padding: 0;
+
+    }
+
+    .action-buttons {
+
+        display: none !important;
+
+    }
+
+    @page {
+
+        size: A4;
+
+        margin: 12mm;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="page" id="informe-content">
+
+
+<div class="content-area">
+
+
+<!-- =====================================================
+     MEMBRETE
+===================================================== -->
+
+<div class="header">
+
+    <div class="header-logo-container">
+
+        <img
+            src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW"
+            alt="Logo"
+            class="header-logo"
+        >
+
+    </div>
+
+
+    <div class="header-info">
+
+        <h2 id="field-Titulo"></h2>
+
+        <h3 id="field-Subtitulo"></h3>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     TIPO DE EXAMEN
+===================================================== -->
+
+<div class="exam-type">
+
+    <span class="exam-type-title">
+        Examen de salud:
+    </span>
+
+    <span class="exam-option">
+        <span id="exam-ingreso">○</span> Ingreso
+    </span>
+
+    <span class="exam-option">
+        <span id="exam-egreso">○</span> Egreso
+    </span>
+
+    <span class="exam-option">
+        <span id="exam-pre">○</span> Pre-vacacional
+    </span>
+
+    <span class="exam-option">
+        <span id="exam-post">○</span> Post-vacacional
+    </span>
+
+    <span class="exam-option">
+        <span id="exam-anual">○</span> Anual
+    </span>
+
+</div>
+
+
+
+<!-- =====================================================
+     DATOS DEL TRABAJADOR
+===================================================== -->
+
+<table class="worker-info">
+
+<tr>
+
+    <td class="left">
+
+        <span class="label">
+            Número de cédula del trabajador:
+        </span>
+
+        <br>
+
+        <span id="val-Cedula"></span>
+
+    </td>
+
+
+    <td class="right">
+
+        <span class="label">
+            Fecha de emisión del informe:
+        </span>
+
+        <br>
+
+        <span id="val-Fecha-emision"></span>
+
+    </td>
+
+</tr>
+
+
+<tr>
+
+    <td>
+
+        <span class="label">
+            Nombres y apellidos del trabajador:
+        </span>
+
+        <br>
+
+        <span id="val-Nombre"></span>
+
+    </td>
+
+
+    <td>
+
+        <span class="label">
+            Cargo del Trabajador:
+        </span>
+
+        <br>
+
+        <span id="val-Cargo"></span>
+
+    </td>
+
+</tr>
+
+
+<tr>
+
+    <td>
+
+        <span class="label">
+            Área donde labora y ha laborado el trabajador:
+        </span>
+
+        <br>
+
+        <span id="val-Area"></span>
+
+    </td>
+
+
+    <td>
+
+        <span class="label">
+            Fecha:
+        </span>
+
+        <br>
+
+        <span id="val-Fecha"></span>
+
+    </td>
+
+</tr>
+
+</table>
+
+
+
+<!-- =====================================================
+     RESULTADOS DE LA EVALUACIÓN
+===================================================== -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        Resultados de la evaluación realizada al trabajador:
+
+    </div>
+
+
+    <table class="measure-table">
+
+        <tr>
+
+            <td>
+                <span class="measure-label">Peso:</span>
+                <span id="val-Peso"></span>
+            </td>
+
+            <td>
+                <span class="measure-label">Talla:</span>
+                <span id="val-Talla"></span>
+            </td>
+
+            <td>
+                <span class="measure-label">TA:</span>
+                <span id="val-TA"></span>
+            </td>
+
+            <td>
+                <span class="measure-label">Observación:</span>
+                <span id="val-observacion"></span>
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    <div style="margin-top:5px;">
+
+        <strong>Piel:</strong>
+        <span id="val-Piel"></span>
+
+        &nbsp;&nbsp;
+
+        <strong>Cabeza y cuello:</strong>
+        <span id="val-Cabeza-cuello"></span>
+
+        &nbsp;&nbsp;
+
+        <strong>Ojos:</strong>
+        <span id="val-Ojos"></span>
+
+        &nbsp;&nbsp;
+
+        <strong>ORL:</strong>
+        <span id="val-ORL"></span>
+
+    </div>
+
+
+    <div style="margin-top:4px;">
+
+        <strong>Extremidades Sup.:</strong>
+        <span id="val-Extremidades"></span>
+
+        &nbsp;&nbsp;
+
+        <strong>Linfáticos:</strong>
+        <span id="val-Linfaticos"></span>
+
+        &nbsp;&nbsp;
+
+        <strong>Tórax:</strong>
+        <span id="val-Torax"></span>
+
+    </div>
+
+
+    <div style="margin-top:4px;">
+
+        <strong>Cardiopulmonar:</strong>
+        <span id="val-Cardiopulmonar"></span>
+
+        &nbsp;&nbsp;
+
+        <strong>Abdomen:</strong>
+        <span id="val-Abdomen"></span>
+
+    </div>
+
+
+    <div style="margin-top:4px;">
+
+        <strong>Zona inguino-genital:</strong>
+        <span id="val-Zona"></span>
+
+        &nbsp;&nbsp;
+
+        <strong>Musculo esquelética:</strong>
+        <span id="val-Musculo"></span>
+
+    </div>
+
+
+    <div style="margin-top:4px;">
+
+        <strong>Resultados adicionales:</strong>
+
+        <span id="val-Resultados"></span>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     EVALUACIONES CLÍNICAS Y PARACLÍNICAS
+===================================================== -->
+
+<div class="section">
+
+    <div class="section-title">
+
+        Evaluación clínicas y paraclínicas practicadas al trabajador:
+
+    </div>
+
+
+    <div class="paraclinical">
+
+        <span class="paraclinical-item">
+            <strong>HGB:</strong>
+            <span id="val-HGB"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>HTO:</strong>
+            <span id="val-HTO"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>GB:</strong>
+            <span id="val-GB"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>PLT:</strong>
+            <span id="val-PLT"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>Glicemi:</strong>
+            <span id="val-Glicemi"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>Urea:</strong>
+            <span id="val-Urea"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>Creatinina:</strong>
+            <span id="val-Creatinina"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>Colesterol:</strong>
+            <span id="val-Colesterol"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>Triglicéridos:</strong>
+            <span id="val-Trigliceridos"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>Ácido úrico:</strong>
+            <span id="val-Acido-urico"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>Uroanálisis:</strong>
+            <span id="val-Uroanalisis"></span>
+        </span>
+
+        <span class="paraclinical-item">
+            <strong>EKG:</strong>
+            <span id="val-Ekg"></span>
+        </span>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     CONCLUSIÓN
+===================================================== -->
+
+<div class="section conclusion">
+
+    <div class="section-title">
+
+        Conclusión de aptitud:
+
+    </div>
+
+    <div
+        id="val-Conclusion"
+        class="conclusion-text">
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     MEDIDAS
+===================================================== -->
+
+<div class="section measures">
+
+    <div class="section-title">
+
+        Medidas de adecuación de tareas o reubicación de puesto de trabajo:
+
+    </div>
+
+    <div
+        id="val-Medidas"
+        class="measures-text">
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     FIRMA
+===================================================== -->
+
+<div class="signature-area">
+
+<table class="signature-table">
+
+<tr>
+
+<td>
+
+    <div class="signature-line"></div>
+
+    Nombres y apellidos del profesional
+
+    <br>
+
+    Número de Colegio Médico (CM)
+
+</td>
+
+
+<td>
+
+    <div class="signature-line"></div>
+
+    Firma y sello del profesional
+
+    <br>
+
+    Servicio de Seguridad y Salud en el Trabajo
+
+</td>
+
+</tr>
+
+</table>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     PIE DE PÁGINA
+===================================================== -->
+
+<div class="footer">
+
+    <p id="footer-direccion"></p>
+
+    <p id="footer-contactos"></p>
+
+    <p id="footer-digital"></p>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     BOTONES
+===================================================== -->
+
+<div class="action-buttons">
+
+    <button
+        class="btn"
+        onclick="window.print()">
+
+        Imprimir PDF
+
+    </button>
+
+
+    <button
+        class="btn"
+        onclick="descargarWord()">
+
+        Descargar Word
+
+    </button>
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================================
+   LEER PARÁMETROS DE APPSHEET
+========================================================= */
+
+function obtenerParametros() {
+
+    const params = {};
+
+    const searchParams =
+        new URLSearchParams(window.location.search);
+
+
+    searchParams.forEach((value, key) => {
+
+        params[key] = value;
+
+    });
+
+
+    return params;
+
+}
+
+
+
+/* =========================================================
+   FORMATO DE FECHA
+========================================================= */
+
+function formatearFechaLatina(fechaStr) {
+
+    if (!fechaStr) return "";
+
+
+    let fecha = fechaStr.trim();
+
+
+    /*
+       YYYY-MM-DD
+    */
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+
+        const partes = fecha.split("-");
+
+        return partes[2] + "/" +
+               partes[1] + "/" +
+               partes[0];
+
+    }
+
+
+    /*
+       DD/MM/YYYY
+    */
+
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(fecha)) {
+
+        return fecha;
+
+    }
+
+
+    /*
+       MM/DD/YYYY
+    */
+
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(fecha)) {
+
+        return fecha;
+
+    }
+
+
+    return fecha;
+
+}
+
+
+
+/* =========================================================
+   MOSTRAR / OCULTAR VALORES
+========================================================= */
+
+function colocarValor(id, valor) {
+
+    const elemento =
+        document.getElementById(id);
+
+
+    if (!elemento) return;
+
+
+    if (
+        valor === undefined ||
+        valor === null ||
+        valor === "" ||
+        valor === "null" ||
+        valor === "undefined"
+    ) {
+
+        elemento.innerText = "";
+
+    } else {
+
+        elemento.innerText = valor;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   EXAMEN DE SALUD
+========================================================= */
+
+function marcarExamen(tipo) {
+
+    const valor =
+        (tipo || "").trim().toLowerCase();
+
+
+    const opciones = {
+
+        "exam-ingreso": "○",
+
+        "exam-egreso": "○",
+
+        "exam-pre": "○",
+
+        "exam-post": "○",
+
+        "exam-anual": "○"
+
+    };
+
+
+    Object.keys(opciones).forEach(id => {
+
+        const elemento =
+            document.getElementById(id);
+
+        if (elemento) {
+
+            elemento.innerText = "○";
+
+        }
+
+    });
+
+
+    if (valor.includes("ingreso")) {
+
+        document.getElementById("exam-ingreso").innerText = "●";
+
+    }
+
+    else if (valor.includes("egreso")) {
+
+        document.getElementById("exam-egreso").innerText = "●";
+
+    }
+
+    else if (
+        valor.includes("pre") &&
+        valor.includes("vac")
+    ) {
+
+        document.getElementById("exam-pre").innerText = "●";
+
+    }
+
+    else if (
+        valor.includes("post") &&
+        valor.includes("vac")
+    ) {
+
+        document.getElementById("exam-post").innerText = "●";
+
+    }
+
+    else if (valor.includes("anual")) {
+
+        document.getElementById("exam-anual").innerText = "●";
+
+    }
+
+}
+
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let p = {};
+
+
+
+/* =========================================================
+   CARGAR INFORMACIÓN
+========================================================= */
+
 window.onload = function() {
+
     p = obtenerParametros();
 
-    // Llenar Membrete (Búsqueda tolerante a minúsculas/mayúsculas)
-    document.getElementById('field-Titulo').innerText = p['titulo'] || '';
-    document.getElementById('field-Subtitulo').innerText = p['subtitulo'] || '';
-    document.getElementById('field-Medico-tratante').innerText = p['medico tratante'] || p['medico'] || '';
-    document.getElementById('field-Especialidad-Medica').innerText = p['especialidad medica'] || p['especialidad'] || '';
 
-    if (p['direccion']) document.getElementById('field-Direccion').innerText = p['direccion'];
-    else document.getElementById('sec-Direccion').style.display = 'none';
+    /* -----------------------------------------------------
+       DATOS DEL CENTRO MÉDICO
+    ----------------------------------------------------- */
 
-    const tel1 = p['numero de telefono principal'] || p['telefono'] || '';
-    const tel2 = p['numero secundario'] || '';
-    let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
-    if (telfsFinal) {
-        document.getElementById('field-Telefonos').innerText = telfsFinal;
-        document.getElementById('sec-Telefonos').style.display = 'inline-flex';
+    colocarValor(
+        "field-Titulo",
+        p["Titulo"]
+    );
+
+
+    colocarValor(
+        "field-Subtitulo",
+        p["Subtítulo"] || p["Subtitulo"]
+    );
+
+
+    /* -----------------------------------------------------
+       EXAMEN
+    ----------------------------------------------------- */
+
+    marcarExamen(
+        p["Examen de Salud"]
+    );
+
+
+    /* -----------------------------------------------------
+       DATOS DEL TRABAJADOR
+    ----------------------------------------------------- */
+
+    colocarValor(
+        "val-Cedula",
+        p["Cedula"]
+    );
+
+
+    colocarValor(
+        "val-Nombre",
+        p["Nombre y Apellido"]
+    );
+
+
+    colocarValor(
+        "val-Cargo",
+        p["Cargo del Trabajador"]
+    );
+
+
+    colocarValor(
+        "val-Area",
+        p["Área donde labora y ha laborado el trabajador"]
+    );
+
+
+    colocarValor(
+        "val-Fecha",
+        formatearFechaLatina(
+            p["Fecha"]
+        )
+    );
+
+
+    colocarValor(
+        "val-Fecha-emision",
+        formatearFechaLatina(
+            p["Fecha de emisión del informe"]
+        )
+    );
+
+
+
+    /* -----------------------------------------------------
+       RESULTADOS
+    ----------------------------------------------------- */
+
+    colocarValor(
+        "val-Peso",
+        p["Peso"]
+    );
+
+
+    colocarValor(
+        "val-Talla",
+        p["Talla"]
+    );
+
+
+    colocarValor(
+        "val-TA",
+        p["TA"]
+    );
+
+
+    colocarValor(
+        "val-observacion",
+        p["observación"]
+    );
+
+
+    colocarValor(
+        "val-Piel",
+        p["Piel"]
+    );
+
+
+    colocarValor(
+        "val-Cabeza-cuello",
+        p["Cabeza y cuello"]
+    );
+
+
+    colocarValor(
+        "val-Ojos",
+        p["Ojos"]
+    );
+
+
+    colocarValor(
+        "val-ORL",
+        p["ORL"]
+    );
+
+
+    colocarValor(
+        "val-Extremidades",
+        p["Extremidades Sup."]
+    );
+
+
+    colocarValor(
+        "val-Linfaticos",
+        p["Linfáticos"]
+    );
+
+
+    colocarValor(
+        "val-Torax",
+        p["Tórax"]
+    );
+
+
+    colocarValor(
+        "val-Cardiopulmonar",
+        p["Cardiopulmonar"]
+    );
+
+
+    colocarValor(
+        "val-Abdomen",
+        p["Abdomen"]
+    );
+
+
+    colocarValor(
+        "val-Zona",
+        p["Zona inguino-genital"]
+    );
+
+
+    colocarValor(
+        "val-Musculo",
+        p["Musculo esquelética"]
+    );
+
+
+    colocarValor(
+        "val-Resultados",
+        p["Resultados de la evaluación realizada al trabajador"]
+    );
+
+
+
+    /* -----------------------------------------------------
+       PARACLÍNICOS
+    ----------------------------------------------------- */
+
+    colocarValor("val-HGB", p["HGB"]);
+
+    colocarValor("val-HTO", p["HTO"]);
+
+    colocarValor("val-GB", p["GB"]);
+
+    colocarValor("val-PLT", p["PLT"]);
+
+    colocarValor("val-Glicemi", p["Glicemi"]);
+
+    colocarValor("val-Urea", p["Urea"]);
+
+    colocarValor("val-Creatinina", p["Creatinina"]);
+
+    colocarValor("val-Colesterol", p["Colesterol"]);
+
+    colocarValor("val-Trigliceridos", p["Triglicéridos"]);
+
+    colocarValor("val-Acido-urico", p["Ácido úrico"]);
+
+    colocarValor("val-Uroanalisis", p["Uroanálisis"]);
+
+    colocarValor("val-Ekg", p["Ekg"]);
+
+
+
+    /* -----------------------------------------------------
+       CONCLUSIÓN
+    ----------------------------------------------------- */
+
+    colocarValor(
+        "val-Conclusion",
+        p["Conclusión de Aptitud"]
+    );
+
+
+    /* -----------------------------------------------------
+       MEDIDAS
+    ----------------------------------------------------- */
+
+    colocarValor(
+        "val-Medidas",
+        p["Medidas de adecuación de tareas o reubicación de puesto de trabajo:"]
+    );
+
+
+
+    /* -----------------------------------------------------
+       PIE DE PÁGINA
+    ----------------------------------------------------- */
+
+    let direccion =
+        p["Dirección"] || "";
+
+
+    let telefono1 =
+        p["Numero de telefono principal"] || "";
+
+
+    let telefono2 =
+        p["Numero secundario"] || "";
+
+
+    let whatsapp =
+        p["Whatsapp"] || "";
+
+
+    let redes =
+        p["Redes sociales"] || "";
+
+
+    let correo =
+        p["Correo electronico"] || "";
+
+
+    if (direccion) {
+
+        document.getElementById(
+            "footer-direccion"
+        ).innerText =
+            "📍 " + direccion;
+
     }
 
-    if (p['whatsapp']) {
-        document.getElementById('field-Whatsapp').innerText = p['whatsapp'];
-        document.getElementById('sec-Whatsapp').style.display = 'inline-flex';
-    }
-    if (p['redes sociales'] || p['redes']) {
-        document.getElementById('field-Redes').innerText = p['redes sociales'] || p['redes'];
-        document.getElementById('sec-Redes').style.display = 'inline-flex';
-    }
-    if (p['correo electronico'] || p['correo']) {
-        document.getElementById('field-Correo').innerText = p['correo electronico'] || p['correo'];
-        document.getElementById('sec-Correo').style.display = 'inline-flex';
+
+    let telefonos = "";
+
+    if (telefono1 && telefono2) {
+
+        telefonos =
+            telefono1 + " / " + telefono2;
+
     }
 
-    // Marcar tipo de examen
-    const tipoExamen = (p['tipo'] || p['tipoexamen'] || '').toLowerCase();
-    if (tipoExamen.includes('ingreso')) document.getElementById('chk-ingreso').checked = true;
-    if (tipoExamen.includes('egreso')) document.getElementById('chk-egreso').checked = true;
-    if (tipoExamen.includes('pre')) document.getElementById('chk-prevacacional').checked = true;
-    if (tipoExamen.includes('post')) document.getElementById('chk-postvacacional').checked = true;
-    if (tipoExamen.includes('anual')) document.getElementById('chk-anual').checked = true;
+    else {
 
-    // Mapeo de Campos Ocupacionales (Soporta llaves con o sin espacios)
-    const mapaCampos = [
-        { keys: ['nombre', 'nombretrabajador'], target: 'val-Nombre', sec: 'sec-Nombre' },
-        { keys: ['cedula', 'cedulatrabajador'], target: 'val-Cedula', sec: 'sec-Cedula' },
-        { keys: ['cargo'], target: 'val-Cargo', sec: 'sec-Cargo' },
-        { keys: ['area'], target: 'val-Area', sec: 'sec-Area' },
-        { keys: ['fecharealizacion', 'fechaeval', 'fecha'], target: 'val-FechaEval', sec: 'sec-FechaEval', fecha: true },
-        { keys: ['fechaemision'], target: 'val-FechaEmision', sec: 'sec-FechaEmision', fecha: true },
-        { keys: ['resultados'], target: 'val-Resultados', sec: 'sec-Resultados' },
-        { keys: ['paraclinicos'], target: 'val-Paraclinicos', sec: 'sec-Paraclinicos' },
-        { keys: ['aptitud'], target: 'val-Aptitud', sec: 'sec-Aptitud' },
-        { keys: ['adecuacion'], target: 'val-Adecuacion', sec: 'sec-Adecuacion' }
-    ];
+        telefonos =
+            telefono1 || telefono2;
 
-    mapaCampos.forEach(c => {
-        // Busca el primer parámetro que coincida
-        let val = '';
-        for (let key of c.keys) {
-            if (p[key]) { val = p[key]; break; }
+    }
+
+
+    let contactos = "";
+
+
+    if (telefonos) {
+
+        contactos =
+            "📞 Telfs: " + telefonos;
+
+    }
+
+
+    if (whatsapp) {
+
+        if (contactos) {
+
+            contactos += "   |   ";
+
         }
 
-        const elTarget = document.getElementById(c.target);
-        const elSec = document.getElementById(c.sec);
+        contactos +=
+            "💬 WhatsApp: " + whatsapp;
 
-        if (val && val !== 'null' && val !== 'undefined') {
-            if (c.fecha) val = formatearFechaLatina(val);
-            if (elTarget) elTarget.innerText = val;
-            if (elSec) elSec.style.display = 'block';
-        } else {
-            // Mantiene visible la etiqueta si quieres que el campo aparezca vacío en lugar de ocultarlo
-            if (elTarget) elTarget.innerText = 'N/A';
-            if (elSec) elSec.style.display = 'block'; 
+    }
+
+
+    document.getElementById(
+        "footer-contactos"
+    ).innerText = contactos;
+
+
+
+    let digital = "";
+
+
+    if (redes) {
+
+        digital =
+            "🌐 " + redes;
+
+    }
+
+
+    if (correo) {
+
+        if (digital) {
+
+            digital += "   |   ";
+
         }
-    });
+
+        digital +=
+            "✉ " + correo;
+
+    }
+
+
+    document.getElementById(
+        "footer-digital"
+    ).innerText = digital;
+
 };
-        
-        function descargarWord() {
-            var datos = (typeof p !== 'undefined') ? p : {};
-            var nombre = datos['nombre'] || 'Trabajador';
-            
-            var node = document.getElementById("informe-content");
-            var cuerpoHTML = node ? node.innerHTML : '';
 
-            var preHtml = `
-                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-                <head>
-                    <meta charset="utf-8">
-                    <title>Informe Médico Ocupacional</title>
-                    <style>
-                        @page Section1 {
-                            size:595.3pt 841.9pt;
-                            margin: 0.65in 0.75in 0.80in 0.75in;
-                        }
-                        div.Section1 { page:Section1; }
-                        body { font-family:'Times New Roman', serif; font-size:10.5pt; color:#000000; line-height:1.2; }
-                        .header-info h2 { font-size:14pt; margin:0; }
-                        .header-info h3 { font-size:11pt; margin:0; }
-                        .report-title { font-size:13pt; font-weight:bold; text-align:center; margin:10pt 0; }
-                        .divider { border-bottom:1pt solid #ccc; margin:10pt 0; }
-                    </style>
-                </head>
-                <body>
-                    <div class="Section1">
-                        ${cuerpoHTML}
+
+
+/* =========================================================
+   DESCARGAR WORD
+   CON PIE DE PÁGINA NATIVO
+========================================================= */
+
+function descargarWord() {
+
+
+    const datos =
+        (typeof p !== "undefined")
+        ? p
+        : {};
+
+
+    const paciente =
+        datos["Nombre y Apellido"] || "Trabajador";
+
+
+    const titulo =
+        datos["Titulo"] ||
+        "CENTRO MÉDICO";
+
+
+    const subtitulo =
+        datos["Subtítulo"] ||
+        datos["Subtitulo"] ||
+        "";
+
+
+    const direccion =
+        datos["Dirección"] || "";
+
+
+    const telefono1 =
+        datos["Numero de telefono principal"] || "";
+
+
+    const telefono2 =
+        datos["Numero secundario"] || "";
+
+
+    const whatsapp =
+        datos["Whatsapp"] || "";
+
+
+    const redes =
+        datos["Redes sociales"] || "";
+
+
+    const correo =
+        datos["Correo electronico"] || "";
+
+
+    const logoURL =
+        "https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW";
+
+
+
+    /* =====================================================
+       TIPO DE EXAMEN
+    ===================================================== */
+
+    const examen =
+        datos["Examen de Salud"] || "";
+
+
+    function circulo(tipo) {
+
+        return examen
+            .toLowerCase()
+            .includes(tipo.toLowerCase())
+            ? "●"
+            : "○";
+
+    }
+
+
+    const examenHTML = `
+
+        <div style="
+            font-family:'Times New Roman',serif;
+            font-size:10pt;
+            margin-top:8pt;
+            margin-bottom:8pt;
+        ">
+
+            <strong>Examen de salud:</strong>
+
+            &nbsp;&nbsp;
+
+            ${circulo("ingreso")} Ingreso
+
+            &nbsp;&nbsp;
+
+            ${circulo("egreso")} Egreso
+
+            &nbsp;&nbsp;
+
+            ${circulo("pre")} Pre-vacacional
+
+            &nbsp;&nbsp;
+
+            ${circulo("post")} Post-vacacional
+
+            &nbsp;&nbsp;
+
+            ${circulo("anual")} Anual
+
+        </div>
+
+    `;
+
+
+
+    /* =====================================================
+       MEMBRETE WORD
+    ===================================================== */
+
+    const headerHTML = `
+
+        <table
+            style="
+                width:100%;
+                border-collapse:collapse;
+                table-layout:fixed;
+                margin:0;
+            "
+        >
+
+            <tr>
+
+                <td
+                    style="
+                        width:125px;
+                        vertical-align:middle;
+                        text-align:left;
+                        padding:0;
+                    "
+                >
+
+                    <img
+                        src="${logoURL}"
+                        width="115"
+                        height="60"
+                        style="
+                            width:115px;
+                            height:60px;
+                            display:block;
+                            object-fit:contain;
+                        "
+                    >
+
+                </td>
+
+
+                <td
+                    style="
+                        vertical-align:middle;
+                        text-align:center;
+                        padding:0 10px;
+                    "
+                >
+
+                    <div
+                        style="
+                            font-family:'Times New Roman',serif;
+                            font-size:13pt;
+                            font-weight:bold;
+                            line-height:1.1;
+                        "
+                    >
+
+                        ${titulo}
+
                     </div>
-                </body>
-                </html>
-            `;
 
-            var blob = new Blob(['\ufeff', preHtml], { type:'application/msword' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement("a");
-            a.href = url;
-            a.download = 'Informe_Ocupacional_' + nombre.replace(/\s+/g, '_') + '.doc';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+
+                    <div
+                        style="
+                            font-family:'Times New Roman',serif;
+                            font-size:10.5pt;
+                            margin-top:3pt;
+                        "
+                    >
+
+                        ${subtitulo}
+
+                    </div>
+
+                </td>
+
+
+                <td
+                    style="
+                        width:50px;
+                    "
+                >
+                    &nbsp;
+                </td>
+
+            </tr>
+
+        </table>
+
+
+        <div
+            style="
+                border-bottom:1.5pt solid #000;
+                margin-top:5pt;
+            "
+        >
+        </div>
+
+    `;
+
+
+
+    /* =====================================================
+       DATOS DEL TRABAJADOR WORD
+    ===================================================== */
+
+    const workerHTML = `
+
+        <table
+            style="
+                width:100%;
+                border-collapse:collapse;
+                font-family:'Times New Roman',serif;
+                font-size:9.5pt;
+                margin-top:12pt;
+            "
+        >
+
+            <tr>
+
+                <td
+                    style="
+                        width:50%;
+                        border:1px solid #777;
+                        padding:5pt;
+                        vertical-align:top;
+                    "
+                >
+
+                    <strong>
+                        Número de cédula del trabajador:
+                    </strong>
+
+                    <br>
+
+                    ${datos["Cedula"] || ""}
+
+                </td>
+
+
+                <td
+                    style="
+                        width:50%;
+                        border:1px solid #777;
+                        padding:5pt;
+                        vertical-align:top;
+                    "
+                >
+
+                    <strong>
+                        Fecha de emisión del informe:
+                    </strong>
+
+                    <br>
+
+                    ${
+                        datos["Fecha de emisión del informe"]
+                        ? formatearFechaLatina(
+                            datos["Fecha de emisión del informe"]
+                        )
+                        : ""
+                    }
+
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td
+                    style="
+                        border:1px solid #777;
+                        padding:5pt;
+                        vertical-align:top;
+                    "
+                >
+
+                    <strong>
+                        Nombres y apellidos del trabajador:
+                    </strong>
+
+                    <br>
+
+                    ${datos["Nombre y Apellido"] || ""}
+
+                </td>
+
+
+                <td
+                    style="
+                        border:1px solid #777;
+                        padding:5pt;
+                        vertical-align:top;
+                    "
+                >
+
+                    <strong>
+                        Cargo del Trabajador:
+                    </strong>
+
+                    <br>
+
+                    ${datos["Cargo del Trabajador"] || ""}
+
+                </td>
+
+            </tr>
+
+
+            <tr>
+
+                <td
+                    style="
+                        border:1px solid #777;
+                        padding:5pt;
+                        vertical-align:top;
+                    "
+                >
+
+                    <strong>
+                        Área donde labora y ha laborado el trabajador:
+                    </strong>
+
+                    <br>
+
+                    ${
+                        datos[
+                            "Área donde labora y ha laborado el trabajador"
+                        ] || ""
+                    }
+
+                </td>
+
+
+                <td
+                    style="
+                        border:1px solid #777;
+                        padding:5pt;
+                        vertical-align:top;
+                    "
+                >
+
+                    <strong>
+                        Fecha:
+                    </strong>
+
+                    <br>
+
+                    ${
+                        datos["Fecha"]
+                        ? formatearFechaLatina(
+                            datos["Fecha"]
+                        )
+                        : ""
+                    }
+
+                </td>
+
+            </tr>
+
+        </table>
+
+    `;
+
+
+
+    /* =====================================================
+       RESULTADOS WORD
+    ===================================================== */
+
+    const resultadosHTML = `
+
+        <div
+            style="
+                border:1px solid #777;
+                padding:7pt 8pt;
+                margin-top:10pt;
+                font-family:'Times New Roman',serif;
+                font-size:9.5pt;
+                line-height:1.25;
+                text-align:justify;
+            "
+        >
+
+            <strong>
+                Resultados de la evaluación realizada al trabajador:
+            </strong>
+
+
+            <table
+                style="
+                    width:100%;
+                    border-collapse:collapse;
+                    margin-top:5pt;
+                "
+            >
+
+                <tr>
+
+                    <td>
+                        <strong>Peso:</strong>
+                        ${datos["Peso"] || ""}
+                    </td>
+
+                    <td>
+                        <strong>Talla:</strong>
+                        ${datos["Talla"] || ""}
+                    </td>
+
+                    <td>
+                        <strong>TA:</strong>
+                        ${datos["TA"] || ""}
+                    </td>
+
+                    <td>
+                        <strong>Observación:</strong>
+                        ${datos["observación"] || ""}
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+            <p>
+                <strong>Piel:</strong>
+                ${datos["Piel"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Cabeza y cuello:</strong>
+                ${datos["Cabeza y cuello"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Ojos:</strong>
+                ${datos["Ojos"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>ORL:</strong>
+                ${datos["ORL"] || ""}
+            </p>
+
+
+            <p>
+                <strong>Extremidades Sup.:</strong>
+                ${datos["Extremidades Sup."] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Linfáticos:</strong>
+                ${datos["Linfáticos"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Tórax:</strong>
+                ${datos["Tórax"] || ""}
+            </p>
+
+
+            <p>
+                <strong>Cardiopulmonar:</strong>
+                ${datos["Cardiopulmonar"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Abdomen:</strong>
+                ${datos["Abdomen"] || ""}
+            </p>
+
+
+            <p>
+                <strong>Zona inguino-genital:</strong>
+                ${datos["Zona inguino-genital"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Musculo esquelética:</strong>
+                ${datos["Musculo esquelética"] || ""}
+            </p>
+
+
+            ${
+                datos[
+                    "Resultados de la evaluación realizada al trabajador"
+                ]
+                ?
+                `
+                <p>
+                    ${
+                        datos[
+                            "Resultados de la evaluación realizada al trabajador"
+                        ]
+                    }
+                </p>
+                `
+                :
+                ""
+            }
+
+        </div>
+
+    `;
+
+
+
+    /* =====================================================
+       PARACLÍNICOS WORD
+    ===================================================== */
+
+    const paraclinicosHTML = `
+
+        <div
+            style="
+                border:1px solid #777;
+                padding:7pt 8pt;
+                margin-top:10pt;
+                font-family:'Times New Roman',serif;
+                font-size:9.5pt;
+                line-height:1.35;
+                text-align:justify;
+            "
+        >
+
+            <strong>
+                Evaluación clínicas y paraclínicas practicadas al trabajador:
+            </strong>
+
+            <p>
+
+                <strong>HGB:</strong>
+                ${datos["HGB"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>HTO:</strong>
+                ${datos["HTO"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>GB:</strong>
+                ${datos["GB"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>PLT:</strong>
+                ${datos["PLT"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Glicemi:</strong>
+                ${datos["Glicemi"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Urea:</strong>
+                ${datos["Urea"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Creatinina:</strong>
+                ${datos["Creatinina"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Colesterol:</strong>
+                ${datos["Colesterol"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Triglicéridos:</strong>
+                ${datos["Triglicéridos"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Ácido úrico:</strong>
+                ${datos["Ácido úrico"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>Uroanálisis:</strong>
+                ${datos["Uroanálisis"] || ""}
+
+                &nbsp;&nbsp;
+
+                <strong>EKG:</strong>
+                ${datos["Ekg"] || ""}
+
+            </p>
+
+        </div>
+
+    `;
+
+
+
+    /* =====================================================
+       CONCLUSIÓN WORD
+    ===================================================== */
+
+    const conclusionHTML = `
+
+        <div
+            style="
+                border:1px solid #777;
+                padding:7pt 8pt;
+                margin-top:10pt;
+                font-family:'Times New Roman',serif;
+                font-size:9.5pt;
+                line-height:1.3;
+                min-height:45pt;
+            "
+        >
+
+            <strong>
+                Conclusión de aptitud:
+            </strong>
+
+            <br>
+
+            ${
+                datos["Conclusión de Aptitud"] || ""
+            }
+
+        </div>
+
+    `;
+
+
+
+    /* =====================================================
+       MEDIDAS WORD
+    ===================================================== */
+
+    const medidasHTML = `
+
+        <div
+            style="
+                border:1px solid #777;
+                padding:7pt 8pt;
+                margin-top:10pt;
+                font-family:'Times New Roman',serif;
+                font-size:9.5pt;
+                line-height:1.3;
+                min-height:45pt;
+            "
+        >
+
+            <strong>
+                Medidas de adecuación de tareas o reubicación de puesto de trabajo:
+            </strong>
+
+            <br>
+
+            ${
+                datos[
+                    "Medidas de adecuación de tareas o reubicación de puesto de trabajo:"
+                ] || ""
+            }
+
+        </div>
+
+    `;
+
+
+
+    /* =====================================================
+       FIRMA WORD
+    ===================================================== */
+
+    const firmaHTML = `
+
+        <table
+            style="
+                width:100%;
+                border-collapse:collapse;
+                margin-top:25pt;
+                font-family:'Times New Roman',serif;
+                font-size:9pt;
+                text-align:center;
+            "
+        >
+
+            <tr>
+
+                <td
+                    style="
+                        width:50%;
+                        padding-top:20pt;
+                    "
+                >
+
+                    <div
+                        style="
+                            border-top:1px solid #000;
+                            width:75%;
+                            margin:auto;
+                        "
+                    >
+                    </div>
+
+                    <br>
+
+                    Nombres y apellidos del profesional
+
+                    <br>
+
+                    Número de Colegio Médico (CM)
+
+                </td>
+
+
+                <td
+                    style="
+                        width:50%;
+                        padding-top:20pt;
+                    "
+                >
+
+                    <div
+                        style="
+                            border-top:1px solid #000;
+                            width:75%;
+                            margin:auto;
+                        "
+                    >
+                    </div>
+
+                    <br>
+
+                    Firma y sello del profesional
+
+                    <br>
+
+                    Servicio de Seguridad y Salud en el Trabajo
+
+                </td>
+
+            </tr>
+
+        </table>
+
+    `;
+
+
+
+    /* =====================================================
+       PIE DE PÁGINA WORD
+       NATIVO
+    ===================================================== */
+
+    let telefonos = "";
+
+    if (telefono1 && telefono2) {
+
+        telefonos =
+            telefono1 + " / " + telefono2;
+
+    } else {
+
+        telefonos =
+            telefono1 || telefono2;
+
+    }
+
+
+    let footerDireccion =
+        direccion
+        ? "📍 " + direccion
+        : "";
+
+
+    let footerContactos = "";
+
+
+    if (telefonos) {
+
+        footerContactos =
+            "📞 Telfs: " + telefonos;
+
+    }
+
+
+    if (whatsapp) {
+
+        if (footerContactos) {
+
+            footerContactos +=
+                "   |   ";
+
         }
-    </script>
+
+        footerContactos +=
+            "💬 WhatsApp: " + whatsapp;
+
+    }
+
+
+    let footerDigital = "";
+
+
+    if (redes) {
+
+        footerDigital =
+            "🌐 " + redes;
+
+    }
+
+
+    if (correo) {
+
+        if (footerDigital) {
+
+            footerDigital +=
+                "   |   ";
+
+        }
+
+        footerDigital +=
+            "✉ " + correo;
+
+    }
+
+
+    const footerHTML = `
+
+        <div
+            class="MsoFooter"
+            style="
+                font-family:Arial,sans-serif;
+                font-size:8pt;
+                color:#333;
+                text-align:center;
+                border-top:0.75pt solid #555;
+                padding-top:4pt;
+                line-height:1.1;
+            "
+        >
+
+            ${
+                footerDireccion
+                ? `<p>${footerDireccion}</p>`
+                : ""
+            }
+
+
+            ${
+                footerContactos
+                ? `<p>${footerContactos}</p>`
+                : ""
+            }
+
+
+            ${
+                footerDigital
+                ? `<p>${footerDigital}</p>`
+                : ""
+            }
+
+        </div>
+
+    `;
+
+
+
+    /* =====================================================
+       DOCUMENTO WORD COMPLETO
+    ===================================================== */
+
+    const preHtml = `
+
+<html
+    xmlns:o="urn:schemas-microsoft-com:office:office"
+    xmlns:w="urn:schemas-microsoft-com:office:word"
+    xmlns="http://www.w3.org/TR/REC-html40"
+>
+
+<head>
+
+<meta charset="utf-8">
+
+<title>
+Informe de Salud Ocupacional
+</title>
+
+
+<style>
+
+@page Section1 {
+
+    size:595.3pt 841.9pt;
+
+    margin:
+        0.55in
+        0.65in
+        0.75in
+        0.65in;
+
+    mso-header-margin:0.3in;
+
+    mso-footer-margin:0.30in;
+
+    mso-footer:f1;
+
+}
+
+
+div.Section1 {
+
+    page:Section1;
+
+}
+
+
+table#hrdftrtbl {
+
+    margin:
+        0in
+        0in
+        0in
+        900in;
+
+    width:1px;
+
+    height:1px;
+
+    overflow:hidden;
+
+}
+
+
+body {
+
+    font-family:
+        'Times New Roman',
+        serif;
+
+    font-size:9.5pt;
+
+    color:#000000;
+
+    line-height:1.15;
+
+    margin:0;
+
+    padding:0;
+
+}
+
+
+p {
+
+    margin-top:0;
+
+    margin-bottom:3pt;
+
+    line-height:1.15;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="Section1">
+
+
+${headerHTML}
+
+
+${examenHTML}
+
+
+${workerHTML}
+
+
+${resultadosHTML}
+
+
+${paraclinicosHTML}
+
+
+${conclusionHTML}
+
+
+${medidasHTML}
+
+
+${firmaHTML}
+
+
+</div>
+
+
+
+<!-- =====================================================
+     PIE NATIVO DE WORD
+===================================================== -->
+
+<table
+    id="hrdftrtbl"
+    border="0"
+    cellspacing="0"
+    cellpadding="0"
+>
+
+<tr>
+
+<td>
+
+<div
+    style="mso-element:footer"
+    id="f1"
+>
+
+${footerHTML}
+
+</div>
+
+</td>
+
+</tr>
+
+</table>
+
+
 </body>
+
+</html>
+
+`;
+
+
+
+    /* =====================================================
+       CREAR ARCHIVO WORD
+    ===================================================== */
+
+    const blob =
+        new Blob(
+            [
+                "\ufeff",
+                preHtml
+            ],
+            {
+                type:
+                    "application/msword"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const a =
+        document.createElement("a");
+
+
+    a.href = url;
+
+
+    a.download =
+        "Informe_Ocupacional_" +
+        paciente
+            .replace(/[^\w\sáéíóúÁÉÍÓÚñÑ-]/g, "")
+            .replace(/\s+/g, "_") +
+        ".doc";
+
+
+    document.body.appendChild(a);
+
+
+    a.click();
+
+
+    document.body.removeChild(a);
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+</script>
+
+
+</body>
+
 </html>

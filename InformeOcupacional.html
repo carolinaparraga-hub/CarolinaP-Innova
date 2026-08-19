@@ -1,1 +1,472 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informe Médico Ocupacional - Dra. Carolina Párraga</title>
+  <style>
+    /* Estilos generales y de impresión */
+    @page {
+      size: A4;
+      margin: 15mm 15mm 20mm 15mm;
+    }
+
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 11pt;
+      color: #000;
+      line-height: 1.25;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+    }
+
+    /* Botones de acción (No se imprimen ni se exportan) */
+    .no-print {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f4f4f9;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .btn-pdf { background-color: #2b579a; }
+    .btn-pdf:hover { background-color: #1e3d6b; }
+    .btn-word { background-color: #1e7145; }
+    .btn-word:hover { background-color: #13462b; }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: #fff; }
+    }
+
+    /* Membrete del Centro Médico / Doctora */
+    .header-container {
+      width: 100%;
+      border-bottom: 2px solid #000;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .header-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .header-table td {
+      vertical-align: middle;
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    .doctor-name {
+      font-size: 14pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .doctor-spec {
+      font-size: 10pt;
+      font-style: italic;
+      color: #333;
+    }
+
+    .clinic-info {
+      text-align: right;
+      font-size: 9.5pt;
+      line-height: 1.2;
+    }
+
+    /* Título del documento y norma */
+    .doc-title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 13pt;
+      text-transform: uppercase;
+      margin-top: 5px;
+      margin-bottom: 2px;
+    }
+
+    .doc-subtitle {
+      text-align: center;
+      font-weight: bold;
+      font-size: 12pt;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    /* Opciones Radio / Examen de salud */
+    .exam-types {
+      text-align: center;
+      font-size: 10pt;
+      margin-bottom: 6px;
+    }
+
+    .exam-option {
+      display: inline-block;
+      margin: 0 5px;
+    }
+
+    .radio-circle {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border: 1px solid #000;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-left: 2px;
+      position: relative;
+    }
+
+    .radio-circle.checked::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 6px;
+      height: 6px;
+      background-color: #000;
+      border-radius: 50%;
+    }
+
+    .norma-text {
+      font-size: 8pt;
+      text-align: justify;
+      margin-bottom: 10px;
+      line-height: 1.15;
+    }
+
+    /* Tabla principal de contenido */
+    .main-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    .main-table th, .main-table td {
+      border: 1px solid #000;
+      padding: 6px 8px;
+      vertical-align: top;
+      font-size: 10.5pt;
+    }
+
+    .label-header {
+      font-weight: bold;
+      font-size: 10pt;
+      background-color: #f9f9f9;
+    }
+
+    .field-value {
+      font-size: 10.5pt;
+    }
+
+    /* Bloque de firma */
+    .signature-container {
+      width: 100%;
+      margin-top: 30px;
+      page-break-inside: avoid;
+    }
+
+    .signature-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .signature-table td {
+      border: none;
+      vertical-align: top;
+      font-size: 9.5pt;
+    }
+
+    .signature-line {
+      width: 240px;
+      border-top: 1px solid #000;
+      margin-top: 40px;
+      margin-bottom: 5px;
+    }
+
+    /* Pie de página estandarizado para MS Word */
+    @page Section1 {
+      footer: f1;
+    }
+    div.Section1 {
+      page: Section1;
+    }
+    p.MsoFooter, li.MsoFooter, div.MsoFooter {
+      margin: 0;
+      font-size: 8pt;
+      font-family: 'Times New Roman', Times, serif;
+      text-align: center;
+      color: #555;
+      border-top: 0.5pt solid #ccc;
+      padding-top: 4px;
+    }
+  </style>
+
+  <!-- Script para exportar directamente a MS Word (.doc/.docx) -->
+  <script>
+    function exportToWord() {
+      var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+        "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+        "xmlns='http://www.w3.org/TR/REC-html40'>" +
+        "<head><meta charset='utf-8'><title>Informe Médico Ocupacional</title>" +
+        "<style>" +
+        " @page { size: 21cm 29.7cm; margin: 1.5cm 1.5cm 2.0cm 1.5cm; } " +
+        " @page Section1 { mso-footer: f1; } " +
+        " div.Section1 { page: Section1; } " +
+        " table.MsoFooterTable { width: 100%; border-collapse: collapse; margin-top: 10px; } " +
+        " body { font-family: 'Times New Roman', serif; font-size: 11pt; line-height: 1.25; } " +
+        " table { border-collapse: collapse; width: 100%; } " +
+        " td, th { border: 1pt solid #000; padding: 5pt; vertical-align: top; } " +
+        " .no-border td { border: none !important; } " +
+        " </style></head><body><div class='Section1'>";
+
+      var footer = "<table class='MsoFooterTable' style='mso-element:footer' id='f1'>" +
+        "<tr><td style='border:none; text-align:center; font-size:8pt; color:#555; border-top:1pt solid #ccc; padding-top:4pt;'>" +
+        "📍 " + ("<<[Centro medico].[Direccion]>>" || "Centro Médico") + " &nbsp;|&nbsp; " +
+        "📞 " + ("<<[Centro medico].[Telefono]>>" || "Teléfono") + " &nbsp;|&nbsp; " +
+        "✉️ " + ("<<[Centro medico].[Correo]>>" || "Correo Electrónico") +
+        "</td></tr></table></div></body></html>";
+
+      var content = document.getElementById('report-content').innerHTML;
+      var fullHTML = header + content + footer;
+
+      var blob = new Blob(['\ufeff', fullHTML], {
+        type: 'application/msword'
+      });
+
+      var filename = 'Informe_Ocupacional_' + ("<<[Nombres y Apellidos]>>" || "Paciente").replace(/\s+/g, '_') + '.doc';
+
+      if (navigator.msSaveOrOpenBlob) {
+        navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <!-- BOTONES DE ACCIÓN -->
+  <div class="no-print">
+    <button class="btn btn-pdf" onclick="window.print()">
+      🖨️ Imprimir PDF
+    </button>
+    <button class="btn btn-word" onclick="exportToWord()">
+      📄 Descargar Word
+    </button>
+  </div>
+
+  <!-- CONTENIDO DEL INFORME MEDICO -->
+  <div id="report-content">
+    <div class="Section1">
+      
+      <!-- MEMBRETE DINÁMICO DE CLÍNICA Y DOCTORA -->
+      <div class="header-container">
+        <table class="header-table no-border">
+          <tr>
+            <td style="width: 55%;">
+              <div class="doctor-name">Dra. Carolina Párraga</div>
+              <div class="doctor-spec">Medicina Física y Rehabilitación / Medicina Ocupacional</div>
+              <div style="font-size: 8.5pt; color: #444; margin-top: 2px;">
+                M.P.P.S.: <<[Nro MPPS]>> &nbsp;|&nbsp; C.M.: <<[Nro Colegio Medico]>> &nbsp;|&nbsp; C.I.: <<[Cula Doctora]>>
+              </div>
+            </td>
+            <td style="width: 45%;" class="clinic-info">
+              <strong><<[Centro medico].[Nombre]>></strong><br>
+              <<[Centro medico].[Direccion]>><br>
+              Teléfono: <<[Centro medico].[Telefono]>>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- ENCABEZADO OFICIAL -->
+      <div class="doc-title">SERVICIO DE SEGURIDAD Y SALUD EN EL TRABAJO</div>
+      <div class="doc-subtitle">INFORME MEDICO</div>
+
+      <!-- TIPO DE EXAMEN DE SALUD DINÁMICO -->
+      <div class="exam-types">
+        <strong>Examen de salud:</strong> &nbsp;
+        
+        <span class="exam-option">
+          Ingreso <span class="radio-circle <<IFS([Tipo de examen] = "Ingreso", "checked", true, "")>>"></span>
+        </span> &nbsp;
+        
+        <span class="exam-option">
+          Egreso <span class="radio-circle <<IFS([Tipo de examen] = "Egreso", "checked", true, "")>>"></span>
+        </span> &nbsp;
+        
+        <span class="exam-option">
+          Pre-vacacional <span class="radio-circle <<IFS([Tipo de examen] = "Pre-vacacional", "checked", true, "")>>"></span>
+        </span> &nbsp;
+        
+        <span class="exam-option">
+          Post-vacacional <span class="radio-circle <<IFS([Tipo de examen] = "Post-vacacional", "checked", true, "")>>"></span>
+        </span> &nbsp;
+        
+        <span class="exam-option">
+          Anual <span class="radio-circle <<IFS([Tipo de examen] = "Anual", "checked", true, "")>>"></span>
+        </span>
+      </div>
+
+      <!-- NORMA TÉCNICA -->
+      <div class="norma-text">
+        <strong>NORMA TÉCNICA DE LOS SERVICIOS DE SEGURIDAD Y SALUD EN EL TRABAJO Artículo 33.</strong> Al término de cualquier evaluación de salud que se practique al trabajador o trabajadora, el médico o médica ocupacional o el profesional que haya realizado la evaluación, debe redactar un informe, que contenga como mínimo lo siguiente:
+      </div>
+
+      <!-- TABLA PRINCIPAL DE DATOS Y EVALUACIONES -->
+      <table class="main-table">
+        <!-- DATOS DEL TRABAJADOR Y EVALUACIÓN -->
+        <tr>
+          <td style="width: 50%;">
+            <div class="label-header">Número de cédula del trabajador</div>
+            <div class="field-value"><<[Cedula]>></div>
+          </td>
+          <td style="width: 50%;">
+            <div class="label-header">Fecha de emisión del informe</div>
+            <div class="field-value"><<TEXT([Fecha de emision], "DD/MM/YYYY")>></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="label-header">Nombres y apellidos del trabajador</div>
+            <div class="field-value"><<[Nombres y Apellidos]>></div>
+          </td>
+          <td>
+            <div class="label-header">Cargo del Trabajador</div>
+            <div class="field-value"><<[Cargo]>></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="label-header">Área donde labora y ha laborado el trabajador</div>
+            <div class="field-value"><<[Area donde labora]>></div>
+          </td>
+          <td>
+            <div class="label-header">Fecha de la evaluación</div>
+            <div class="field-value"><<TEXT([Fecha de evaluacion], "DD/MM/YYYY")>></div>
+          </td>
+        </tr>
+
+        <!-- EXAMEN FÍSICO Y SISTEMAS -->
+        <tr>
+          <td colspan="2">
+            <div class="label-header">Resultados de la evaluación realizada al trabajador:</div>
+            <div class="field-value" style="margin-top: 4px; text-align: justify; line-height: 1.35;">
+              <strong>Peso:</strong> <<[Peso]>> kg &nbsp;&nbsp;
+              <strong>Talla:</strong> <<[Talla]>> m &nbsp;&nbsp;
+              <strong>TA:</strong> <<[TA]>> mmHg. &nbsp;&nbsp;
+              <<[Consciente y orientacion]>>.
+              
+              <strong>Piel:</strong> <<[Piel]>>.
+              <strong>Cabeza y cuello:</strong> <<[Cabeza y cuello]>>.
+              <strong>Ojos:</strong> <<[Ojos]>>.
+              <strong>ORL:</strong> <<[ORL]>>.
+              <strong>Extremidades Sup:</strong> <<[Extremidades Sup]>>.
+              <strong>Linfáticos:</strong> <<[Linfaticos]>>.
+              <strong>Tórax:</strong> <<[Torax]>>.
+              <strong>Cardiopulmonar:</strong> <<[Cardiopulmonar]>>.
+              <strong>Abdomen:</strong> <<[Abdomen]>>.
+              <strong>Zona inguino-genital:</strong> <<[Zona inguino-genital]>>.
+              <strong>Musculo esquelética:</strong> <<[Musculo esqueletica]>>.
+              <<IF(ISNOTBLANK([Observacion Examen Fisico]), CONCATENATE(" <strong>Observación:</strong> ", [Observacion Examen Fisico], "."), "")>>
+            </div>
+          </td>
+        </tr>
+
+        <!-- EVALUACIONES CLÍNICAS Y PARACLÍNICAS -->
+        <tr>
+          <td colspan="2">
+            <div class="label-header">Evaluaciones clínicas y paraclínicas practicadas al trabajador:</div>
+            <div class="field-value" style="margin-top: 4px; text-align: justify; line-height: 1.35;">
+              <strong>HGB:</strong> <<[HGB]>> &nbsp;&nbsp;
+              <strong>HTO:</strong> <<[HTO]>> &nbsp;&nbsp;
+              <strong>GB:</strong> <<[GB]>> &nbsp;&nbsp;
+              <strong>PLT:</strong> <<[PLT]>> &nbsp;&nbsp;
+              <strong>Glicemia:</strong> <<[Glicemia]>> &nbsp;&nbsp;
+              <strong>Urea:</strong> <<[Urea]>> &nbsp;&nbsp;
+              <strong>Creatinina:</strong> <<[Creatinina]>> &nbsp;&nbsp;
+              <strong>Colesterol:</strong> <<[Colesterol]>> &nbsp;&nbsp;
+              <strong>Triglicéridos:</strong> <<[Trigliceridos]>> &nbsp;&nbsp;
+              <strong>Ácido Úrico:</strong> <<[Acido Urico]>> &nbsp;&nbsp;
+              <strong>Uroanálisis:</strong> <<[Uroanalisis]>>. &nbsp;&nbsp;
+              <strong>EKG:</strong> <<[EKG]>>.
+              <<IF(ISNOTBLANK([Otras Paraclinicas]), CONCATENATE("<br><strong>Otras evaluaciones:</strong> ", [Otras Paraclinicas]), "")>>
+            </div>
+          </td>
+        </tr>
+
+        <!-- CONCLUSIÓN DE APTITUD -->
+        <tr>
+          <td colspan="2">
+            <div class="label-header">Conclusión de aptitud:</div>
+            <div class="field-value" style="margin-top: 4px; white-space: pre-wrap; line-height: 1.3;"><<[Conclusion de aptitud]>></div>
+          </td>
+        </tr>
+
+        <!-- MEDIDAS DE ADECUACIÓN DE TAREAS -->
+        <tr>
+          <td colspan="2">
+            <div class="label-header">Medidas de adecuación de tareas o reubicación de puesto de trabajo:</div>
+            <div class="field-value" style="margin-top: 4px; white-space: pre-wrap; line-height: 1.3;"><<[Medidas de adecuacion]>></div>
+          </td>
+        </tr>
+      </table>
+
+      <!-- FIRMA Y PIE PROFESIONAL -->
+      <div class="signature-container">
+        <table class="signature-table">
+          <tr>
+            <td style="width: 60%;">
+              <strong>Nombres y apellidos del profesional:</strong> Dra. Carolina Párraga<br>
+              <strong>Número de Colegio Médico (CM):</strong> <<[Nro Colegio Medico]>>
+              <br><br>
+              <div class="signature-line"></div>
+              <strong>Firma y sello del profesional</strong><br>
+              Servicio de Seguridad y Salud en el Trabajo
+            </td>
+            <td style="width: 40%; text-align: center; vertical-align: bottom;">
+              <div style="font-size: 8pt; color: #888; border: 1px dashed #ccc; padding: 15px; border-radius: 4px;">
+                Sello del Servicio / Firma Digital
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- FOOTER EN PANTALLA / IMPRESIÓN DIRECTA -->
+      <div style="margin-top: 35px; border-top: 1px solid #ccc; padding-top: 6px; text-align: center; font-size: 8pt; color: #555;">
+        📍 <<[Centro medico].[Direccion]>> &nbsp;|&nbsp; 📞 <<[Centro medico].[Telefono]>> &nbsp;|&nbsp; ✉️ <<[Centro medico].[Correo]>>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

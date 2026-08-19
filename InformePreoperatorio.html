@@ -31,6 +31,9 @@
         .bullet-item { display: list-item; list-style-type: disc; list-style-position: inside; }
         .multiline-text { white-space: pre-wrap; }
         
+        /* Estilo especial para Escalas Riesgo Quirúrgico */
+        .escalas-riesgo-style { font-weight: bold; }
+
         /* Estilo especial para Conclusión / Contraindicación */
         .conclusion-style { font-weight: bold; text-decoration: underline; font-size: 12.5pt; }
         
@@ -108,11 +111,12 @@
                 <div class="section-item bullet-item" id="sec-Radiografia-Torax"><strong>Radiografía de Tórax:</strong> <span id="val-Radiografia-Torax" class="multiline-text"></span></div>
                 <div class="section-item bullet-item" id="sec-Laboratorio"><strong>Laboratorio:</strong> <span id="val-Laboratorio" class="multiline-text"></span></div>
                 
-                <div class="section-item" id="sec-Escalas-Riesgo"><span id="val-Escalas-Riesgo" class="multiline-text"></span></div>
+                <!-- ESCALAS DE RIESGO EN NEGRITA -->
+                <div class="section-item escalas-riesgo-style" id="sec-Escalas-Riesgo"><span id="val-Escalas-Riesgo" class="multiline-text"></span></div>
                 
                 <div class="section-item conclusion-style" id="sec-Conclusion-Contraindicacion"><span id="val-Conclusion-Contraindicacion" class="multiline-text"></span></div>
                 
-                <!-- SUGERENCIAS / RECOMENDACIONES: TEXTO COMIENZA EN EL SIGUIENTE PÁRRAFO -->
+                <!-- SUGERENCIAS / RECOMENDACIONES -->
                 <div class="section-item sugerencias-style" id="sec-Sugerencias-Recomendaciones">
                     <strong>Sugerencias / Recomendaciones:</strong>
                     <div id="val-Sugerencias-Recomendaciones" class="multiline-text" style="margin-top: 4px;"></div>
@@ -389,6 +393,7 @@
                         .section-item { margin-top:0pt; margin-bottom:5pt; line-height:1.15; }
                         .bullet-item { display: list-item; list-style-type: disc; list-style-position: inside; }
                         .multiline-text { white-space:pre-wrap; }
+                        .escalas-riesgo-style { font-weight: bold; }
                         .conclusion-style { font-weight: bold; text-decoration: underline; font-size: 12.5pt; }
                         .sugerencias-style { font-weight: normal; font-size: 10.5pt; }
                         p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }

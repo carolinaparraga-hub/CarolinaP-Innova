@@ -44,7 +44,7 @@
         /* Firma del Médico al final */
         .doctor-signature { text-align: center; margin-top: 30px; margin-bottom: 10px; font-size: 11pt; line-height: 1.3; }
         .doctor-signature .doc-name { font-weight: bold; display: block; }
-        .doctor-signature .doc-spec { display: block; }
+        .doctor-signature .doc-spec { display: block; font-weight: normal; }
 
         /* Pie de página */
         .footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 10px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
@@ -133,6 +133,7 @@
         <!-- FIRMA / DATOS DEL MÉDICO -->
         <div class="doctor-signature" id="sec-Firma-Medico">
             <span class="doc-name" id="field-Medico-tratante"></span>
+            <span class="doc-spec" id="field-Especialidad-Medica"></span>
         </div>
 
         <!-- PIE DE PÁGINA -->
@@ -202,11 +203,14 @@
             document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
             document.getElementById('field-Subtitulo').innerText = p['Subtítulo'] || p['Subtitulo'] || '';
             
-            // Extrae el valor y remueve cualquier coincidencia con especialidades para dejar solo el nombre
+            // Separar y limpiar nombre y especialidad si vienen concatenados o desde sus parámetros
             let rawMedico = p['Medico Tratante'] || p['Medico tratante'] || '';
+            let especialidad = p['Especialidad'] || p['Especialidad Medica'] || p['Especialidad medica'] || 'Fisiatría';
+
             let nombreMedico = rawMedico.replace(/Fisiatría|Fisiatria/gi, '').trim();
 
             document.getElementById('field-Medico-tratante').innerText = nombreMedico;
+            document.getElementById('field-Especialidad-Medica').innerText = especialidad;
 
             if (!nombreMedico) {
                 document.getElementById('sec-Firma-Medico').style.display = 'none';
@@ -323,6 +327,7 @@
             
             var rawMedico = datos['Medico Tratante'] || datos['Medico tratante'] || '';
             var medico = rawMedico.replace(/Fisiatría|Fisiatria/gi, '').trim();
+            var especialidad = datos['Especialidad'] || datos['Especialidad Medica'] || datos['Especialidad medica'] || 'Fisiatría';
 
             var direccion = datos['Dirección'] || datos['Direccion'] || '';
             var logoURL = 'https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW';
@@ -383,7 +388,8 @@
 
             var docFirmaWordHTML = medico ? `
                 <p style="text-align:center; margin-top:25pt; margin-bottom:15pt; font-family:'Times New Roman', serif; font-size:11pt; line-height:1.2;">
-                    <strong>${medico}</strong>
+                    <strong>${medico}</strong><br>
+                    <span>${especialidad}</span>
                 </p>
             ` : '';
 

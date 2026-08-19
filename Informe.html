@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informe Médico Ocupacional</title>
+    <title>Informe Médico</title>
     <style>
         * { box-sizing: border-box; font-family: 'Times New Roman', Times, serif; }
         body { background-color: #f2f2f2; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #000; }
@@ -18,22 +18,16 @@
         .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
         .header-info p { margin: 1px 0; font-size: 10pt; font-weight: bold; }
         
-        /* Datos del Informe / Ocupacional */
-        .report-header-title { text-align: center; font-size: 12pt; font-weight: bold; text-transform: uppercase; margin-bottom: 4px; }
-        .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 5px 0 10px 0; }
-        
-        .exam-types { display: flex; justify-content: center; gap: 12px; font-size: 10pt; margin-bottom: 8px; flex-wrap: wrap; }
-        .exam-types label { display: inline-flex; align-items: center; gap: 4px; }
-        .norma-text { font-size: 8pt; text-align: justify; margin-bottom: 12px; font-style: italic; color: #333; }
-        
-        /* Grilla del Trabajador */
+        /* Datos Paciente */
         .patient-info { width: 100%; margin-bottom: 15px; font-size: 10.5pt; line-height: 1.4; }
-        .patient-grid { display: grid; grid-template-columns: 1fr 1fr; row-gap: 6px; column-gap: 20px; }
-        .divider { border-bottom: 1px solid #ccc; margin: 12px 0 15px 0; }
+        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 10px; }
+        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 4px; column-gap: 20px; }
+        .divider { border-bottom: 1px solid #ccc; margin: 10px 0 15px 0; }
         
         /* Cuerpo del Informe */
+        .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 15px 0 15px 0; }
         .report-body { font-size: 10.5pt; line-height: 1.45; text-align: justify; }
-        .section-item { margin-bottom: 12px; }
+        .section-item { margin-bottom: 10px; }
         .multiline-text { white-space: pre-wrap; }
         
         /* Pie de página e Íconos */
@@ -59,7 +53,6 @@
 
     <div class="page" id="informe-content">
         <div class="content-area">
-            <!-- MEMBRETE ORIGINAL -->
             <div class="header">
                 <div style="width: 170px;">
                     <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" alt="Logo" class="header-logo" id="logo-centro">
@@ -71,66 +64,33 @@
                 </div>
             </div>
 
-            <!-- ENCABEZADO OCUPACIONAL -->
-            <div class="report-header-title">Servicio de Seguridad y Salud en el Trabajo</div>
-            <div class="report-title">INFORME MEDICO OCUPACIONAL</div>
-            
-            <div class="exam-types">
-                <strong>Examen de salud:</strong>
-                <label><input type="checkbox" id="chk-ingreso"> Ingreso</label>
-                <label><input type="checkbox" id="chk-egreso"> Egreso</label>
-                <label><input type="checkbox" id="chk-prevacacional"> Pre-vacacional</label>
-                <label><input type="checkbox" id="chk-postvacacional"> Post-vacacional</label>
-                <label><input type="checkbox" id="chk-anual"> Anual</label>
-            </div>
-            
-            <div class="norma-text">
-                <strong>NORMA TÉCNICA DE LOS SERVICIOS DE SEGURIDAD Y SALUD EN EL TRABAJO Artículo 33.</strong> Al término de cualquier evaluación de salud que se practique al trabajador o trabajadora, el médico o médica ocupacional o el profesional que haya realizado la evaluación, debe redactar un informe que contenga como mínimo lo siguiente:
-            </div>
-
-            <div class="divider"></div>
-
-            <!-- DATOS TRABAJADOR Y EVALUACIÓN -->
             <div class="patient-info">
+                <div class="date-row" id="sec-Fecha">Fecha: <span id="val-Fecha"></span></div>
                 <div class="patient-grid">
-                    <div id="sec-Nombre"><strong>Nombres y apellidos del trabajador:</strong> <span id="val-Nombre"></span></div>
-                    <div id="sec-FechaEmision"><strong>Fecha de emisión del informe:</strong> <span id="val-FechaEmision"></span></div>
-                    
-                    <div id="sec-Cedula"><strong>Número de cédula del trabajador:</strong> <span id="val-Cedula"></span></div>
-                    <div id="sec-Cargo"><strong>Cargo del Trabajador:</strong> <span id="val-Cargo"></span></div>
-                    
-                    <div id="sec-Area"><strong>Área donde labora y ha laborado:</strong> <span id="val-Area"></span></div>
-                    <div id="sec-FechaEval"><strong>Fecha de la evaluación:</strong> <span id="val-FechaEval"></span></div>
+                    <div id="sec-Nombre-y-Apellido"><strong>Paciente:</strong> <span id="val-Nombre-y-Apellido"></span></div>
+                    <div id="sec-Edad"><strong>Edad:</strong> <span id="val-Edad"></span></div>
+                    <div id="sec-Cedula"><strong>C.I:</strong> <span id="val-Cedula"></span></div>
+                    <div id="sec-FN"><strong>F / N:</strong> <span id="val-FN"></span></div>
+                    <div id="sec-Telefono"><strong>Telf:</strong> <span id="val-Telefono"></span></div>
+                    <div id="sec-Ocupacion"><strong>Ocupación:</strong> <span id="val-Ocupacion"></span></div>
+                    <div id="sec-Aseguradora"><strong>Aseguradora:</strong> <span id="val-Aseguradora"></span></div>
                 </div>
             </div>
 
             <div class="divider"></div>
+            <div class="report-title">Informe Médico</div>
 
-            <!-- RESULTADOS Y EVALUACIONES -->
             <div class="report-body">
-                <div class="section-item" id="sec-Resultados">
-                    <strong>Resultados de la evaluación realizada al trabajador:</strong><br>
-                    <span id="val-Resultados" class="multiline-text"></span>
-                </div>
-                
-                <div class="section-item" id="sec-Paraclinicos">
-                    <strong>Evaluaciones clínicas y paraclínicas practicadas al trabajador:</strong><br>
-                    <span id="val-Paraclinicos" class="multiline-text"></span>
-                </div>
-                
-                <div class="section-item" id="sec-Aptitud">
-                    <strong>Conclusión de aptitud:</strong><br>
-                    <span id="val-Aptitud" class="multiline-text"></span>
-                </div>
-                
-                <div class="section-item" id="sec-Adecuacion">
-                    <strong>Medidas de adecuación de tareas o reubicación de puesto de trabajo:</strong><br>
-                    <span id="val-Adecuacion" class="multiline-text"></span>
-                </div>
+                <div class="section-item" id="sec-Enfermedad-Actual"><span id="val-Enfermedad-Actual" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Antecedentes-Personales"><strong>Antecedentes Personales:</strong> <span id="val-Antecedentes-Personales" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Antecedentes-Familiares"><strong>Antecedentes Familiares:</strong> <span id="val-Antecedentes-Familiares" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Examen-Fisico"><strong>Examen Físico:</strong> <span id="val-Examen-Fisico" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-IDX-Impresion-Diagnostica"><strong>Impresión Diagnóstica (IDX):</strong> <span id="val-IDX-Impresion-Diagnostica" class="multiline-text"></span></div>
+                <div class="section-item" id="sec-Plan-Tratamiento"><strong>Plan / Tratamiento / Conducta:</strong> <span id="val-Plan-Tratamiento" class="multiline-text"></span></div>
             </div>
         </div>
 
-        <!-- PIE DE PÁGINA ORIGINAL -->
+        <!-- PIE DE PÁGINA CON ÍCONOS SVG SOBRIOS -->
         <div class="footer">
             <p id="sec-Direccion">
                 <span class="footer-item">
@@ -194,7 +154,6 @@
         window.onload = function() {
             p = obtenerParametros();
 
-            // Llenar Membrete
             document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
             document.getElementById('field-Subtitulo').innerText = p['Subtitulo'] || '';
             document.getElementById('field-Medico-tratante').innerText = p['Medico tratante'] || '';
@@ -215,6 +174,7 @@
                 document.getElementById('field-Whatsapp').innerText = p['Whatsapp'];
                 document.getElementById('sec-Whatsapp').style.display = 'inline-flex';
             }
+
             if (p['Redes sociales']) {
                 document.getElementById('field-Redes').innerText = p['Redes sociales'];
                 document.getElementById('sec-Redes').style.display = 'inline-flex';
@@ -224,26 +184,21 @@
                 document.getElementById('sec-Correo').style.display = 'inline-flex';
             }
 
-            // Marcar tipo de examen
-            const tipoExamen = (p['tipo'] || p['TipoExamen'] || '').toLowerCase();
-            if (tipoExamen.includes('ingreso')) document.getElementById('chk-ingreso').checked = true;
-            if (tipoExamen.includes('egreso')) document.getElementById('chk-egreso').checked = true;
-            if (tipoExamen.includes('pre')) document.getElementById('chk-prevacacional').checked = true;
-            if (tipoExamen.includes('post')) document.getElementById('chk-postvacacional').checked = true;
-            if (tipoExamen.includes('anual')) document.getElementById('chk-anual').checked = true;
-
-            // Mapeo de Campos Ocupacionales
             const mapaCampos = [
-                { key: 'nombre', target: 'val-Nombre', sec: 'sec-Nombre' },
-                { key: 'cedula', target: 'val-Cedula', sec: 'sec-Cedula' },
-                { key: 'cargo', target: 'val-Cargo', sec: 'sec-Cargo' },
-                { key: 'area', target: 'val-Area', sec: 'sec-Area' },
-                { key: 'fecharealizacion', target: 'val-FechaEval', sec: 'sec-FechaEval', fecha: true },
-                { key: 'fechaemision', target: 'val-FechaEmision', sec: 'sec-FechaEmision', fecha: true },
-                { key: 'resultados', target: 'val-Resultados', sec: 'sec-Resultados' },
-                { key: 'paraclinicos', target: 'val-Paraclinicos', sec: 'sec-Paraclinicos' },
-                { key: 'aptitud', target: 'val-Aptitud', sec: 'sec-Aptitud' },
-                { key: 'adecuacion', target: 'val-Adecuacion', sec: 'sec-Adecuacion' }
+                { key: 'Fecha', target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
+                { key: 'Nombre y Apellido', target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
+                { key: 'Cedula', target: 'val-Cedula', sec: 'sec-Cedula' },
+                { key: 'Telefono', target: 'val-Telefono', sec: 'sec-Telefono' },
+                { key: 'F / N', target: 'val-FN', sec: 'sec-FN' },
+                { key: 'Edad', target: 'val-Edad', sec: 'sec-Edad' },
+                { key: 'Ocupacion', target: 'val-Ocupacion', sec: 'sec-Ocupacion' },
+                { key: 'Aseguradora', target: 'val-Aseguradora', sec: 'sec-Aseguradora' },
+                { key: 'Enfermedad Actual', target: 'val-Enfermedad-Actual', sec: 'sec-Enfermedad-Actual' },
+                { key: 'Antecedentes Personales', target: 'val-Antecedentes-Personales', sec: 'sec-Antecedentes-Personales' },
+                { key: 'Antecedentes Familiares', target: 'val-Antecedentes-Familiares', sec: 'sec-Antecedentes-Familiares' },
+                { key: 'Examen Fisico', target: 'val-Examen-Fisico', sec: 'sec-Examen-Fisico' },
+                { key: 'IDX Impresion Diagnostica', target: 'val-IDX-Impresion-Diagnostica', sec: 'sec-IDX-Impresion-Diagnostica' },
+                { key: 'Plan Tratamiento', target: 'val-Plan-Tratamiento', sec: 'sec-Plan-Tratamiento' }
             ];
 
             mapaCampos.forEach(c => {
@@ -261,49 +216,170 @@
             });
         };
 
-        function descargarWord() {
-            var datos = (typeof p !== 'undefined') ? p : {};
-            var nombre = datos['nombre'] || 'Trabajador';
-            
-            var node = document.getElementById("informe-content");
-            var cuerpoHTML = node ? node.innerHTML : '';
+       function descargarWord() {
+    var datos = (typeof p !== 'undefined') ? p : {};
 
-            var preHtml = `
-                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-                <head>
-                    <meta charset="utf-8">
-                    <title>Informe Médico Ocupacional</title>
-                    <style>
-                        @page Section1 {
-                            size:595.3pt 841.9pt;
-                            margin: 0.65in 0.75in 0.80in 0.75in;
-                        }
-                        div.Section1 { page:Section1; }
-                        body { font-family:'Times New Roman', serif; font-size:10.5pt; color:#000000; line-height:1.2; }
-                        .header-info h2 { font-size:14pt; margin:0; }
-                        .header-info h3 { font-size:11pt; margin:0; }
-                        .report-title { font-size:13pt; font-weight:bold; text-align:center; margin:10pt 0; }
-                        .divider { border-bottom:1pt solid #ccc; margin:10pt 0; }
-                    </style>
-                </head>
-                <body>
-                    <div class="Section1">
-                        ${cuerpoHTML}
+    var paciente = datos['Nombre y Apellido'] || '';
+    var edad = datos['Edad'] || '';
+    var ci = datos['Cedula'] || '';
+    var fn = datos['F / N'] || '';
+    var telf = datos['Telefono'] || '';
+    var ocupacion = datos['Ocupacion'] || '';
+    var aseguradora = datos['Aseguradora'] || '';
+
+    var titulo = datos['Titulo'] || 'MEDICINA FÍSICA Y REHABILITACIÓN';
+    var subtitulo = datos['Subtitulo'] || '';
+    var medico = datos['Medico tratante'] || '';
+    var especialidad = datos['Especialidad Medica'] || '';
+    var direccion = datos['Direccion'] || '';
+    var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
+    var logoURL = 'https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW';
+
+    var node = document.getElementById("informe-content");
+    var cuerpoHTML = '';
+
+    if (node) {
+        var clone = node.cloneNode(true);
+        clone.querySelectorAll('.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr').forEach(function(el) { el.remove(); });
+        var reportBody = clone.querySelector('.report-body');
+        if (reportBody) cuerpoHTML = reportBody.innerHTML;
+    }
+
+    var headerHTML = `
+        <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0 0 0 8mm; padding:0;">
+            <tr>
+                <td style="width:120px; vertical-align:middle; text-align:left; padding:0;">
+                    <img src="${logoURL}" width="120" height="60" style="width:120px; height:60px; display:block; object-fit:contain;" alt="Logo">
+                </td>
+                <td style="width:auto; vertical-align:middle; text-align:center; padding:0 6px 0 18px;">
+                    <div style="font-family:'Times New Roman', serif; font-size:12pt; font-weight:bold; line-height:1.05; margin:0; padding:0;">${titulo}</div>
+                    <div style="font-family:'Times New Roman', serif; font-size:11pt; line-height:1.05; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
+                    <div style="font-family:'Times New Roman', serif; font-size:10pt; font-weight:bold; line-height:1.05; margin:3pt 0 0 0; padding:0;">${medicoEsp}</div>
+                </td>
+                <td style="width:70px; padding:0;">&nbsp;</td>
+            </tr>
+        </table>
+        <div style="border-bottom:1.5pt solid #000000; margin-top:5pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
+    `;
+
+    // 1. DOS LÍNEAS/COLUMNAS VACÍAS ENTRE EL MEMBRETE Y LA FECHA
+    var espaciadorMembreteFecha = `
+        <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+        <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+    `;
+
+    // 2. UNA LÍNEA/COLUMNA VACÍA ENTRE LA FECHA Y LOS DATOS DEL PACIENTE
+    var espaciadorFechaPaciente = `
+        <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+    `;
+
+    // 3. DOS LÍNEAS/COLUMNAS VACÍAS ENTRE LOS DATOS Y EL TÍTULO DEL DOCUMENTO
+    var espaciadorDatosTitulo = `
+        <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+        <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+    `;
+
+    var patientHTML = `
+        ${espaciadorMembreteFecha}
+        <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman', serif; font-size:10pt; line-height:1; margin:0;">
+            <tr><td style="width:100%; text-align:right; padding:0; line-height:1;"><strong>Fecha:</strong> ${datos['Fecha'] ? formatearFechaLatina(datos['Fecha']) : ''}</td></tr>
+        </table>
+        
+        ${espaciadorFechaPaciente}
+        
+        <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-family:'Times New Roman', serif; font-size:10pt; line-height:1; margin:0; padding:0;">
+            <tr>
+                <td style="width:55%; padding:1.5pt 0;"><strong>Paciente:</strong> ${paciente}</td>
+                <td style="width:45%; padding:1.5pt 0;"><strong>Edad:</strong> ${edad}</td>
+            </tr>
+            <tr>
+                <td style="padding:1.5pt 0;"><strong>C.I:</strong> ${ci}</td>
+                <td style="padding:1.5pt 0;"><strong>F / N:</strong> ${fn}</td>
+            </tr>
+            <tr>
+                <td style="padding:1.5pt 0;"><strong>Telf:</strong> ${telf}</td>
+                <td style="padding:1.5pt 0;"><strong>Ocupación:</strong> ${ocupacion}</td>
+            </tr>
+            ${aseguradora ? `<tr><td style="padding:1.5pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td><td style="padding:1.5pt 0;">&nbsp;</td></tr>` : ''}
+        </table>
+        <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:6pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
+        
+        ${espaciadorDatosTitulo}
+    `;
+
+    // Íconos Unicode sobrios/compatibles para exportación nativa a Word
+    var footerDireccion = direccion ? `<p style="margin:0; padding:0; line-height:1;">📍 ${direccion}</p>` : '';
+    var tel1 = datos['Numero de telefono principal'] || '';
+    var tel2 = datos['Numero secundario'] || '';
+    var telfs = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+    var wa = datos['Whatsapp'] || '';
+    var redes = datos['Redes sociales'] || '';
+    var correo = datos['Correo electronico'] || '';
+
+    var footerTexto = `
+        ${footerDireccion}
+        <p style="margin:2pt 0 0 0; padding:0; line-height:1;">
+            ${telfs ? `📞 <strong>Telfs:</strong> ${telfs}` : ''} 
+            ${wa ? ` | 💬 <strong>WhatsApp:</strong> ${wa}` : ''}
+        </p>
+        <p style="margin:2pt 0 0 0; padding:0; line-height:1;">
+            ${redes ? `🌐 ${redes}` : ''} 
+            ${correo ? ` | ✉️ ${correo}` : ''}
+        </p>
+    `;
+
+    var preHtml = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+            <meta charset="utf-8">
+            <title>Informe Médico</title>
+            <style>
+                @page Section1 {
+                    size:595.3pt 841.9pt;
+                    margin: 0.65in 0.75in 0.80in 0.75in;
+                    mso-header-margin:0.3in;
+                    mso-footer-margin:0.30in;
+                    mso-footer:f1;
+                }
+                div.Section1 { page:Section1; }
+                table#hrdftrtbl { margin: 0in 0in 0in 900in; width:1px; height:1px; overflow:hidden; }
+                body { font-family:'Times New Roman', serif; font-size:10.5pt; color:#000000; line-height:1.12; margin:0; padding:0; }
+                .doc-title { font-family:'Times New Roman', serif; text-align:center; font-size:12.5pt; font-weight:bold; text-decoration:underline; line-height:1; margin-top:0pt; margin-bottom:9pt; }
+                .report-body { font-family:'Times New Roman', serif; font-size:10.5pt; line-height:1.15; text-align:justify; margin:0; padding:0; }
+                .section-item { margin-top:0pt; margin-bottom:6pt; line-height:1.15; }
+                .multiline-text { white-space:pre-wrap; }
+                p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }
+                div.MsoFooter { font-family:Arial, sans-serif; font-size:8.5pt; color:#333333; text-align:center; border-top:0.75pt solid #555555; padding-top:3pt; line-height:1.05; }
+            </style>
+        </head>
+        <body>
+            <div class="Section1">
+                ${headerHTML}
+                ${patientHTML}
+                <div class="doc-title" align="center"><u><b>Informe Médico</b></u></div>
+                <div class="report-body">${cuerpoHTML}</div>
+            </div>
+            <table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
+                <tr><td>
+                    <div style="mso-element:footer" id="f1">
+                        <div class="MsoFooter">${footerTexto}</div>
                     </div>
-                </body>
-                </html>
-            `;
+                </td></tr>
+            </table>
+        </body>
+        </html>
+    `;
 
-            var blob = new Blob(['\ufeff', preHtml], { type:'application/msword' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement("a");
-            a.href = url;
-            a.download = 'Informe_Ocupacional_' + nombre.replace(/\s+/g, '_') + '.doc';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
+    var blob = new Blob(['\ufeff', preHtml], { type:'application/msword' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = 'Informe_Medico_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
     </script>
 </body>
 </html>

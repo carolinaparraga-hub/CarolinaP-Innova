@@ -9,7 +9,6 @@
         body { background-color: #f2f2f2; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #000; }
         .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 20mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
         .content-area { flex-grow: 1; }
-
         
         /* Membrete */
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
@@ -157,7 +156,7 @@
             </p>
             <p id="sec-Contactos-Digital">
                 <span id="sec-Redes" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7 wonderh-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7 h-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
                     <span id="field-Redes"></span>
                 </span>
                 <span id="sec-Correo" class="footer-item" style="display:none;">
@@ -203,10 +202,15 @@
 
             document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
             document.getElementById('field-Subtitulo').innerText = p['Subtítulo'] || p['Subtitulo'] || '';
-            document.getElementById('field-Medico-tratante').innerText = p['Medico Tratante'] || p['Medico tratante'] || '';
-            document.getElementById('field-Especialidad-Medica').innerText = p['Especialidad Medico'] || p['Especialidad Medica'] || '';
+            
+            // Prioriza estrictamente el parámetro 'Medico Tratante' con nombre y apellido
+            const nombreMedico = p['Medico Tratante'] || p['Medico tratante'] || '';
+            const especialidadMedica = p['Especialidad Medico'] || p['Especialidad Medica'] || '';
 
-            if (!p['Medico Tratante'] && !p['Medico tratante'] && !p['Especialidad Medico'] && !p['Especialidad Medica']) {
+            document.getElementById('field-Medico-tratante').innerText = nombreMedico;
+            document.getElementById('field-Especialidad-Medica').innerText = especialidadMedica;
+
+            if (!nombreMedico && !especialidadMedica) {
                 document.getElementById('sec-Firma-Medico').style.display = 'none';
             }
 

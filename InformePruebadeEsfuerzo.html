@@ -99,22 +99,22 @@
             <!-- CUERPO DEL INFORME CON VIÑETAS TABULADAS -->
             <div class="report-body">
                 <ul class="bullet-list">
-                    <li id="sec-Fc-maxima-y-sub-maxima"><strong>Fc máxima y sub máxima según edad y sexo:</strong> <span id="val-Fc-maxima-y-sub-maxima"></span></li>
-                    <li id="sec-EKG-en-reposo"><strong>EKG en reposo:</strong> <span id="val-EKG-en-reposo"></span></li>
-                    <li id="sec-Fc-en-reposo"><strong>Fc en reposo:</strong> <span id="val-Fc-en-reposo"></span></li>
-                    <li id="sec-Consideraciones"><strong>Consideraciones:</strong> <span id="val-Consideraciones"></span></li>
-                    <li id="sec-Motivo-detiene"><strong>Motivo por el cual se detiene la prueba:</strong> <span id="val-Motivo-detiene"></span></li>
-                    <li id="sec-Respuesta-presion"><strong>Respuesta de la presión arterial al ejercicio:</strong> <span id="val-Respuesta-presion"></span></li>
-                    <li id="sec-Fc-maxima-alcanzada"><strong>Fc máxima alcanzada:</strong> <span id="val-Fc-maxima-alcanzada"></span></li>
-                    <li id="sec-Competencia-cronotropica"><strong>Competencia cronotrópica:</strong> <span id="val-Competencia-cronotropica"></span></li>
-                    <li id="sec-Recuperacion-fc"><strong>Recuperación de la frecuencia cardíaca al 1er minuto:</strong> <span id="val-Recuperacion-fc"></span></li>
-                    <li id="sec-Arritmias-ventriculares"><strong>Registro de arritmias ventriculares:</strong> <span id="val-Arritmias-ventriculares"></span></li>
-                    <li id="sec-Capacidad-Astrand"><strong>Capacidad de trabajo según Astrand:</strong> <span id="val-Capacidad-Astrand"></span></li>
-                    <li id="sec-Riesgo-Duke"><strong>Riesgo según criterio de Duke:</strong> <span id="val-Riesgo-Duke"></span></li>
-                    <li id="sec-Consideraciones-2"><strong>Consideraciones:</strong> <span id="val-Consideraciones-2"></span></li>
+                    <li id="sec-Fc-maxima-y-sub-maxima">Fc máxima y sub máxima según edad y sexo: <span id="val-Fc-maxima-y-sub-maxima"></span></li>
+                    <li id="sec-EKG-en-reposo">EKG en reposo: <span id="val-EKG-en-reposo"></span></li>
+                    <li id="sec-Fc-en-reposo">Fc en reposo: <span id="val-Fc-en-reposo"></span></li>
+                    <li id="sec-Consideraciones">Consideraciones: <span id="val-Consideraciones"></span></li>
+                    <li id="sec-Motivo-detiene">Motivo por el cual se detiene la prueba: <span id="val-Motivo-detiene"></span></li>
+                    <li id="sec-Respuesta-presion">Respuesta de la presión arterial al ejercicio: <span id="val-Respuesta-presion"></span></li>
+                    <li id="sec-Fc-maxima-alcanzada">Fc máxima alcanzada: <span id="val-Fc-maxima-alcanzada"></span></li>
+                    <li id="sec-Competencia-cronotropica">Competencia cronotrópica: <span id="val-Competencia-cronotropica"></span></li>
+                    <li id="sec-Recuperacion-fc">Recuperación de la frecuencia cardíaca al 1er minuto: <span id="val-Recuperacion-fc"></span></li>
+                    <li id="sec-Arritmias-ventriculares">Registro de arritmias ventriculares: <span id="val-Arritmias-ventriculares"></span></li>
+                    <li id="sec-Capacidad-Astrand">Capacidad de trabajo según Astrand: <span id="val-Capacidad-Astrand"></span></li>
+                    <li id="sec-Riesgo-Duke">Riesgo según criterio de Duke: <span id="val-Riesgo-Duke"></span></li>
+                    <li id="sec-Consideraciones-2">Consideraciones: <span id="val-Consideraciones-2"></span></li>
                 </ul>
 
-                <!-- CONCLUSIÓN (SIN MARGEN/TABULACIÓN INICIAL, PERO CONTENIDO CON VIÑETA) -->
+                <!-- CONCLUSIÓN -->
                 <div class="conclusion-container" id="sec-Conclusion-Container">
                     <div class="conclusion-header">Conclusión:</div>
                     <ul class="bullet-list" style="padding-left: 20px;">
@@ -193,7 +193,6 @@
             return p['Medico Tratante'] || p['Medico tratante'] || p['Medico'] || p['Doctor'] || p['MedicoTratante'] || '';
         }
 
-        // Convierte saltos de línea dentro de un valor en viñetas redondas adicionales
         function procesarTextoConViñetas(texto) {
             if (!texto) return '';
             const lineas = texto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
@@ -212,7 +211,6 @@
             document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
             document.getElementById('field-Subtitulo').innerText = p['Subtítulo'] || p['Subtitulo'] || '';
             
-            // Extracción dinámica del médico y especialidad
             let nombreMedico = obtenerMedico(p);
             let especialidad = p['Especialidad Medico'] || p['Especialidad'] || p['Especialidad Medica'] || p['Especialidad medica'] || '';
 
@@ -225,7 +223,6 @@
                 document.getElementById('sec-Firma-Medico').style.display = 'block';
             }
 
-            // Pie de página desde columna virtual del centro médico
             if (p['Dirección'] || p['Direccion']) document.getElementById('field-Direccion').innerText = p['Dirección'] || p['Direccion'];
             else document.getElementById('sec-Direccion').style.display = 'none';
 
@@ -251,7 +248,6 @@
                 document.getElementById('sec-Correo').style.display = 'inline-flex';
             }
 
-            // Datos Paciente
             const mapaPaciente = [
                 { keys: ['Fecha'], target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
                 { keys: ['Nombre y Apellido', 'Nombre Paciente', 'Paciente'], target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
@@ -277,7 +273,6 @@
                 }
             });
 
-            // Mapeo dinámico de Campos del Informe de Prueba de Esfuerzo
             const mapaInforme = [
                 { keys: ['Fc máxima y sub máxima según edad y sexo:'], target: 'val-Fc-maxima-y-sub-maxima', sec: 'sec-Fc-maxima-y-sub-maxima' },
                 { keys: ['EKG en reposo'], target: 'val-EKG-en-reposo', sec: 'sec-EKG-en-reposo' },
@@ -294,8 +289,6 @@
                 { keys: ['Consideraciones_2', 'Consideraciones2'], target: 'val-Consideraciones-2', sec: 'sec-Consideraciones-2' }
             ];
 
-            // Si existen dos columnas llamadas "Consideraciones", la segunda se asigna dinámicamente
-            let countConsideraciones = 0;
             mapaInforme.forEach(c => {
                 let val = null;
                 for (let k of c.keys) {
@@ -314,13 +307,11 @@
                 }
             });
 
-            // Tratamiento especial para la Celda de Conclusión
             const valConclusion = p['Conslusión'] || p['Conclusion'] || p['Conclusión'] || '';
             const secConclusion = document.getElementById('sec-Conclusion-Container');
             const elConclusion = document.getElementById('val-Conclusion');
 
             if (valConclusion && valConclusion !== '') {
-                // Maneja saltos de línea convirtiendo cada línea en un li con viñeta
                 const lineasConclusion = valConclusion.split('\n').map(l => l.trim()).filter(l => l.length > 0);
                 if (lineasConclusion.length > 1) {
                     elConclusion.parentElement.innerHTML = lineasConclusion.map(l => `<li style="font-weight: normal;">${l}</li>`).join('');

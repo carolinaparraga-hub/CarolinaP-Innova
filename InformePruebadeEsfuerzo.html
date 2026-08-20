@@ -102,7 +102,10 @@
                     <li id="sec-Fc-maxima-y-sub-maxima">Fc máxima y sub máxima según edad y sexo: <span id="val-Fc-maxima-y-sub-maxima"></span></li>
                     <li id="sec-EKG-en-reposo">EKG en reposo: <span id="val-EKG-en-reposo"></span></li>
                     <li id="sec-Fc-en-reposo">Fc en reposo: <span id="val-Fc-en-reposo"></span></li>
-                    <li id="sec-Consideraciones">Consideraciones: <span id="val-Consideraciones"></span></li>
+                    
+                    <!-- Consideraciones (sin título fijo) -->
+                    <div id="sec-Consideraciones"></div>
+
                     <li id="sec-Motivo-detiene">Motivo por el cual se detiene la prueba: <span id="val-Motivo-detiene"></span></li>
                     <li id="sec-Respuesta-presion">Respuesta de la presión arterial al ejercicio: <span id="val-Respuesta-presion"></span></li>
                     <li id="sec-Fc-maxima-alcanzada">Fc máxima alcanzada: <span id="val-Fc-maxima-alcanzada"></span></li>
@@ -111,7 +114,9 @@
                     <li id="sec-Arritmias-ventriculares">Registro de arritmias ventriculares: <span id="val-Arritmias-ventriculares"></span></li>
                     <li id="sec-Capacidad-Astrand">Capacidad de trabajo según Astrand: <span id="val-Capacidad-Astrand"></span></li>
                     <li id="sec-Riesgo-Duke">Riesgo según criterio de Duke: <span id="val-Riesgo-Duke"></span></li>
-                    <li id="sec-Consideraciones-2">Consideraciones: <span id="val-Consideraciones-2"></span></li>
+                    
+                    <!-- Registro (sin título fijo) -->
+                    <div id="sec-Registro"></div>
                 </ul>
 
                 <!-- CONCLUSIÓN -->
@@ -191,6 +196,12 @@
 
         function obtenerMedico(p) {
             return p['Medico Tratante'] || p['Medico tratante'] || p['Medico'] || p['Doctor'] || p['MedicoTratante'] || '';
+        }
+
+        function procesarTextoConVinetaIndependientes(texto) {
+            if (!texto) return '';
+            const lineas = texto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            return lineas.map(linea => `<li style="font-weight: normal;">${linea}</li>`).join('');
         }
 
         function procesarTextoConViñetas(texto) {
@@ -273,11 +284,32 @@
                 }
             });
 
+            /* Renderizado especial para Consideraciones y Registro (sin título, con cada salto de línea como nueva viñeta) */
+            const renderDirectoSinTitulo = [
+                { keys: ['Consideraciones'], sec: 'sec-Consideraciones' },
+                { keys: ['Registro'], sec: 'sec-Registro' }
+            ];
+
+            renderDirectoSinTitulo.forEach(c => {
+                let val = null;
+                for (let k of c.keys) {
+                    if (p[k] !== undefined && p[k] !== null && p[k] !== 'null' && p[k] !== 'undefined') {
+                        val = p[k];
+                        break;
+                    }
+                }
+                const elSec = document.getElementById(c.sec);
+                if (val && val !== '') {
+                    if (elSec) elSec.innerHTML = procesarTextoConVinetaIndependientes(val);
+                } else if (elSec) {
+                    elSec.style.display = 'none';
+                }
+            });
+
             const mapaInforme = [
                 { keys: ['Fc máxima y sub máxima según edad y sexo:'], target: 'val-Fc-maxima-y-sub-maxima', sec: 'sec-Fc-maxima-y-sub-maxima' },
                 { keys: ['EKG en reposo'], target: 'val-EKG-en-reposo', sec: 'sec-EKG-en-reposo' },
                 { keys: ['Fc en reposo'], target: 'val-Fc-en-reposo', sec: 'sec-Fc-en-reposo' },
-                { keys: ['Consideraciones'], target: 'val-Consideraciones', sec: 'sec-Consideraciones' },
                 { keys: ['Motivo por el cual se detiene la prueba'], target: 'val-Motivo-detiene', sec: 'sec-Motivo-detiene' },
                 { keys: ['Respuesta dela presión arterial al ejercicios Normal ', 'Respuesta de la presión arterial al ejercicio'], target: 'val-Respuesta-presion', sec: 'sec-Respuesta-presion' },
                 { keys: ['Fc maxima alcanzada'], target: 'val-Fc-maxima-alcanzada', sec: 'sec-Fc-maxima-alcanzada' },
@@ -285,8 +317,7 @@
                 { keys: ['recuperación de la frecuencia cardicaca al 1er minuto', 'Recuperacion de la frecuencia cardiaca al 1er minuto'], target: 'val-Recuperacion-fc', sec: 'sec-Recuperacion-fc' },
                 { keys: ['Registro de arritmias ventriculares'], target: 'val-Arritmias-ventriculares', sec: 'sec-Arritmias-ventriculares' },
                 { keys: ['Capacidad de traba según Astrand', 'Capacidad de trabajo según Astrand'], target: 'val-Capacidad-Astrand', sec: 'sec-Capacidad-Astrand' },
-                { keys: ['Riesgo según criterio de Duke'], target: 'val-Riesgo-Duke', sec: 'sec-Riesgo-Duke' },
-                { keys: ['Consideraciones_2', 'Consideraciones2'], target: 'val-Consideraciones-2', sec: 'sec-Consideraciones-2' }
+                { keys: ['Riesgo según criterio de Duke'], target: 'val-Riesgo-Duke', sec: 'sec-Riesgo-Duke' }
             ];
 
             mapaInforme.forEach(c => {

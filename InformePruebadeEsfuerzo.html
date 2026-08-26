@@ -7,12 +7,12 @@
     <style>
         * { box-sizing: border-box; font-family: Arial, sans-serif; }
         body { background-color: #f2f2f2; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #000; }
-        .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 20mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+        .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 10mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
         .content-area { flex-grow: 1; }
         
         /* Membrete */
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
-        .header-logo { max-width: 170px; max-height: 85px; object-fit: contain; }
+        .header-logo { max-width: 260px; max-height: 160px; object-fit: contain; }
         .header-info { text-align: center; flex-grow: 1; }
         .header-info h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
         .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
@@ -72,7 +72,7 @@
             <!-- MEMBRETE -->
             <div class="header">
                 <div style="width: 170px;">
-                    <img src="https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW" alt="Logo" class="header-logo" id="logo-centro">
+                    <img src="https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq" alt="Logo" class="header-logo" id="logo-centro">
                 </div>
                 <div class="header-info">
                     <h2 id="field-Titulo"></h2>
@@ -368,7 +368,7 @@
             var especialidad = datos['Especialidad Medico'] || datos['Especialidad'] || datos['Especialidad Medica'] || '';
 
             var direccion = datos['Dirección'] || datos['Direccion'] || '';
-            var logoURL = 'https://lh3.googleusercontent.com/d/1BsnSEM4G0mbZg5j9JeOWayP6t4RknZFW';
+            var logoURL = 'https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq';
 
             var node = document.getElementById("informe-content");
             var cuerpoHTML = '';
@@ -384,7 +384,7 @@
                 <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0 0 0 8mm; padding:0;">
                     <tr>
                         <td style="width:120px; vertical-align:middle; text-align:left; padding:0;">
-                            <img src="${logoURL}" width="120" height="60" style="width:120px; height:60px; display:block; object-fit:contain;" alt="Logo">
+                            <img src="${logoURL}" width="200" height="140" style="width:200px; height:140px; display:block; object-fit:contain;" alt="Logo">
                         </td>
                         <td style="width:auto; vertical-align:middle; text-align:center; padding:0 6px 0 18px;">
                             <div style="font-family:Arial, sans-serif; font-size:12pt; font-weight:bold; line-height:1.05; margin:0; padding:0;">${titulo}</div>

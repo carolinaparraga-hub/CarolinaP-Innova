@@ -245,22 +245,21 @@
                 if (reportBody) cuerpoHTML = reportBody.innerHTML;
             }
 
-            var headerHTML = `
-                <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0 0 0 8mm; padding:0;">
-                    <tr>
-                        <td style="width:140px; vertical-align:middle; text-align:left; padding:0;">
-                            <img src="${logoURL}" width="220" height="160" style="width:220px; height:160px; display:block; object-fit:contain;" alt="Logo">
-                        </td>
-                        <td style="width:auto; vertical-align:middle; text-align:center; padding:0 6px 0 18px;">
-                            <div style="font-family:'Times New Roman', serif; font-size:12pt; font-weight:bold; line-height:1.05; margin:0; padding:0;">${titulo}</div>
-                            <div style="font-family:'Times New Roman', serif; font-size:11pt; line-height:1.05; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
-                            <div style="font-family:'Times New Roman', serif; font-size:10pt; font-weight:bold; line-height:1.05; margin:3pt 0 0 0; padding:0;">${medicoEsp}</div>
-                        </td>
-                        <td style="width:70px; padding:0;">&nbsp;</td>
-                    </tr>
-                </table>
-                <div style="border-bottom:1.5pt solid #000000; margin-top:5pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
-            `;
+           var headerHTML = `
+    <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0; padding:0;">
+        <tr>
+            <td style="width:40%; vertical-align:middle; text-align:left; padding:0;">
+                <img src="${logoURL}" width="220" height="160" style="width:220px; height:160px; display:block; object-fit:contain;" alt="Logo">
+            </td>
+            <td style="width:60%; vertical-align:middle; text-align:center; padding:0 0 0 10pt;">
+                <div style="font-family:'Times New Roman', serif; font-size:12pt; font-weight:bold; line-height:1.1; margin:0; padding:0;">${titulo}</div>
+                <div style="font-family:'Times New Roman', serif; font-size:11pt; line-height:1.1; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
+                <div style="font-family:'Times New Roman', serif; font-size:10pt; font-weight:bold; line-height:1.1; margin:3pt 0 0 0; padding:0;">${medicoEsp}</div>
+            </td>
+        </tr>
+    </table>
+    <div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
+`;
 
             var espaciadorMembreteFecha = `
                 <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>

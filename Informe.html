@@ -11,12 +11,23 @@
         .content-area { flex-grow: 1; }
         
         /* Membrete */
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 2px solid #000; 
+            padding-bottom: 2px;   /* Reducido para acercar el texto a la línea negra */
+            margin-bottom: 8px;    /* Reducido para acercar la línea a los datos del paciente */
+        }
         .header-logo { max-width: 260px; max-height: 160px; object-fit: contain; }
         .header-info { text-align: center; flex-grow: 1; }
         .header-info h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
         .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
-        .header-info p { margin: 1px 0; font-size: 10pt; font-weight: bold; }
+        .header-info p { 
+            margin: 1px 0 0 0;     /* Elimina el margen inferior residual */
+            font-size: 10pt; 
+            font-weight: bold; 
+        }
         
         /* Datos Paciente */
         .patient-info { width: 100%; margin-bottom: 15px; font-size: 10.5pt; line-height: 1.4; }
@@ -110,7 +121,7 @@
             </p>
             <p id="sec-Contactos-Digital">
                 <span id="sec-Redes" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7 wonderh-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7h-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
                     <span id="field-Redes"></span>
                 </span>
                 <span id="sec-Correo" class="footer-item" style="display:none;">

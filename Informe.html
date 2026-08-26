@@ -7,7 +7,7 @@
     <style>
         * { box-sizing: border-box; font-family: 'Times New Roman', Times, serif; }
         body { background-color: #f2f2f2; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #000; }
-        .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 20mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+        .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 10mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
         .content-area { flex-grow: 1; }
         
         /* Membrete */
@@ -248,8 +248,8 @@
             var headerHTML = `
                 <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0 0 0 8mm; padding:0;">
                     <tr>
-                        <td style="width:160px; vertical-align:middle; text-align:left; padding:0;">
-                            <img src="${logoURL}" width="220" height="120" style="width:220px; height:120px; display:block; object-fit:contain;" alt="Logo">
+                        <td style="width:140px; vertical-align:middle; text-align:left; padding:0;">
+                            <img src="${logoURL}" width="220" height="160" style="width:220px; height:160px; display:block; object-fit:contain;" alt="Logo">
                         </td>
                         <td style="width:auto; vertical-align:middle; text-align:center; padding:0 6px 0 18px;">
                             <div style="font-family:'Times New Roman', serif; font-size:12pt; font-weight:bold; line-height:1.05; margin:0; padding:0;">${titulo}</div>

@@ -11,12 +11,11 @@
         .content-area { flex-grow: 1; }
         
         /* Membrete Web / PDF */
-        .header { display: table; width: 100%; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
-        .header-logo-cell { display: table-cell; width: 30%; vertical-align: middle; text-align: left; }
-        .header-logo { max-width: 220px; max-height: 120px; object-fit: contain; }
-        .header-info-cell { display: table-cell; width: 70%; vertical-align: middle; text-align: center; }
-        .header-info-cell h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
-        .header-info-cell h3 { margin: 4px 0 0 0; font-size: 11.5pt; font-weight: normal; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
+        .header-logo { width: 260px; height: 160; object-fit: contain; }
+        .header-info { text-align: center; flex-grow: 1; padding-left: 10px; }
+        .header-info h2 { margin: 0; font-size: 14pt; font-weight: bold; text-transform: uppercase; }
+        .header-info h3 { margin: 4px 0 0 0; font-size: 11pt; font-weight: normal; }
         
         /* Datos Paciente Compactos */
         .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.2; }
@@ -72,10 +71,10 @@
         <div class="content-area">
             <!-- MEMBRETE -->
             <div class="header">
-                <div class="header-logo-cell">
+                <div>
                     <img src="https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq" alt="Logo" class="header-logo" id="logo-centro">
                 </div>
-                <div class="header-info-cell">
+                <div class="header-info">
                     <h2 id="field-Titulo"></h2>
                     <h3 id="field-Subtitulo"></h3>
                 </div>
@@ -380,27 +379,27 @@
                 if (reportBody) cuerpoHTML = reportBody.innerHTML;
             }
 
-            /* Membrete optimizado para HTML-to-Word en MS Word */
+            /* Membrete estricto para Word fijando dimensiones en la imagen */
             var headerHTML = `
-                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; margin:0; padding:0;">
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse;">
                     <tr>
-                        <td style="width:30%; vertical-align:middle; text-align:left; padding:0;">
-                            <img src="${logoURL}" width="170" style="width:170px; height:auto; display:block;" alt="Logo">
+                        <td style="width:170pt; vertical-align:middle; text-align:left; padding:0;">
+                            <img src="${logoURL}" width="170" height="70" style="width:170pt; height:70pt; display:block;" alt="Logo">
                         </td>
-                        <td style="width:70%; vertical-align:middle; text-align:center; padding:0;">
-                            <p style="font-family:Arial, sans-serif; font-size:14pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>
-                            <p style="font-family:Arial, sans-serif; font-size:11pt; line-height:1.15; margin:3pt 0 0 0;">${subtitulo}</p>
+                        <td style="vertical-align:middle; text-align:center; padding:0 0 0 10pt;">
+                            <p style="font-family:Arial, sans-serif; font-size:13pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>
+                            <p style="font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.15; margin:3pt 0 0 0;">${subtitulo}</p>
                         </td>
                     </tr>
                 </table>
-                <div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:10pt; height:1pt;"></div>
+                <div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:10pt;"></div>
             `;
 
             var fechaInforme = datos['Fecha'] || datos['Fecha Informe'] || '';
 
             /* Datos de Paciente estandarizados para MS Word */
             var patientHTML = `
-                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:10pt; line-height:1.2; margin:0;">
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:10pt; line-height:1.2;">
                     <tr>
                         <td colspan="2" style="text-align:right; padding-bottom:4pt;">
                             <strong>Fecha:</strong> <span style="font-weight:normal;">${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</span>
@@ -420,11 +419,11 @@
                         </td>
                     </tr>
                 </table>
-                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:6pt; margin-bottom:12pt; height:1pt;"></div>
+                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:6pt; margin-bottom:12pt;"></div>
             `;
 
             var docFirmaWordHTML = medico ? `
-                <p style="text-align:center; margin-top:30pt; margin-bottom:15pt; font-family:Arial, sans-serif; font-size:11pt; line-height:1.2;">
+                <p style="text-align:center; margin-top:25pt; margin-bottom:15pt; font-family:Arial, sans-serif; font-size:11pt; line-height:1.2;">
                     <strong>${medico}</strong><br>
                     <span>${especialidad}</span>
                 </p>
@@ -455,6 +454,15 @@
                 <head>
                     <meta charset="utf-8">
                     <title>Informe Médico de Prueba de Esfuerzo</title>
+                    <!--[if gte mso 9]>
+                    <xml>
+                        <w:WordDocument>
+                            <w:View>Print</w:View>
+                            <w:Zoom>100</w:Zoom>
+                            <w:DoNotOptimizeForBrowser/>
+                        </w:WordDocument>
+                    </xml>
+                    <![endif]-->
                     <style>
                         @page Section1 {
                             size:595.3pt 841.9pt;

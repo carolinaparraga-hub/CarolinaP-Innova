@@ -10,10 +10,10 @@
         .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 10mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
         .content-area { flex-grow: 1; }
         
-        /* Membrete Web / PDF */
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 0.1px; margin-bottom: 2px; }
-        .header-logo { width: 200px; height: 140; object-fit: contain; }
-        .header-info { text-align: center; flex-grow: 1; padding-left: 2px; }
+        /* Membrete Web / PDF (Ajustado espacio con la línea) */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 6px; }
+        .header-logo { max-width: 200px; max-height: 75px; width: auto; height: auto; object-fit: contain; display: block; }
+        .header-info { text-align: center; flex-grow: 1; padding-left: 10px; }
         .header-info h2 { margin: 0; font-size: 14pt; font-weight: bold; text-transform: uppercase; }
         .header-info h3 { margin: 4px 0 0 0; font-size: 11pt; font-weight: normal; }
         

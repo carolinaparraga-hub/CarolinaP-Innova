@@ -10,38 +10,39 @@
         .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 10mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
         .content-area { flex-grow: 1; }
         
-        /* Membrete */
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
-        .header-logo { max-width: 240px; max-height: 140px; object-fit: contain; }
-        .header-info { text-align: center; flex-grow: 1; padding-left: 10px; }
-        .header-info h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
-        .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
+        /* Membrete Web / PDF */
+        .header { display: table; width: 100%; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px; }
+        .header-logo-cell { display: table-cell; width: 30%; vertical-align: middle; text-align: left; }
+        .header-logo { max-width: 220px; max-height: 120px; object-fit: contain; }
+        .header-info-cell { display: table-cell; width: 70%; vertical-align: middle; text-align: center; }
+        .header-info-cell h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
+        .header-info-cell h3 { margin: 4px 0 0 0; font-size: 11.5pt; font-weight: normal; }
         
         /* Datos Paciente Compactos */
-        .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.15; }
-        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 4px; }
-        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 2px; column-gap: 20px; }
+        .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.2; }
+        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 6px; }
+        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 4px; column-gap: 20px; }
         .patient-grid .full-width { grid-column: span 2; }
         .divider { border-bottom: 1px solid #ccc; margin: 8px 0 12px 0; }
         
         /* Título y Subtítulo Fijo */
-        .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 12px 0 4px 0; text-transform: uppercase; }
+        .report-title { text-align: center; font-size: 13.5pt; font-weight: bold; text-decoration: underline; margin: 14px 0 4px 0; text-transform: uppercase; }
         .report-subtitle-fixed { text-align: center; font-size: 10.5pt; font-style: italic; margin-bottom: 16px; font-weight: normal; }
         
         /* Cuerpo del Informe */
         .report-body { font-size: 10.5pt; line-height: 1.35; text-align: justify; font-weight: normal; }
         .section-item { margin-bottom: 6px; }
         
-        /* Estilos para Viñetas Redondas y Indentación / Tabulación */
+        /* Estilos para Viñetas Redondas */
         .bullet-list { margin: 0; padding-left: 24px; list-style-type: disc; }
         .bullet-list li { margin-bottom: 4px; line-height: 1.35; font-weight: normal; }
         .bullet-list span { font-weight: normal !important; }
         
-        /* Estilo especial para Conclusión sin tabulación inicial */
+        /* Estilo Conclusión */
         .conclusion-container { margin-top: 12px; margin-bottom: 6px; }
         .conclusion-header { font-weight: bold; font-size: 11pt; margin-bottom: 4px; }
 
-        /* Firma del Médico al final */
+        /* Firma del Médico */
         .doctor-signature { text-align: center; margin-top: 30px; margin-bottom: 10px; font-size: 11pt; line-height: 1.3; }
         .doctor-signature .doc-name { font-weight: bold; display: block; }
         .doctor-signature .doc-spec { display: block; font-weight: normal; }
@@ -71,10 +72,10 @@
         <div class="content-area">
             <!-- MEMBRETE -->
             <div class="header">
-                <div>
+                <div class="header-logo-cell">
                     <img src="https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq" alt="Logo" class="header-logo" id="logo-centro">
                 </div>
-                <div class="header-info">
+                <div class="header-info-cell">
                     <h2 id="field-Titulo"></h2>
                     <h3 id="field-Subtitulo"></h3>
                 </div>
@@ -284,7 +285,6 @@
                 }
             });
 
-            /* Renderizado especial para Consideraciones y Registro */
             const renderDirectoSinTitulo = [
                 { keys: ['Consideraciones'], sec: 'sec-Consideraciones' },
                 { keys: ['Registro'], sec: 'sec-Registro' }
@@ -380,44 +380,51 @@
                 if (reportBody) cuerpoHTML = reportBody.innerHTML;
             }
 
+            /* Membrete optimizado para HTML-to-Word en MS Word */
             var headerHTML = `
-                <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0; padding:0;">
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; margin:0; padding:0;">
                     <tr>
-                        <td style="width:180px; vertical-align:middle; text-align:left; padding:0;">
-                            <img src="${logoURL}" width="180" height="120" style="width:180px; height:auto; display:block; object-fit:contain;" alt="Logo">
+                        <td style="width:30%; vertical-align:middle; text-align:left; padding:0;">
+                            <img src="${logoURL}" width="170" style="width:170px; height:auto; display:block;" alt="Logo">
                         </td>
-                        <td style="width:auto; vertical-align:middle; text-align:center; padding:0 10px;">
-                            <div style="font-family:Arial, sans-serif; font-size:12pt; font-weight:bold; line-height:1.1; margin:0; padding:0;">${titulo}</div>
-                            <div style="font-family:Arial, sans-serif; font-size:11pt; line-height:1.1; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
+                        <td style="width:70%; vertical-align:middle; text-align:center; padding:0;">
+                            <p style="font-family:Arial, sans-serif; font-size:14pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>
+                            <p style="font-family:Arial, sans-serif; font-size:11pt; line-height:1.15; margin:3pt 0 0 0;">${subtitulo}</p>
                         </td>
                     </tr>
                 </table>
-                <div style="border-bottom:1.5pt solid #000000; margin-top:5pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
+                <div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:10pt; height:1pt;"></div>
             `;
 
             var fechaInforme = datos['Fecha'] || datos['Fecha Informe'] || '';
 
+            /* Datos de Paciente estandarizados para MS Word */
             var patientHTML = `
-                <p style="margin:0; padding:0; line-height:1; font-size:10pt;">&nbsp;</p>
-                <table style="width:100%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:10pt; line-height:1; margin:0;">
-                    <tr><td style="width:100%; text-align:right; padding:0; line-height:1;"><strong>Fecha:</strong> <span style="font-weight:normal;">${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</span></td></tr>
-                </table>
-                <p style="margin:0; padding:0; line-height:0.5; font-size:10pt;">&nbsp;</p>
-                <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-family:Arial, sans-serif; font-size:10pt; line-height:1; margin:0; padding:0;">
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:10pt; line-height:1.2; margin:0;">
                     <tr>
-                        <td style="width:100%; padding:0.5pt 0;" colspan="2"><strong>Nombre y Apellido:</strong> <span style="font-weight:normal;">${paciente}</span></td>
+                        <td colspan="2" style="text-align:right; padding-bottom:4pt;">
+                            <strong>Fecha:</strong> <span style="font-weight:normal;">${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</span>
+                        </td>
                     </tr>
                     <tr>
-                        <td style="width:50%; padding:0.5pt 0;"><strong>C.I:</strong> <span style="font-weight:normal;">${ci}</span></td>
-                        <td style="width:50%; padding:0.5pt 0;"><strong>Edad:</strong> <span style="font-weight:normal;">${edad}</span></td>
+                        <td colspan="2" style="padding:2pt 0;">
+                            <strong>Nombre y Apellido:</strong> <span style="font-weight:normal;">${paciente}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:50%; padding:2pt 0;">
+                            <strong>C.I:</strong> <span style="font-weight:normal;">${ci}</span>
+                        </td>
+                        <td style="width:50%; padding:2pt 0;">
+                            <strong>Edad:</strong> <span style="font-weight:normal;">${edad}</span>
+                        </td>
                     </tr>
                 </table>
-                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:4pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
-                <p style="margin:0; padding:0; line-height:1; font-size:10pt;">&nbsp;</p>
+                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:6pt; margin-bottom:12pt; height:1pt;"></div>
             `;
 
             var docFirmaWordHTML = medico ? `
-                <p style="text-align:center; margin-top:25pt; margin-bottom:15pt; font-family:Arial, sans-serif; font-size:11pt; line-height:1.2;">
+                <p style="text-align:center; margin-top:30pt; margin-bottom:15pt; font-family:Arial, sans-serif; font-size:11pt; line-height:1.2;">
                     <strong>${medico}</strong><br>
                     <span>${especialidad}</span>
                 </p>
@@ -458,10 +465,10 @@
                         }
                         div.Section1 { page:Section1; }
                         table#hrdftrtbl { margin: 0in 0in 0in 900in; width:1px; height:1px; overflow:hidden; }
-                        body { font-family:Arial, sans-serif; font-size:10.5pt; color:#000000; line-height:1.12; margin:0; padding:0; }
-                        .doc-title { font-family:Arial, sans-serif; text-align:center; font-size:13pt; font-weight:bold; text-decoration:underline; line-height:1; margin-top:0pt; margin-bottom:3pt; }
-                        .doc-subtitle { font-family:Arial, sans-serif; text-align:center; font-size:10.5pt; font-style:italic; line-height:1; margin-top:0pt; margin-bottom:12pt; }
-                        .report-body { font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.15; text-align:justify; margin:0; padding:0; font-weight:normal; }
+                        body { font-family:Arial, sans-serif; font-size:10.5pt; color:#000000; line-height:1.15; margin:0; padding:0; }
+                        .doc-title { font-family:Arial, sans-serif; text-align:center; font-size:13pt; font-weight:bold; text-decoration:underline; line-height:1.1; margin-top:0pt; margin-bottom:3pt; }
+                        .doc-subtitle { font-family:Arial, sans-serif; text-align:center; font-size:10.5pt; font-style:italic; line-height:1.1; margin-top:0pt; margin-bottom:12pt; }
+                        .report-body { font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.2; text-align:justify; margin:0; padding:0; font-weight:normal; }
                         ul { margin-top:0pt; margin-bottom:6pt; padding-left:18pt; }
                         li { margin-bottom:3pt; font-weight:normal; }
                         span { font-weight:normal; }

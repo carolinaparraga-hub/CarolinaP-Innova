@@ -207,13 +207,11 @@
             document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
             document.getElementById('field-Subtitulo').innerText = p['Subtítulo'] || p['Subtitulo'] || '';
             
-            // Extracción dinámica del médico desde los parámetros
-          // Remplaza estas líneas en tu script:
-let nombreMedico = obtenerMedico(p);
-let especialidad = p['Especialidad Medico'] || p['Especialidad'] || p['Especialidad Medica'] || p['Especialidad medica'] || (p['Medico'] ? p['Medico].[Especialidad]'] : '') || '';
+            let nombreMedico = obtenerMedico(p);
+            let especialidad = p['Especialidad Medico'] || p['Especialidad'] || p['Especialidad Medica'] || p['Especialidad medica'] || (p['Medico'] ? p['Medico].[Especialidad]'] : '') || '';
 
-document.getElementById('field-Medico-tratante').innerText = nombreMedico;
-document.getElementById('field-Especialidad-Medica').innerText = especialidad;
+            document.getElementById('field-Medico-tratante').innerText = nombreMedico;
+            document.getElementById('field-Especialidad-Medica').innerText = especialidad;
 
             if (!nombreMedico) {
                 document.getElementById('sec-Firma-Medico').style.display = 'none';
@@ -347,16 +345,15 @@ document.getElementById('field-Especialidad-Medica').innerText = especialidad;
             }
 
             var headerHTML = `
-                <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0 0 0 8mm; padding:0;">
+                <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0; padding:0;">
                     <tr>
-                        <td style="width:120px; vertical-align:middle; text-align:left; padding:0;">
-                            <img src="${logoURL}" width="220" height="160" style="width:220px; height:160px; display:block; object-fit:contain;" alt="Logo">
+                        <td style="width:40%; vertical-align:middle; text-align:left; padding:0;">
+                            <img src="${logoURL}" width="200" height="140" style="width:200px; height:140px; display:block; object-fit:contain;" alt="Logo">
                         </td>
-                        <td style="width:auto; vertical-align:middle; text-align:center; padding:0 6px 0 18px;">
+                        <td style="width:60%; vertical-align:middle; text-align:center; padding:0;">
                             <div style="font-family:'Times New Roman', serif; font-size:12pt; font-weight:bold; line-height:1.05; margin:0; padding:0;">${titulo}</div>
                             <div style="font-family:'Times New Roman', serif; font-size:11pt; line-height:1.05; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
                         </td>
-                        <td style="width:70px; padding:0;">&nbsp;</td>
                     </tr>
                 </table>
                 <div style="border-bottom:1.5pt solid #000000; margin-top:5pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>

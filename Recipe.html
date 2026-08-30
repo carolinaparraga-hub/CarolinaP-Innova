@@ -149,7 +149,7 @@
         }
 
         .main-title {
-            font-size: 15pt;
+            font-size: 13pt;
             font-weight: 800;
             color: #0f172a;
             margin: 0;
@@ -405,81 +405,73 @@
     </div>
 
     <script>
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param) || '';
-        }
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const val = urlParams.get(param);
+        return val ? decodeURIComponent(val.replace(/\+/g, ' ')) : '';
+    }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const titulo = getQueryParam('Titulo');
-            const subtitulo = getQueryParam('Subtitulo');
-            const medico = getQueryParam('Medico+tratante');
-            const fecha = getQueryParam('Fecha');
-            const nombre = getQueryParam('Nombre');
-            const cedula = getQueryParam('Cedula');
-            const recipe = getQueryParam('Recipe');
-            const indicaciones = getQueryParam('Indicaciones');
-            const direccion = getQueryParam('Direccion');
-            const tel1 = getQueryParam('Numero+de+telefono+principal');
-            const tel2 = getQueryParam('Numero+secundario');
-            const whatsapp = getQueryParam('Whatsapp');
-            const redes = getQueryParam('Redes+sociales');
-            const correo = getQueryParam('Correo+electronico');
+    document.addEventListener("DOMContentLoaded", function() {
+        const titulo = getQueryParam('Titulo');
+        const subtitulo = getQueryParam('Subtitulo');
+        const medico = getQueryParam('Medico');
+        const fecha = getQueryParam('Fecha');
+        const nombre = getQueryParam('Nombre');
+        const cedula = getQueryParam('Cedula');
+        const recipe = getQueryParam('Recipe');
+        const indicaciones = getQueryParam('Indicaciones');
+        
+        const direccion = getQueryParam('Direccion');
+        const tel1 = getQueryParam('Tel1') || getQueryParam('Numero+de+telefono+principal');
+        const tel2 = getQueryParam('Tel2') || getQueryParam('Numero+secundario');
+        const whatsapp = getQueryParam('Ws') || getQueryParam('Whatsapp');
+        const redes = getQueryParam('Redes') || getQueryParam('Redes+sociales');
+        const correo = getQueryParam('Correo') || getQueryParam('Correo+electronico');
 
-            if(titulo) {
-                document.getElementById('param-titulo-1').innerText = titulo;
-                document.getElementById('param-foot-titulo-1').innerText = titulo;
-                document.getElementById('param-titulo-2').innerText = titulo;
-                document.getElementById('param-foot-titulo-2').innerText = titulo;
-            }
-            if(subtitulo) {
-                document.getElementById('param-subtitulo-1').innerText = subtitulo;
-                document.getElementById('param-subtitulo-2').innerText = subtitulo;
-            }
-            if(medico) {
-                document.getElementById('param-medico-1').innerText = medico;
-                document.getElementById('param-medico-2').innerText = medico;
-            }
-            if(fecha) {
-                document.getElementById('param-fecha-1').innerText = fecha;
-                document.getElementById('param-fecha-2').innerText = fecha;
-            }
-            if(nombre) {
-                document.getElementById('param-nombre-1').innerText = nombre;
-                document.getElementById('param-nombre-2').innerText = nombre;
-            }
-            if(cedula) {
-                document.getElementById('param-cedula-1').innerText = cedula;
-                document.getElementById('param-cedula-2').innerText = cedula;
-            }
-            if(direccion) {
-                document.getElementById('param-direccion-1').innerText = direccion;
-                document.getElementById('param-direccion-2').innerText = direccion;
-            }
-            if(tel1) {
-                document.getElementById('param-tel1-1').innerText = tel1;
-                document.getElementById('param-tel1-2').innerText = tel1;
-            }
-            if(tel2) {
-                document.getElementById('param-tel2-1').innerText = tel2;
-                document.getElementById('param-tel2-2').innerText = tel2;
-            }
-            if(whatsapp) {
-                document.getElementById('param-ws-1').innerText = whatsapp;
-                document.getElementById('param-ws-2').innerText = whatsapp;
-            }
-            if(redes) {
-                document.getElementById('param-redes-1').innerText = redes;
-                document.getElementById('param-redes-2').innerText = redes;
-            }
-            if(correo) {
-                document.getElementById('param-correo-1').innerText = correo;
-                document.getElementById('param-correo-2').innerText = correo;
-            }
+        // Asignación con fallback limpio
+        const setText = (id, text) => {
+            const el = document.getElementById(id);
+            if (el) el.innerText = text && text.trim() !== '' ? text : '-';
+        };
 
-            if(recipe) document.getElementById('param-recipe').innerText = recipe;
-            if(indicaciones) document.getElementById('param-indicaciones').innerText = indicaciones;
-        });
+        // Membretes
+        setText('param-titulo-1', titulo || 'CENTRO MÉDICO');
+        setText('param-titulo-2', titulo || 'CENTRO MÉDICO');
+        setText('param-foot-titulo-1', titulo || '');
+        setText('param-foot-titulo-2', titulo || '');
+
+        setText('param-subtitulo-1', subtitulo);
+        setText('param-subtitulo-2', subtitulo);
+
+        // Ficha Paciente / Médico
+        setText('param-medico-1', medico);
+        setText('param-medico-2', medico);
+        setText('param-fecha-1', fecha);
+        setText('param-fecha-2', fecha);
+        setText('param-nombre-1', nombre);
+        setText('param-nombre-2', nombre);
+        setText('param-cedula-1', cedula);
+        setText('param-cedula-2', cedula);
+
+        // Pie de página
+        setText('param-direccion-1', direccion);
+        setText('param-direccion-2', direccion);
+        setText('param-tel1-1', tel1);
+        setText('param-tel1-2', tel1);
+        setText('param-tel2-1', tel2);
+        setText('param-tel2-2', tel2);
+        setText('param-ws-1', whatsapp);
+        setText('param-ws-2', whatsapp);
+        setText('param-redes-1', redes);
+        setText('param-redes-2', redes);
+        setText('param-correo-1', correo);
+        setText('param-correo-2', correo);
+
+        // Contenidos
+        setText('param-recipe', recipe);
+        setText('param-indicaciones', indicaciones);
+    });
+</script>
 
         // FUNCIONALIDAD PARA EXPORTAR DIRECTO A WORD (.DOCX)
         function downloadWord() {

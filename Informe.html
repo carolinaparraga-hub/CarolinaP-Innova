@@ -54,9 +54,10 @@
             color: #222; 
             background: #ffffff;
             width: 100%;
+            margin-top: 15px;
         }
-        .footer p { margin: 2px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .footer-item { display: inline-flex; align-items: center; gap: 4px; }
+        .footer p { margin: 2px 0; text-align: center; }
+        .footer-item { display: inline-block; margin: 0 6px; }
         .icon { width: 11px; height: 11px; fill: #333; vertical-align: middle; display: inline-block; }
         
         /* Botones Acción */
@@ -89,12 +90,12 @@
                 background: #ffffff !important;
                 padding-top: 6px !important;
                 padding-bottom: 6px !important;
-                z-index: 9999;
+                margin-top: 0 !important;
             }
             
             @page { 
                 size: A4; 
-                margin: 10mm 15mm 12mm 15mm; 
+                margin: 10mm 15mm 10mm 15mm; 
             }
         }
     </style>
@@ -153,38 +154,40 @@
                 <tr>
                     <td>
                         <div class="footer-spacer"></div>
-                        <div class="footer">
-                            <p id="sec-Direccion">
-                                <span class="footer-item">
-                                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                                    <span id="field-Direccion"></span>
-                                </span>
-                            </p>
-                            <p id="sec-Contactos-Tel">
-                                <span id="sec-Telefonos" class="footer-item" style="display:none;">
-                                    <svg class="icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                                    <strong>Telfs:</strong> <span id="field-Telefonos"></span>
-                                </span>
-                                <span id="sec-Whatsapp" class="footer-item" style="display:none;">
-                                    <svg class="icon" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 16.5c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.22 8.24z"/></svg>
-                                    <strong>WhatsApp:</strong> <span id="field-Whatsapp"></span>
-                                </span>
-                            </p>
-                            <p id="sec-Contactos-Digital">
-                                <span id="sec-Redes" class="footer-item" style="display:none;">
-                                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7h-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
-                                    <span id="field-Redes"></span>
-                                </span>
-                                <span id="sec-Correo" class="footer-item" style="display:none;">
-                                    <svg class="icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                                    <span id="field-Correo"></span>
-                                </span>
-                            </p>
-                        </div>
                     </td>
                 </tr>
             </tfoot>
         </table>
+
+        <!-- Pie de página fuera de la tabla -->
+        <div class="footer">
+            <p id="sec-Direccion">
+                <span class="footer-item">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <span id="field-Direccion"></span>
+                </span>
+            </p>
+            <p id="sec-Contactos-Tel">
+                <span id="sec-Telefonos" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                    <strong>Telfs:</strong> <span id="field-Telefonos"></span>
+                </span>
+                <span id="sec-Whatsapp" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 16.5c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.22 8.24z"/></svg>
+                    <strong>WhatsApp:</strong> <span id="field-Whatsapp"></span>
+                </span>
+            </p>
+            <p id="sec-Contactos-Digital">
+                <span id="sec-Redes" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7h-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
+                    <span id="field-Redes"></span>
+                </span>
+                <span id="sec-Correo" class="footer-item" style="display:none;">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span id="field-Correo"></span>
+                </span>
+            </p>
+        </div>
     </div>
 
     <div class="action-buttons">
@@ -233,21 +236,21 @@
             let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
             if (telfsFinal) {
                 document.getElementById('field-Telefonos').innerText = telfsFinal;
-                document.getElementById('sec-Telefonos').style.display = 'inline-flex';
+                document.getElementById('sec-Telefonos').style.display = 'inline-block';
             }
 
             if (p['Whatsapp']) {
                 document.getElementById('field-Whatsapp').innerText = p['Whatsapp'];
-                document.getElementById('sec-Whatsapp').style.display = 'inline-flex';
+                document.getElementById('sec-Whatsapp').style.display = 'inline-block';
             }
 
             if (p['Redes sociales']) {
                 document.getElementById('field-Redes').innerText = p['Redes sociales'];
-                document.getElementById('sec-Redes').style.display = 'inline-flex';
+                document.getElementById('sec-Redes').style.display = 'inline-block';
             }
             if (p['Correo electronico']) {
                 document.getElementById('field-Correo').innerText = p['Correo electronico'];
-                document.getElementById('sec-Correo').style.display = 'inline-flex';
+                document.getElementById('sec-Correo').style.display = 'inline-block';
             }
 
             const mapaCampos = [

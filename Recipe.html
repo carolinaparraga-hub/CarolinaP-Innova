@@ -286,7 +286,7 @@
     <!-- CONTENEDOR DOCUMENTO -->
     <div class="page-sheet" id="document-content">
         
-        <!-- FONDO INAMOVIBLE -->
+        <!-- FONDO VECTORIAL -->
         <svg class="background-svg" viewBox="0 0 297 210" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M 130 0 C 120 70, 140 140, 148.5 210 L 148.5 210 L 138 210 C 130 140, 110 70, 120 0 Z" fill="#cbd5e1" opacity="0.4"/>
             <path d="M 138 0 C 115 65, 142 145, 148.5 210 L 148.5 210 L 144 210 C 137 145, 110 65, 130 0 Z" fill="#94a3b8" opacity="0.5"/>
@@ -405,73 +405,71 @@
     </div>
 
     <script>
-    function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const val = urlParams.get(param);
-        return val ? decodeURIComponent(val.replace(/\+/g, ' ')) : '';
-    }
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const val = urlParams.get(param);
+            return val ? decodeURIComponent(val.replace(/\+/g, ' ')) : '';
+        }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const titulo = getQueryParam('Titulo');
-        const subtitulo = getQueryParam('Subtitulo');
-        const medico = getQueryParam('Medico');
-        const fecha = getQueryParam('Fecha');
-        const nombre = getQueryParam('Nombre');
-        const cedula = getQueryParam('Cedula');
-        const recipe = getQueryParam('Recipe');
-        const indicaciones = getQueryParam('Indicaciones');
-        
-        const direccion = getQueryParam('Direccion');
-        const tel1 = getQueryParam('Tel1') || getQueryParam('Numero+de+telefono+principal');
-        const tel2 = getQueryParam('Tel2') || getQueryParam('Numero+secundario');
-        const whatsapp = getQueryParam('Ws') || getQueryParam('Whatsapp');
-        const redes = getQueryParam('Redes') || getQueryParam('Redes+sociales');
-        const correo = getQueryParam('Correo') || getQueryParam('Correo+electronico');
+        document.addEventListener("DOMContentLoaded", function() {
+            const titulo = getQueryParam('Titulo');
+            const subtitulo = getQueryParam('Subtitulo');
+            const medico = getQueryParam('Medico');
+            const fecha = getQueryParam('Fecha');
+            const nombre = getQueryParam('Nombre');
+            const cedula = getQueryParam('Cedula');
+            const recipe = getQueryParam('Recipe');
+            const indicaciones = getQueryParam('Indicaciones');
+            
+            const direccion = getQueryParam('Direccion');
+            const tel1 = getQueryParam('Tel1') || getQueryParam('Numero+de+telefono+principal');
+            const tel2 = getQueryParam('Tel2') || getQueryParam('Numero+secundario');
+            const whatsapp = getQueryParam('Ws') || getQueryParam('Whatsapp');
+            const redes = getQueryParam('Redes') || getQueryParam('Redes+sociales');
+            const correo = getQueryParam('Correo') || getQueryParam('Correo+electronico');
 
-        // Asignación con fallback limpio
-        const setText = (id, text) => {
-            const el = document.getElementById(id);
-            if (el) el.innerText = text && text.trim() !== '' ? text : '-';
-        };
+            const setText = (id, text) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = text && text.trim() !== '' ? text : '-';
+            };
 
-        // Membretes
-        setText('param-titulo-1', titulo || 'CENTRO MÉDICO');
-        setText('param-titulo-2', titulo || 'CENTRO MÉDICO');
-        setText('param-foot-titulo-1', titulo || '');
-        setText('param-foot-titulo-2', titulo || '');
+            // Membretes
+            setText('param-titulo-1', titulo || 'CENTRO MÉDICO');
+            setText('param-titulo-2', titulo || 'CENTRO MÉDICO');
+            setText('param-foot-titulo-1', titulo || '');
+            setText('param-foot-titulo-2', titulo || '');
 
-        setText('param-subtitulo-1', subtitulo);
-        setText('param-subtitulo-2', subtitulo);
+            setText('param-subtitulo-1', subtitulo);
+            setText('param-subtitulo-2', subtitulo);
 
-        // Ficha Paciente / Médico
-        setText('param-medico-1', medico);
-        setText('param-medico-2', medico);
-        setText('param-fecha-1', fecha);
-        setText('param-fecha-2', fecha);
-        setText('param-nombre-1', nombre);
-        setText('param-nombre-2', nombre);
-        setText('param-cedula-1', cedula);
-        setText('param-cedula-2', cedula);
+            // Ficha Paciente / Médico
+            setText('param-medico-1', medico);
+            setText('param-medico-2', medico);
+            setText('param-fecha-1', fecha);
+            setText('param-fecha-2', fecha);
+            setText('param-nombre-1', nombre);
+            setText('param-nombre-2', nombre);
+            setText('param-cedula-1', cedula);
+            setText('param-cedula-2', cedula);
 
-        // Pie de página
-        setText('param-direccion-1', direccion);
-        setText('param-direccion-2', direccion);
-        setText('param-tel1-1', tel1);
-        setText('param-tel1-2', tel1);
-        setText('param-tel2-1', tel2);
-        setText('param-tel2-2', tel2);
-        setText('param-ws-1', whatsapp);
-        setText('param-ws-2', whatsapp);
-        setText('param-redes-1', redes);
-        setText('param-redes-2', redes);
-        setText('param-correo-1', correo);
-        setText('param-correo-2', correo);
+            // Pie de página
+            setText('param-direccion-1', direccion);
+            setText('param-direccion-2', direccion);
+            setText('param-tel1-1', tel1);
+            setText('param-tel1-2', tel1);
+            setText('param-tel2-1', tel2);
+            setText('param-tel2-2', tel2);
+            setText('param-ws-1', whatsapp);
+            setText('param-ws-2', whatsapp);
+            setText('param-redes-1', redes);
+            setText('param-redes-2', redes);
+            setText('param-correo-1', correo);
+            setText('param-correo-2', correo);
 
-        // Contenidos
-        setText('param-recipe', recipe);
-        setText('param-indicaciones', indicaciones);
-    });
-</script>
+            // Contenidos
+            setText('param-recipe', recipe);
+            setText('param-indicaciones', indicaciones);
+        });
 
         // FUNCIONALIDAD PARA EXPORTAR DIRECTO A WORD (.DOCX)
         function downloadWord() {

@@ -64,7 +64,7 @@
         .btn { background-color: #1d5f99; color: #ffffff; border: none; padding: 10px 22px; font-size: 11pt; font-weight: bold; border-radius: 4px; cursor: pointer; font-family: Arial, sans-serif; }
         .btn:hover { background-color: #14436d; }
         
-        /* Estructura Tabla para Impresión Fija */
+        /* Estructura Tabla */
         .print-table { width: 100%; border-collapse: collapse; }
         .print-table td { padding: 0; vertical-align: top; }
 
@@ -72,6 +72,23 @@
             body { background: none; padding: 0; margin: 0; }
             .page { box-shadow: none; width: 100%; padding: 0; min-height: auto; }
             .action-buttons { display: none !important; }
+            
+            /* Reserva de espacio inferior en tfoot para que el texto no se monte sobre el footer */
+            .footer-spacer {
+                height: 15mm;
+            }
+
+            /* Fijar pie de página al final físico de cada página impresa */
+            .footer { 
+                position: fixed !important; 
+                bottom: 0 !important; 
+                left: 0 !important; 
+                right: 0 !important; 
+                width: 100% !important;
+                background: #ffffff !important;
+                padding-top: 4px;
+                padding-bottom: 4px;
+            }
             
             @page { 
                 size: A4; 
@@ -89,7 +106,7 @@
                     <td>
                         <div class="header">
                             <div style="width: 140px;">
-                                <img src="https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu" alt="Logo" class="header-logo" id="logo-centro">
+                                <img src="https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq" alt="Logo" class="header-logo" id="logo-centro">
                             </div>
                             <div class="header-info">
                                 <h2 id="field-Titulo"></h2>
@@ -133,6 +150,7 @@
             <tfoot>
                 <tr>
                     <td>
+                        <div class="footer-spacer"></div>
                         <div class="footer">
                             <p id="sec-Direccion">
                                 <span class="footer-item">
@@ -279,7 +297,7 @@
             var especialidad = datos['Especialidad Medica'] || '';
             var direccion = datos['Direccion'] || '';
             var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
-            var logoURL = 'https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu';
+            var logoURL = 'https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq';
 
             var node = document.getElementById("informe-content");
             var cuerpoHTML = '';

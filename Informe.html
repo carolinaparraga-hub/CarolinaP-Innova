@@ -7,43 +7,64 @@
     <style>
         * { box-sizing: border-box; font-family: 'Times New Roman', Times, serif; }
         body { background-color: #f2f2f2; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #000; }
-        .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 10mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+        .page { 
+            background: #ffffff; 
+            width: 210mm; 
+            min-height: 297mm; 
+            padding: 10mm 20mm 20mm 20mm; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); 
+            position: relative; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+        }
         .content-area { flex-grow: 1; }
         
-        /* Membrete */
+        /* Membrete Compacto */
         .header { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             border-bottom: 2px solid #000; 
-            padding-bottom: 2px;   /* Reducido para acercar el texto a la línea negra */
-            margin-bottom: 8px;    /* Reducido para acercar la línea a los datos del paciente */
+            padding-bottom: 2px;
+            margin-bottom: 6px;
         }
-        .header-logo { max-width: 260px; max-height: 160px; object-fit: contain; }
+        .header-logo { max-width: 180px; max-height: 80px; object-fit: contain; }
         .header-info { text-align: center; flex-grow: 1; }
-        .header-info h2 { margin: 0; font-size: 15pt; font-weight: bold; text-transform: uppercase; }
-        .header-info h3 { margin: 2px 0 4px 0; font-size: 11.5pt; font-weight: normal; }
+        .header-info h2 { margin: 0; font-size: 12pt; font-weight: bold; text-transform: uppercase; }
+        .header-info h3 { margin: 1px 0 2px 0; font-size: 10pt; font-weight: normal; }
         .header-info p { 
-            margin: 1px 0 0 0;     /* Elimina el margen inferior residual */
-            font-size: 10pt; 
+            margin: 0; 
+            font-size: 9.5pt; 
             font-weight: bold; 
         }
         
         /* Datos Paciente */
-        .patient-info { width: 100%; margin-bottom: 15px; font-size: 10.5pt; line-height: 1.4; }
-        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 10px; }
-        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 4px; column-gap: 20px; }
-        .divider { border-bottom: 1px solid #ccc; margin: 10px 0 15px 0; }
+        .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.35; }
+        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 6px; }
+        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 3px; column-gap: 20px; }
+        .divider { border-bottom: 1px solid #ccc; margin: 8px 0 12px 0; }
         
         /* Cuerpo del Informe */
-        .report-title { text-align: center; font-size: 14pt; font-weight: bold; text-decoration: underline; margin: 15px 0 15px 0; }
-        .report-body { font-size: 10.5pt; line-height: 1.45; text-align: justify; }
-        .section-item { margin-bottom: 10px; }
+        .report-title { text-align: center; font-size: 13pt; font-weight: bold; text-decoration: underline; margin: 10px 0 12px 0; }
+        .report-body { font-size: 10.5pt; line-height: 1.4; text-align: justify; }
+        .section-item { margin-bottom: 8px; }
         .multiline-text { white-space: pre-wrap; }
         
-        /* Pie de página e Íconos */
-        .footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 20px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
-        .footer p { margin: 3px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        /* Pie de página Fijo e Íconos */
+        .footer { 
+            position: absolute;
+            bottom: 12mm;
+            left: 20mm;
+            right: 20mm;
+            border-top: 1px solid #000; 
+            padding-top: 6px; 
+            text-align: center; 
+            font-size: 8pt; 
+            line-height: 1.35; 
+            color: #222; 
+        }
+        .footer p { margin: 2px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .footer-item { display: inline-flex; align-items: center; gap: 4px; }
         .icon { width: 11px; height: 11px; fill: #333; vertical-align: middle; display: inline-block; }
         
@@ -56,7 +77,27 @@
             body { background: none; padding: 0; }
             .page { box-shadow: none; width: 100%; padding: 0; min-height: 100vh; }
             .action-buttons { display: none !important; }
-            @page { size: A4; margin: 15mm; }
+            .footer { position: fixed; bottom: 0; left: 0; right: 0; }
+            
+            @page { 
+                size: A4; 
+                margin: 15mm 15mm 20mm 15mm; 
+            }
+            
+            /* Contador para omitir número en la primera página */
+            @page :first {
+                @bottom-right {
+                    content: "";
+                }
+            }
+            
+            @page {
+                @bottom-right {
+                    content: "Página " counter(page);
+                    font-family: 'Times New Roman', Times, serif;
+                    font-size: 8.5pt;
+                }
+            }
         }
     </style>
 </head>
@@ -65,8 +106,8 @@
     <div class="page" id="informe-content">
         <div class="content-area">
             <div class="header">
-                <div style="width: 170px;">
-                    <img src="https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq" alt="Logo" class="header-logo" id="logo-centro">
+                <div style="width: 140px;">
+                    <img src="https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu" alt="Logo" class="header-logo" id="logo-centro">
                 </div>
                 <div class="header-info">
                     <h2 id="field-Titulo"></h2>
@@ -244,7 +285,7 @@
             var especialidad = datos['Especialidad Medica'] || '';
             var direccion = datos['Direccion'] || '';
             var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
-            var logoURL = 'https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq';
+            var logoURL = 'https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu';
 
             var node = document.getElementById("informe-content");
             var cuerpoHTML = '';
@@ -259,21 +300,20 @@
            var headerHTML = `
     <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0; padding:0;">
         <tr>
-            <td style="width:40%; vertical-align:middle; text-align:left; padding:0;">
-                <img src="${logoURL}" width="220" height="160" style="width:220px; height:160px; display:block; object-fit:contain;" alt="Logo">
+            <td style="width:35%; vertical-align:middle; text-align:left; padding:0;">
+                <img src="${logoURL}" width="180" height="80" style="width:180px; height:80px; display:block; object-fit:contain;" alt="Logo">
             </td>
-            <td style="width:60%; vertical-align:middle; text-align:center; padding:0 0 0 10pt;">
+            <td style="width:65%; vertical-align:middle; text-align:center; padding:0 0 0 10pt;">
                 <div style="font-family:'Times New Roman', serif; font-size:12pt; font-weight:bold; line-height:1.1; margin:0; padding:0;">${titulo}</div>
-                <div style="font-family:'Times New Roman', serif; font-size:11pt; line-height:1.1; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
-                <div style="font-family:'Times New Roman', serif; font-size:10pt; font-weight:bold; line-height:1.1; margin:3pt 0 0 0; padding:0;">${medicoEsp}</div>
+                <div style="font-family:'Times New Roman', serif; font-size:10pt; line-height:1.1; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
+                <div style="font-family:'Times New Roman', serif; font-size:9.5pt; font-weight:bold; line-height:1.1; margin:3pt 0 0 0; padding:0;">${medicoEsp}</div>
             </td>
         </tr>
     </table>
-    <div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
+    <div style="border-bottom:1.5pt solid #000000; margin-top:4pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
 `;
 
             var espaciadorMembreteFecha = `
-                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
                 <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
             `;
 
@@ -282,7 +322,6 @@
             `;
 
             var espaciadorDatosTitulo = `
-                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
                 <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
             `;
 

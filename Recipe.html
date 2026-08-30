@@ -122,7 +122,7 @@
             width: 50%;
             height: 210mm;
             vertical-align: top;
-            padding: 10mm 16mm 16mm 16mm;
+            padding: 10mm 14mm 14mm 14mm;
             position: relative;
         }
 
@@ -130,46 +130,33 @@
             border-right: 1px dashed #cbd5e1;
         }
 
-        /* MEMBRETE SUPERIOR (LOGO A LA DERECHA Y ESPACIO COMPACTO) */
+        /* ESTRUCTURA DEL MEMBRETE SUPERIOR */
         .header-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 1mm;
+            margin-bottom: 3mm;
         }
 
-        .header-logo-cell {
+        .patient-cell {
+            vertical-align: middle;
+            width: 60%;
+            padding-right: 5px;
+        }
+
+        .logo-cell {
             vertical-align: middle;
             text-align: right;
-            width: 100%;
-            padding: 0;
-        }
-
-        .logo-img {
-            max-width: 280px;
-            max-height: 160px;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-            display: inline-block;
-        }
-
-        /* FICHA PACIENTE Y MÉDICO */
-        .patient-box {
-            background-color: rgba(248, 250, 252, 0.9);
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            padding: 6px 10px;
-            margin-bottom: 5mm;
-            font-size: 9pt;
+            width: 40%;
         }
 
         .patient-table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 8.5pt;
         }
 
         .patient-table td {
-            padding: 2px 4px;
+            padding: 2px 3px;
             vertical-align: middle;
         }
 
@@ -184,22 +171,36 @@
             font-weight: 500;
         }
 
-        /* CONTENIDO TRATAMIENTO */
+        .logo-img {
+            max-width: 160px;
+            max-height: 80px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: inline-block;
+        }
+
+        /* LÍNEA SEPARADORA ROJA */
+        .divider-red {
+            border: none;
+            border-top: 2px solid #ef4444;
+            margin: 0 0 4mm 0;
+        }
+
+        /* TITULOS SECCION DENTRO DEL CUERPO */
         .section-header {
-            font-size: 11.5pt;
+            font-size: 11pt;
             font-weight: 800;
-            color: #1d4ed8;
-            border-bottom: 2px solid #1d4ed8;
-            padding-bottom: 3px;
-            margin-bottom: 5mm;
-            text-transform: uppercase;
+            color: #0f172a;
+            margin-bottom: 4mm;
+            text-transform: capitalize;
         }
 
         .content-body {
             font-size: 9.5pt;
             line-height: 1.55;
             color: #1e293b;
-            min-height: 92mm;
+            min-height: 95mm;
             white-space: pre-wrap;
             word-wrap: break-word;
         }
@@ -207,9 +208,9 @@
         /* PIE DE PÁGINA */
         .footer-container {
             position: absolute;
-            bottom: 10mm;
-            left: 16mm;
-            right: 16mm;
+            bottom: 8mm;
+            left: 14mm;
+            right: 14mm;
             border-top: 1px solid #e2e8f0;
             padding-top: 6px;
             font-size: 7.5pt;
@@ -286,30 +287,35 @@
             <div class="recipe-column left">
                 <table class="header-table">
                     <tr>
-                        <td class="header-logo-cell">
+                        <td class="patient-cell">
+                            <table class="patient-table">
+                                <tr>
+                                    <td class="label" style="width: 22%;">Paciente:</td>
+                                    <td class="value" id="param-nombre-1">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">C.I.:</td>
+                                    <td class="value" id="param-cedula-1">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Médico:</td>
+                                    <td class="value" id="param-medico-1">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Fecha:</td>
+                                    <td class="value" id="param-fecha-1">-</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="logo-cell">
                             <img src="https://drive.google.com/thumbnail?id=1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq&sz=w500" class="logo-img" alt="Logo">
                         </td>
                     </tr>
                 </table>
 
-                <div class="patient-box">
-                    <table class="patient-table">
-                        <tr>
-                            <td class="label" style="width: 18%;">Paciente:</td>
-                            <td class="value" style="width: 47%;" id="param-nombre-1">-</td>
-                            <td class="label" style="width: 10%;">C.I.:</td>
-                            <td class="value" id="param-cedula-1">-</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Médico:</td>
-                            <td class="value" id="param-medico-1">-</td>
-                            <td class="label">Fecha:</td>
-                            <td class="value" id="param-fecha-1">-</td>
-                        </tr>
-                    </table>
-                </div>
+                <hr class="divider-red">
 
-                <div class="section-header">Récipe Médico</div>
+                <div class="section-header">Récipe:</div>
                 <div class="content-body" id="param-recipe">-</div>
 
                 <div class="footer-container">
@@ -333,30 +339,35 @@
             <div class="recipe-column right">
                 <table class="header-table">
                     <tr>
-                        <td class="header-logo-cell">
+                        <td class="patient-cell">
+                            <table class="patient-table">
+                                <tr>
+                                    <td class="label" style="width: 22%;">Paciente:</td>
+                                    <td class="value" id="param-nombre-2">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">C.I.:</td>
+                                    <td class="value" id="param-cedula-2">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Médico:</td>
+                                    <td class="value" id="param-medico-2">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Fecha:</td>
+                                    <td class="value" id="param-fecha-2">-</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="logo-cell">
                             <img src="https://drive.google.com/thumbnail?id=1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq&sz=w500" class="logo-img" alt="Logo">
                         </td>
                     </tr>
                 </table>
 
-                <div class="patient-box">
-                    <table class="patient-table">
-                        <tr>
-                            <td class="label" style="width: 18%;">Paciente:</td>
-                            <td class="value" style="width: 47%;" id="param-nombre-2">-</td>
-                            <td class="label" style="width: 10%;">C.I.:</td>
-                            <td class="value" id="param-cedula-2">-</td>
-                        </tr>
-                        <tr>
-                            <td class="label">Médico:</td>
-                            <td class="value" id="param-medico-2">-</td>
-                            <td class="label">Fecha:</td>
-                            <td class="value" id="param-fecha-2">-</td>
-                        </tr>
-                    </table>
-                </div>
+                <hr class="divider-red">
 
-                <div class="section-header">Indicaciones Tratamiento</div>
+                <div class="section-header">Indicaciones:</div>
                 <div class="content-body" id="param-indicaciones">-</div>
 
                 <div class="footer-container">
@@ -388,7 +399,6 @@
 
         document.addEventListener("DOMContentLoaded", function() {
             const titulo = getQueryParam('Titulo');
-            const subtitulo = getQueryParam('Subtitulo');
             const medico = getQueryParam('Medico');
             const fecha = getQueryParam('Fecha');
             const nombre = getQueryParam('Nombre');
@@ -408,11 +418,11 @@
                 if (el) el.innerText = text && text.trim() !== '' ? text : '-';
             };
 
-            // Pie de página (Nombre comercial si se requiere)
+            // Pie de página (Nombre comercial)
             setText('param-foot-titulo-1', titulo || '');
             setText('param-foot-titulo-2', titulo || '');
 
-            // Ficha Paciente / Médico
+            // Ficha Paciente / Médico (Membrete superior)
             setText('param-medico-1', medico);
             setText('param-medico-2', medico);
             setText('param-fecha-1', fecha);
@@ -441,7 +451,7 @@
             setText('param-indicaciones', indicaciones);
         });
 
-        // FUNCIONALIDAD PARA EXPORTAR DIRECTO A WORD (.DOCX)
+        // EXPORTAR A WORD
         function downloadWord() {
             const content = document.getElementById('document-content').innerHTML;
             const patientName = document.getElementById('param-nombre-1').innerText || 'Paciente';
@@ -451,7 +461,7 @@
                 <html>
                 <head>
                     <meta charset="utf-8">
-                    <title>Recipe Médico</title>
+                    <title>Recipe Medico</title>
                 </head>
                 <body>
                     ${content}

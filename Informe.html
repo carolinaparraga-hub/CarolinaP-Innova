@@ -252,83 +252,53 @@
 
 
         /* =====================================================
-           ESPACIO PARA PIE DE PÁGINA
+           PIE DE PÁGINA REPETIBLE EN PDF
+           Se utiliza <tfoot> para que Chrome lo repita
+           automáticamente en cada página impresa.
         ===================================================== */
 
-        .footer-spacer {
-
-            height: 20mm;
-
-            display: block;
-
+        .print-table thead {
+            display: table-header-group;
         }
 
+        .print-table tfoot {
+            display: table-footer-group;
+        }
 
-        /* =====================================================
-           PIE DE PÁGINA
-        ===================================================== */
-
-        .footer {
-
+        .print-footer {
             width: 100%;
-
-            background: #ffffff;
-
             border-top: 1px solid #000;
-
             padding-top: 5px;
-
-            padding-bottom: 5px;
-
+            padding-bottom: 4px;
             text-align: center;
-
             font-size: 8pt;
-
             line-height: 1.25;
-
             color: #222;
-
-            margin-top: 15px;
-
+            background: #fff;
         }
 
-
-        .footer p {
-
+        .print-footer p {
             margin: 2px 0;
-
             padding: 0;
-
             text-align: center;
-
         }
-
 
         .footer-item {
-
-            display: inline-block;
-
-            margin: 0 6px;
-
+            display: inline;
             vertical-align: middle;
-
         }
 
+        .footer-separator {
+            display: inline;
+            margin: 0 5px;
+        }
 
-        .icon {
-
-            width: 11px;
-
-            height: 11px;
-
+        .print-footer svg {
+            width: 10px;
+            height: 10px;
             fill: #333;
-
-            vertical-align: middle;
-
-            display: inline-block;
-
+            vertical-align: -1px;
         }
-
 
         /* =====================================================
            BOTONES
@@ -386,122 +356,65 @@
         @media print {
 
             body {
-
                 background: none !important;
-
                 padding: 0 !important;
-
                 margin: 0 !important;
-
                 display: block !important;
-
             }
-
 
             .page {
-
                 width: 100% !important;
-
                 min-height: auto !important;
-
-                padding: 0 0 28mm 0 !important;
-
+                padding: 0 !important;
                 margin: 0 !important;
-
                 box-shadow: none !important;
-
                 background: #ffffff !important;
-
             }
-
 
             .action-buttons {
-
                 display: none !important;
-
             }
 
-
-            /*
-             * Reservamos espacio en la parte inferior
-             * del contenido para que nunca quede detrás
-             * del pie de página.
-             */
-
-            .footer-spacer {
-
-                height: 22mm !important;
-
-                display: block !important;
-
-            }
-
-
-            /*
-             * PIE DE PÁGINA DEL PDF
-             *
-             * Al estar fuera de .page y ser fixed,
-             * queda anclado a la parte inferior de
-             * cada página impresa.
-             */
-
-            .footer {
-
-                position: fixed !important;
-
-                left: 0 !important;
-
-                right: 0 !important;
-
-                bottom: 0 !important;
-
+            .print-table {
                 width: 100% !important;
+                border-collapse: collapse !important;
+            }
 
-                background: #ffffff !important;
+            .print-table thead {
+                display: table-header-group !important;
+            }
 
+            .print-table tbody {
+                display: table-row-group !important;
+            }
+
+            .print-table tfoot {
+                display: table-footer-group !important;
+            }
+
+            .print-footer {
+                display: block !important;
+                width: 100% !important;
                 border-top: 1px solid #000 !important;
-
-                padding-top: 5px !important;
-
-                padding-bottom: 5px !important;
-
-                padding-left: 15mm !important;
-
-                padding-right: 15mm !important;
-
+                padding: 5px 0 4px 0 !important;
                 margin: 0 !important;
-
                 font-size: 8pt !important;
-
                 line-height: 1.25 !important;
-
                 text-align: center !important;
-
-                z-index: 999999 !important;
-
+                background: #fff !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
 
-
-            .footer p {
-
+            .print-footer p {
                 margin: 2px 0 !important;
-
                 padding: 0 !important;
-
+                line-height: 1.25 !important;
             }
-
 
             @page {
-
                 size: A4;
-
-                margin:
-
-                    10mm
-                    15mm
-                    30mm
-                    15mm;
-
+                margin: 10mm 15mm 12mm 15mm;
             }
 
         }
@@ -853,7 +766,54 @@
 
                     <td>
 
-                        <div class="footer-spacer"></div>
+                        <div class="print-footer" id="print-footer">
+
+                            <p id="sec-Direccion">
+                                <span class="footer-item">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                    </svg>
+                                    <span id="field-Direccion"></span>
+                                </span>
+                            </p>
+
+                            <p id="sec-Contactos-Tel">
+                                <span id="sec-Telefonos" class="footer-item" style="display:none;">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                    </svg>
+                                    <strong>Telfs:</strong>
+                                    <span id="field-Telefonos"></span>
+                                </span>
+
+                                <span id="sec-Whatsapp" class="footer-item" style="display:none;">
+                                    <span class="footer-separator">|</span>
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 16.5c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.22 8.24z"/>
+                                    </svg>
+                                    <strong>WhatsApp:</strong>
+                                    <span id="field-Whatsapp"></span>
+                                </span>
+                            </p>
+
+                            <p id="sec-Contactos-Digital">
+                                <span id="sec-Redes" class="footer-item" style="display:none;">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7h-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/>
+                                    </svg>
+                                    <span id="field-Redes"></span>
+                                </span>
+
+                                <span id="sec-Correo" class="footer-item" style="display:none;">
+                                    <span class="footer-separator">|</span>
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                    </svg>
+                                    <span id="field-Correo"></span>
+                                </span>
+                            </p>
+
+                        </div>
 
                     </td>
 
@@ -863,200 +823,6 @@
 
 
         </table>
-
-
-    </div>
-
-
-    <!-- =====================================================
-         PIE DE PÁGINA
-         
-         IMPORTANTE:
-         Está FUERA de .page para evitar problemas
-         al generar el PDF.
-    ====================================================== -->
-
-    <div
-        class="footer"
-        id="footer"
-    >
-
-
-        <!-- =================================================
-             DIRECCIÓN
-        ================================================== -->
-
-        <p id="sec-Direccion">
-
-
-            <span class="footer-item">
-
-
-                <svg
-                    class="icon"
-                    viewBox="0 0 24 24"
-                >
-
-                    <path
-                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
-                    />
-
-                </svg>
-
-
-                <span id="field-Direccion"></span>
-
-
-            </span>
-
-
-        </p>
-
-
-        <!-- =================================================
-             TELÉFONOS Y WHATSAPP
-        ================================================== -->
-
-        <p id="sec-Contactos-Tel">
-
-
-            <!-- TELÉFONOS -->
-
-            <span
-                id="sec-Telefonos"
-                class="footer-item"
-                style="display:none;"
-            >
-
-
-                <svg
-                    class="icon"
-                    viewBox="0 0 24 24"
-                >
-
-                    <path
-                        d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"
-                    />
-
-                </svg>
-
-
-                <strong>
-                    Telfs:
-                </strong>
-
-
-                <span
-                    id="field-Telefonos"
-                ></span>
-
-
-            </span>
-
-
-            <!-- WHATSAPP -->
-
-            <span
-                id="sec-Whatsapp"
-                class="footer-item"
-                style="display:none;"
-            >
-
-
-                <svg
-                    class="icon"
-                    viewBox="0 0 24 24"
-                >
-
-                    <path
-                        d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 16.5c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.22 8.24z"
-                    />
-
-                </svg>
-
-
-                <strong>
-                    WhatsApp:
-                </strong>
-
-
-                <span
-                    id="field-Whatsapp"
-                ></span>
-
-
-            </span>
-
-
-        </p>
-
-
-        <!-- =================================================
-             REDES SOCIALES Y CORREO
-        ================================================== -->
-
-        <p id="sec-Contactos-Digital">
-
-
-            <!-- REDES SOCIALES -->
-
-            <span
-                id="sec-Redes"
-                class="footer-item"
-                style="display:none;"
-            >
-
-
-                <svg
-                    class="icon"
-                    viewBox="0 0 24 24"
-                >
-
-                    <path
-                        d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7h-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"
-                    />
-
-                </svg>
-
-
-                <span
-                    id="field-Redes"
-                ></span>
-
-
-            </span>
-
-
-            <!-- CORREO -->
-
-            <span
-                id="sec-Correo"
-                class="footer-item"
-                style="display:none;"
-            >
-
-
-                <svg
-                    class="icon"
-                    viewBox="0 0 24 24"
-                >
-
-                    <path
-                        d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
-                    />
-
-                </svg>
-
-
-                <span
-                    id="field-Correo"
-                ></span>
-
-
-            </span>
-
-
-        </p>
 
 
     </div>
@@ -1856,7 +1622,7 @@
 
                 clone
                     .querySelectorAll(
-                        '.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr'
+                        '.header, .footer, .print-footer, #footer, footer, .patient-info, .patient-grid, .divider, hr'
                     )
                     .forEach(
                         function(el) {

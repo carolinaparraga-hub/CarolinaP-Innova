@@ -1,447 +1,1978 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informe Médico</title>
+
     <style>
-        * { box-sizing: border-box; font-family: 'Times New Roman', Times, serif; }
-        body { background-color: #f2f2f2; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #000; }
-        
-        .page { 
-            background: #ffffff; 
-            width: 210mm; 
-            min-height: 297mm; 
-            padding: 10mm 20mm 15mm 20mm; 
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); 
-            position: relative; 
+
+        /* =========================================
+           CONFIGURACIÓN GENERAL
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
         }
-        
-        /* Membrete Compacto */
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 2px solid #000; 
+
+        body {
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #000;
+        }
+
+        .page {
+            background: #ffffff;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 10mm 20mm 15mm 20mm;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+
+        /* =========================================
+           MEMBRETE
+        ========================================= */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #000;
             padding-bottom: 2px;
             margin-bottom: 6px;
         }
-        .header-logo { max-width: 100%; height: auto; object-fit: contain; }
-        .header-info { text-align: center; flex-grow: 1; }
-        .header-info h2 { margin: 0; font-size: 12pt; font-weight: bold; text-transform: uppercase; }
-        .header-info h3 { margin: 1px 0 2px 0; font-size: 10pt; font-weight: normal; }
-        .header-info p { margin: 0; font-size: 9.5pt; font-weight: bold; }
-        
-        /* Datos Paciente */
-        .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.35; }
-        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 6px; }
-        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 3px; column-gap: 20px; }
-        .divider { border-bottom: 1px solid #ccc; margin: 8px 0 12px 0; }
-        
-        /* Cuerpo del Informe */
-        .report-title { text-align: center; font-size: 13pt; font-weight: bold; text-decoration: underline; margin: 10px 0 12px 0; }
-        .report-body { font-size: 10.5pt; line-height: 1.4; text-align: justify; }
-        .section-item { margin-bottom: 8px; }
-        .multiline-text { white-space: pre-wrap; }
-        
-        /* Pie de página */
-        .footer { 
-            border-top: 1px solid #000; 
-            padding-top: 6px; 
-            text-align: center; 
-            font-size: 8pt; 
-            line-height: 1.35; 
-            color: #222; 
+
+        .header-logo {
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .header-info {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .header-info h2 {
+            margin: 0;
+            font-size: 12pt;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .header-info h3 {
+            margin: 1px 0 2px 0;
+            font-size: 10pt;
+            font-weight: normal;
+        }
+
+        .header-info p {
+            margin: 0;
+            font-size: 9.5pt;
+            font-weight: bold;
+        }
+
+
+        /* =========================================
+           DATOS DEL PACIENTE
+        ========================================= */
+
+        .patient-info {
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 10pt;
+            line-height: 1.35;
+        }
+
+        .patient-info .date-row {
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            row-gap: 3px;
+            column-gap: 20px;
+        }
+
+        .divider {
+            border-bottom: 1px solid #ccc;
+            margin: 8px 0 12px 0;
+        }
+
+
+        /* =========================================
+           CUERPO DEL INFORME
+        ========================================= */
+
+        .report-title {
+            text-align: center;
+            font-size: 13pt;
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 10px 0 12px 0;
+        }
+
+        .report-body {
+            font-size: 10.5pt;
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        .section-item {
+            margin-bottom: 8px;
+        }
+
+        .multiline-text {
+            white-space: pre-wrap;
+        }
+
+
+        /* =========================================
+           PIE DE PÁGINA
+        ========================================= */
+
+        .footer {
+            border-top: 1px solid #000;
+            padding-top: 5px;
+            text-align: center;
+            font-size: 8pt;
+            line-height: 1.25;
+            color: #222;
             background: #ffffff;
             width: 100%;
             margin-top: 15px;
         }
-        .footer p { margin: 2px 0; text-align: center; }
-        .footer-item { display: inline-block; margin: 0 6px; }
-        .icon { width: 11px; height: 11px; fill: #333; vertical-align: middle; display: inline-block; }
-        
-        /* Botones Acción */
-        .action-buttons { margin-top: 25px; margin-bottom: 30px; display: flex; gap: 15px; justify-content: center; }
-        .btn { background-color: #1d5f99; color: #ffffff; border: none; padding: 10px 22px; font-size: 11pt; font-weight: bold; border-radius: 4px; cursor: pointer; font-family: Arial, sans-serif; }
-        .btn:hover { background-color: #14436d; }
-        
-        /* Estructura Tabla */
-        .print-table { width: 100%; border-collapse: collapse; }
-        .print-table td { padding: 0; vertical-align: top; }
 
-        .footer-spacer { height: 18mm; display: block; }
+        .footer p {
+            margin: 2px 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .footer-item {
+            display: inline-block;
+            margin: 0 6px;
+            vertical-align: middle;
+        }
+
+        .icon {
+            width: 11px;
+            height: 11px;
+            fill: #333;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        .footer-spacer {
+            height: 20mm;
+            display: block;
+        }
+
+
+        /* =========================================
+           BOTONES
+        ========================================= */
+
+        .action-buttons {
+            margin-top: 25px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            background-color: #1d5f99;
+            color: #ffffff;
+            border: none;
+            padding: 10px 22px;
+            font-size: 11pt;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+
+        .btn:hover {
+            background-color: #14436d;
+        }
+
+
+        /* =========================================
+           TABLA DE IMPRESIÓN
+        ========================================= */
+
+        .print-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .print-table td {
+            padding: 0;
+            vertical-align: top;
+        }
+
+
+        /* =========================================
+           IMPRESIÓN / PDF
+        ========================================= */
 
         @media print {
-            body { background: none; padding: 0; margin: 0; }
-            .page { box-shadow: none; width: 100%; padding: 0; min-height: auto; }
-            .action-buttons { display: none !important; }
-            
+
+            body {
+                background: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .page {
+                box-shadow: none;
+                width: 100%;
+                padding: 0;
+                min-height: auto;
+            }
+
+            .action-buttons {
+                display: none !important;
+            }
+
+            /*
+             * Espacio reservado para el pie de página.
+             */
             .footer-spacer {
-                height: 18mm !important;
+                height: 20mm !important;
                 display: block !important;
             }
 
-            .footer { 
-                position: fixed !important; 
-                bottom: 0 !important; 
-                left: 0 !important; 
-                right: 0 !important; 
+            /*
+             * Pie de página fijo.
+             */
+            .footer {
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+
                 width: 100% !important;
+
                 background: #ffffff !important;
-                padding-top: 6px !important;
-                padding-bottom: 6px !important;
-                margin-top: 0 !important;
+
+                border-top: 1px solid #000 !important;
+
+                padding-top: 5px !important;
+                padding-bottom: 5px !important;
+
+                margin: 0 !important;
+
+                font-size: 8pt !important;
+                line-height: 1.25 !important;
+
+                z-index: 9999 !important;
             }
-            
-            @page { 
-                size: A4; 
-                margin: 10mm 15mm 10mm 15mm; 
+
+            .footer p {
+                margin: 2px 0 !important;
+                padding: 0 !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 10mm 15mm 25mm 15mm;
             }
         }
+
     </style>
 </head>
+
+
 <body>
 
+
+    <!-- =========================================
+         CONTENIDO PRINCIPAL
+    ========================================== -->
+
     <div class="page" id="informe-content">
+
         <table class="print-table">
+
+            <!-- ================================
+                 MEMBRETE
+            ================================= -->
+
             <thead>
                 <tr>
                     <td>
+
                         <div class="header">
+
                             <div style="width: 140px;">
-                                <img src="https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu" alt="Logo" class="header-logo" id="logo-centro">
+
+                                <img
+                                    src="https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu"
+                                    alt="Logo"
+                                    class="header-logo"
+                                    id="logo-centro"
+                                >
+
                             </div>
+
                             <div class="header-info">
+
                                 <h2 id="field-Titulo"></h2>
+
                                 <h3 id="field-Subtitulo"></h3>
-                                <p><span id="field-Medico-tratante"></span> - <span id="field-Especialidad-Medica"></span></p>
+
+                                <p>
+                                    <span id="field-Medico-tratante"></span>
+                                    -
+                                    <span id="field-Especialidad-Medica"></span>
+                                </p>
+
                             </div>
+
                         </div>
+
                     </td>
                 </tr>
             </thead>
+
+
+            <!-- ================================
+                 DATOS Y CUERPO
+            ================================= -->
+
             <tbody>
+
                 <tr>
                     <td>
+
                         <div class="patient-info">
-                            <div class="date-row" id="sec-Fecha">Fecha: <span id="val-Fecha"></span></div>
-                            <div class="patient-grid">
-                                <div id="sec-Nombre-y-Apellido"><strong>Paciente:</strong> <span id="val-Nombre-y-Apellido"></span></div>
-                                <div id="sec-Edad"><strong>Edad:</strong> <span id="val-Edad"></span></div>
-                                <div id="sec-Cedula"><strong>C.I:</strong> <span id="val-Cedula"></span></div>
-                                <div id="sec-FN"><strong>F / N:</strong> <span id="val-FN"></span></div>
-                                <div id="sec-Telefono"><strong>Telf:</strong> <span id="val-Telefono"></span></div>
-                                <div id="sec-Ocupacion"><strong>Ocupación:</strong> <span id="val-Ocupacion"></span></div>
-                                <div id="sec-Aseguradora"><strong>Aseguradora:</strong> <span id="val-Aseguradora"></span></div>
+
+                            <div
+                                class="date-row"
+                                id="sec-Fecha"
+                            >
+                                Fecha:
+                                <span id="val-Fecha"></span>
                             </div>
+
+
+                            <div class="patient-grid">
+
+                                <div id="sec-Nombre-y-Apellido">
+                                    <strong>Paciente:</strong>
+                                    <span id="val-Nombre-y-Apellido"></span>
+                                </div>
+
+                                <div id="sec-Edad">
+                                    <strong>Edad:</strong>
+                                    <span id="val-Edad"></span>
+                                </div>
+
+                                <div id="sec-Cedula">
+                                    <strong>C.I:</strong>
+                                    <span id="val-Cedula"></span>
+                                </div>
+
+                                <div id="sec-FN">
+                                    <strong>F / N:</strong>
+                                    <span id="val-FN"></span>
+                                </div>
+
+                                <div id="sec-Telefono">
+                                    <strong>Telf:</strong>
+                                    <span id="val-Telefono"></span>
+                                </div>
+
+                                <div id="sec-Ocupacion">
+                                    <strong>Ocupación:</strong>
+                                    <span id="val-Ocupacion"></span>
+                                </div>
+
+                                <div id="sec-Aseguradora">
+                                    <strong>Aseguradora:</strong>
+                                    <span id="val-Aseguradora"></span>
+                                </div>
+
+                            </div>
+
                         </div>
+
 
                         <div class="divider"></div>
-                        <div class="report-title">Informe Médico</div>
+
+
+                        <div class="report-title">
+                            Informe Médico
+                        </div>
+
 
                         <div class="report-body">
-                            <div class="section-item" id="sec-Enfermedad-Actual"><span id="val-Enfermedad-Actual" class="multiline-text"></span></div>
-                            <div class="section-item" id="sec-Antecedentes-Personales"><strong>Antecedentes Personales:</strong> <span id="val-Antecedentes-Personales" class="multiline-text"></span></div>
-                            <div class="section-item" id="sec-Antecedentes-Familiares"><strong>Antecedentes Familiares:</strong> <span id="val-Antecedentes-Familiares" class="multiline-text"></span></div>
-                            <div class="section-item" id="sec-Examen-Fisico"><strong>Examen Físico:</strong> <span id="val-Examen-Fisico" class="multiline-text"></span></div>
-                            <div class="section-item" id="sec-IDX-Impresion-Diagnostica"><strong>Impresión Diagnóstica (IDX):</strong> <span id="val-IDX-Impresion-Diagnostica" class="multiline-text"></span></div>
-                            <div class="section-item" id="sec-Plan-Tratamiento"><strong>Plan / Tratamiento / Conducta:</strong> <span id="val-Plan-Tratamiento" class="multiline-text"></span></div>
+
+                            <div
+                                class="section-item"
+                                id="sec-Enfermedad-Actual"
+                            >
+                                <span
+                                    id="val-Enfermedad-Actual"
+                                    class="multiline-text"
+                                ></span>
+                            </div>
+
+
+                            <div
+                                class="section-item"
+                                id="sec-Antecedentes-Personales"
+                            >
+                                <strong>
+                                    Antecedentes Personales:
+                                </strong>
+
+                                <span
+                                    id="val-Antecedentes-Personales"
+                                    class="multiline-text"
+                                ></span>
+                            </div>
+
+
+                            <div
+                                class="section-item"
+                                id="sec-Antecedentes-Familiares"
+                            >
+                                <strong>
+                                    Antecedentes Familiares:
+                                </strong>
+
+                                <span
+                                    id="val-Antecedentes-Familiares"
+                                    class="multiline-text"
+                                ></span>
+                            </div>
+
+
+                            <div
+                                class="section-item"
+                                id="sec-Examen-Fisico"
+                            >
+                                <strong>
+                                    Examen Físico:
+                                </strong>
+
+                                <span
+                                    id="val-Examen-Fisico"
+                                    class="multiline-text"
+                                ></span>
+                            </div>
+
+
+                            <div
+                                class="section-item"
+                                id="sec-IDX-Impresion-Diagnostica"
+                            >
+                                <strong>
+                                    Impresión Diagnóstica (IDX):
+                                </strong>
+
+                                <span
+                                    id="val-IDX-Impresion-Diagnostica"
+                                    class="multiline-text"
+                                ></span>
+                            </div>
+
+
+                            <div
+                                class="section-item"
+                                id="sec-Plan-Tratamiento"
+                            >
+                                <strong>
+                                    Plan / Tratamiento / Conducta:
+                                </strong>
+
+                                <span
+                                    id="val-Plan-Tratamiento"
+                                    class="multiline-text"
+                                ></span>
+                            </div>
+
                         </div>
+
                     </td>
                 </tr>
+
             </tbody>
+
+
+            <!-- ================================
+                 ESPACIO PARA FOOTER
+            ================================= -->
+
             <tfoot>
+
                 <tr>
+
                     <td>
+
                         <div class="footer-spacer"></div>
+
                     </td>
+
                 </tr>
+
             </tfoot>
+
         </table>
 
-        <!-- Pie de página fuera de la tabla -->
+
+        <!-- =========================================
+             PIE DE PÁGINA
+        ========================================== -->
+
         <div class="footer">
+
+
+            <!-- DIRECCIÓN -->
+
             <p id="sec-Direccion">
+
                 <span class="footer-item">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+
+                    <svg
+                        class="icon"
+                        viewBox="0 0 24 24"
+                    >
+
+                        <path
+                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                        />
+
+                    </svg>
+
                     <span id="field-Direccion"></span>
+
                 </span>
+
             </p>
+
+
+            <!-- TELÉFONOS Y WHATSAPP -->
+
             <p id="sec-Contactos-Tel">
-                <span id="sec-Telefonos" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                    <strong>Telfs:</strong> <span id="field-Telefonos"></span>
+
+
+                <span
+                    id="sec-Telefonos"
+                    class="footer-item"
+                    style="display:none;"
+                >
+
+                    <svg
+                        class="icon"
+                        viewBox="0 0 24 24"
+                    >
+
+                        <path
+                            d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"
+                        />
+
+                    </svg>
+
+                    <strong>Telfs:</strong>
+
+                    <span id="field-Telefonos"></span>
+
                 </span>
-                <span id="sec-Whatsapp" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 16.5c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.22 8.24z"/></svg>
-                    <strong>WhatsApp:</strong> <span id="field-Whatsapp"></span>
+
+
+                <span
+                    id="sec-Whatsapp"
+                    class="footer-item"
+                    style="display:none;"
+                >
+
+                    <svg
+                        class="icon"
+                        viewBox="0 0 24 24"
+                    >
+
+                        <path
+                            d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 16.5c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.22 8.24z"
+                        />
+
+                    </svg>
+
+                    <strong>WhatsApp:</strong>
+
+                    <span id="field-Whatsapp"></span>
+
                 </span>
+
             </p>
+
+
+            <!-- REDES Y CORREO -->
+
             <p id="sec-Contactos-Digital">
-                <span id="sec-Redes" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7h-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
+
+
+                <span
+                    id="sec-Redes"
+                    class="footer-item"
+                    style="display:none;"
+                >
+
+                    <svg
+                        class="icon"
+                        viewBox="0 0 24 24"
+                    >
+
+                        <path
+                            d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7h-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"
+                        />
+
+                    </svg>
+
                     <span id="field-Redes"></span>
+
                 </span>
-                <span id="sec-Correo" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+
+
+                <span
+                    id="sec-Correo"
+                    class="footer-item"
+                    style="display:none;"
+                >
+
+                    <svg
+                        class="icon"
+                        viewBox="0 0 24 24"
+                    >
+
+                        <path
+                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                        />
+
+                    </svg>
+
                     <span id="field-Correo"></span>
+
                 </span>
+
             </p>
+
         </div>
+
     </div>
+
+
+    <!-- =========================================
+         BOTONES
+    ========================================== -->
 
     <div class="action-buttons">
-        <button class="btn" onclick="window.print()">Imprimir PDF</button>
-        <button class="btn" onclick="descargarWord()">Descargar Word</button>
+
+        <button
+            class="btn"
+            onclick="descargarPDF()"
+        >
+            Descargar PDF
+        </button>
+
+        <button
+            class="btn"
+            onclick="descargarWord()"
+        >
+            Descargar Word
+        </button>
+
     </div>
 
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
     <script>
+
+
+        /* =========================================
+           OBTENER PARÁMETROS DE LA URL
+        ========================================== */
+
         function obtenerParametros() {
+
             const params = {};
-            const queryString = window.location.search.substring(1);
-            const pairs = queryString.split("&");
+
+            const queryString =
+                window.location.search.substring(1);
+
+            const pairs =
+                queryString.split("&");
+
+
             for (let i = 0; i < pairs.length; i++) {
+
                 if (!pairs[i]) continue;
-                const pair = pairs[i].split("=");
-                const key = decodeURIComponent(pair[0].replace(/\+/g, " ")).trim();
-                const value = decodeURIComponent((pair[1] || "").replace(/\+/g, " ")).trim();
+
+                const pair =
+                    pairs[i].split("=");
+
+                const key =
+                    decodeURIComponent(
+                        pair[0].replace(/\+/g, " ")
+                    ).trim();
+
+                const value =
+                    decodeURIComponent(
+                        (pair[1] || "").replace(/\+/g, " ")
+                    ).trim();
+
                 params[key] = value;
             }
+
             return params;
         }
 
+
+        /* =========================================
+           FORMATO DE FECHA
+        ========================================== */
+
         function formatearFechaLatina(fechaStr) {
+
             if (!fechaStr) return '';
-            let partes = fechaStr.split(/[-/]/);
-            if (partes[0].length === 4) return `${partes[2].padStart(2, '0')}/${partes[1].padStart(2, '0')}/${partes[0]}`;
-            if (partes.length === 3 && partes[2].length === 4) return `${partes[1].padStart(2, '0')}/${partes[0].padStart(2, '0')}/${partes[2]}`;
+
+            let partes =
+                fechaStr.split(/[-/]/);
+
+
+            if (partes[0].length === 4) {
+
+                return `${partes[2].padStart(2, '0')}/${partes[1].padStart(2, '0')}/${partes[0]}`;
+
+            }
+
+
+            if (
+                partes.length === 3 &&
+                partes[2].length === 4
+            ) {
+
+                return `${partes[1].padStart(2, '0')}/${partes[0].padStart(2, '0')}/${partes[2]}`;
+
+            }
+
+
             return fechaStr;
         }
 
+
         let p = {};
 
+
+        /* =========================================
+           CARGAR INFORMACIÓN
+        ========================================== */
+
         window.onload = function() {
+
             p = obtenerParametros();
 
-            document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
-            document.getElementById('field-Subtitulo').innerText = p['Subtitulo'] || '';
-            document.getElementById('field-Medico-tratante').innerText = p['Medico tratante'] || '';
-            document.getElementById('field-Especialidad-Medica').innerText = p['Especialidad Medica'] || '';
 
-            if (p['Direccion']) document.getElementById('field-Direccion').innerText = p['Direccion'];
-            else document.getElementById('sec-Direccion').style.display = 'none';
+            /* MEMBRETE */
 
-            const tel1 = p['Numero de telefono principal'] || '';
-            const tel2 = p['Numero secundario'] || '';
-            let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+            document.getElementById(
+                'field-Titulo'
+            ).innerText =
+                p['Titulo'] || '';
+
+
+            document.getElementById(
+                'field-Subtitulo'
+            ).innerText =
+                p['Subtitulo'] || '';
+
+
+            document.getElementById(
+                'field-Medico-tratante'
+            ).innerText =
+                p['Medico tratante'] || '';
+
+
+            document.getElementById(
+                'field-Especialidad-Medica'
+            ).innerText =
+                p['Especialidad Medica'] || '';
+
+
+            /* =====================================
+               PIE DE PÁGINA
+            ===================================== */
+
+
+            /* DIRECCIÓN */
+
+            const direccion =
+                p['Direccion'] || '';
+
+
+            if (direccion) {
+
+                document.getElementById(
+                    'field-Direccion'
+                ).innerText =
+                    direccion;
+
+                document.getElementById(
+                    'sec-Direccion'
+                ).style.display =
+                    'block';
+
+            } else {
+
+                document.getElementById(
+                    'sec-Direccion'
+                ).style.display =
+                    'none';
+
+            }
+
+
+            /* TELÉFONOS */
+
+            const tel1 =
+                p['Numero de telefono principal'] || '';
+
+            const tel2 =
+                p['Numero secundario'] || '';
+
+
+            let telfsFinal = '';
+
+
+            if (tel1 && tel2) {
+
+                telfsFinal =
+                    `${tel1} / ${tel2}`;
+
+            } else if (tel1) {
+
+                telfsFinal =
+                    tel1;
+
+            } else if (tel2) {
+
+                telfsFinal =
+                    tel2;
+
+            }
+
+
             if (telfsFinal) {
-                document.getElementById('field-Telefonos').innerText = telfsFinal;
-                document.getElementById('sec-Telefonos').style.display = 'inline-block';
+
+                document.getElementById(
+                    'field-Telefonos'
+                ).innerText =
+                    telfsFinal;
+
+                document.getElementById(
+                    'sec-Telefonos'
+                ).style.display =
+                    'inline-block';
+
+            } else {
+
+                document.getElementById(
+                    'sec-Telefonos'
+                ).style.display =
+                    'none';
+
             }
 
-            if (p['Whatsapp']) {
-                document.getElementById('field-Whatsapp').innerText = p['Whatsapp'];
-                document.getElementById('sec-Whatsapp').style.display = 'inline-block';
+
+            /* WHATSAPP */
+
+            const whatsapp =
+                p['Whatsapp'] || '';
+
+
+            if (whatsapp) {
+
+                document.getElementById(
+                    'field-Whatsapp'
+                ).innerText =
+                    whatsapp;
+
+                document.getElementById(
+                    'sec-Whatsapp'
+                ).style.display =
+                    'inline-block';
+
+            } else {
+
+                document.getElementById(
+                    'sec-Whatsapp'
+                ).style.display =
+                    'none';
+
             }
 
-            if (p['Redes sociales']) {
-                document.getElementById('field-Redes').innerText = p['Redes sociales'];
-                document.getElementById('sec-Redes').style.display = 'inline-block';
+
+            /* REDES SOCIALES */
+
+            const redes =
+                p['Redes sociales'] || '';
+
+
+            if (redes) {
+
+                document.getElementById(
+                    'field-Redes'
+                ).innerText =
+                    redes;
+
+                document.getElementById(
+                    'sec-Redes'
+                ).style.display =
+                    'inline-block';
+
+            } else {
+
+                document.getElementById(
+                    'sec-Redes'
+                ).style.display =
+                    'none';
+
             }
-            if (p['Correo electronico']) {
-                document.getElementById('field-Correo').innerText = p['Correo electronico'];
-                document.getElementById('sec-Correo').style.display = 'inline-block';
+
+
+            /* CORREO */
+
+            const correo =
+                p['Correo electronico'] || '';
+
+
+            if (correo) {
+
+                document.getElementById(
+                    'field-Correo'
+                ).innerText =
+                    correo;
+
+                document.getElementById(
+                    'sec-Correo'
+                ).style.display =
+                    'inline-block';
+
+            } else {
+
+                document.getElementById(
+                    'sec-Correo'
+                ).style.display =
+                    'none';
+
             }
+
+
+            /* =====================================
+               CAMPOS DEL INFORME
+            ===================================== */
 
             const mapaCampos = [
-                { key: 'Fecha', target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
-                { key: 'Nombre y Apellido', target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
-                { key: 'Cedula', target: 'val-Cedula', sec: 'sec-Cedula' },
-                { key: 'Telefono', target: 'val-Telefono', sec: 'sec-Telefono' },
-                { key: 'F / N', target: 'val-FN', sec: 'sec-FN' },
-                { key: 'Edad', target: 'val-Edad', sec: 'sec-Edad' },
-                { key: 'Ocupacion', target: 'val-Ocupacion', sec: 'sec-Ocupacion' },
-                { key: 'Aseguradora', target: 'val-Aseguradora', sec: 'sec-Aseguradora' },
-                { key: 'Enfermedad Actual', target: 'val-Enfermedad-Actual', sec: 'sec-Enfermedad-Actual' },
-                { key: 'Antecedentes Personales', target: 'val-Antecedentes-Personales', sec: 'sec-Antecedentes-Personales' },
-                { key: 'Antecedentes Familiares', target: 'val-Antecedentes-Familiares', sec: 'sec-Antecedentes-Familiares' },
-                { key: 'Examen Fisico', target: 'val-Examen-Fisico', sec: 'sec-Examen-Fisico' },
-                { key: 'IDX Impresion Diagnostica', target: 'val-IDX-Impresion-Diagnostica', sec: 'sec-IDX-Impresion-Diagnostica' },
-                { key: 'Plan Tratamiento', target: 'val-Plan-Tratamiento', sec: 'sec-Plan-Tratamiento' }
+
+                {
+                    key: 'Fecha',
+                    target: 'val-Fecha',
+                    sec: 'sec-Fecha',
+                    fecha: true
+                },
+
+                {
+                    key: 'Nombre y Apellido',
+                    target: 'val-Nombre-y-Apellido',
+                    sec: 'sec-Nombre-y-Apellido'
+                },
+
+                {
+                    key: 'Cedula',
+                    target: 'val-Cedula',
+                    sec: 'sec-Cedula'
+                },
+
+                {
+                    key: 'Telefono',
+                    target: 'val-Telefono',
+                    sec: 'sec-Telefono'
+                },
+
+                {
+                    key: 'F / N',
+                    target: 'val-FN',
+                    sec: 'sec-FN'
+                },
+
+                {
+                    key: 'Edad',
+                    target: 'val-Edad',
+                    sec: 'sec-Edad'
+                },
+
+                {
+                    key: 'Ocupacion',
+                    target: 'val-Ocupacion',
+                    sec: 'sec-Ocupacion'
+                },
+
+                {
+                    key: 'Aseguradora',
+                    target: 'val-Aseguradora',
+                    sec: 'sec-Aseguradora'
+                },
+
+                {
+                    key: 'Enfermedad Actual',
+                    target: 'val-Enfermedad-Actual',
+                    sec: 'sec-Enfermedad-Actual'
+                },
+
+                {
+                    key: 'Antecedentes Personales',
+                    target: 'val-Antecedentes-Personales',
+                    sec: 'sec-Antecedentes-Personales'
+                },
+
+                {
+                    key: 'Antecedentes Familiares',
+                    target: 'val-Antecedentes-Familiares',
+                    sec: 'sec-Antecedentes-Familiares'
+                },
+
+                {
+                    key: 'Examen Fisico',
+                    target: 'val-Examen-Fisico',
+                    sec: 'sec-Examen-Fisico'
+                },
+
+                {
+                    key: 'IDX Impresion Diagnostica',
+                    target: 'val-IDX-Impresion-Diagnostica',
+                    sec: 'sec-IDX-Impresion-Diagnostica'
+                },
+
+                {
+                    key: 'Plan Tratamiento',
+                    target: 'val-Plan-Tratamiento',
+                    sec: 'sec-Plan-Tratamiento'
+                }
+
             ];
 
-            mapaCampos.forEach(c => {
-                let val = p[c.key];
-                const elTarget = document.getElementById(c.target);
-                const elSec = document.getElementById(c.sec);
 
-                if (val && val !== 'null' && val !== 'undefined') {
-                    if (c.fecha) val = formatearFechaLatina(val);
-                    if (elTarget) elTarget.innerText = val;
-                    if (elSec) elSec.style.display = 'block';
-                } else {
-                    if (elSec) elSec.style.display = 'none';
+            mapaCampos.forEach(
+                c => {
+
+                    let val =
+                        p[c.key];
+
+                    const elTarget =
+                        document.getElementById(
+                            c.target
+                        );
+
+                    const elSec =
+                        document.getElementById(
+                            c.sec
+                        );
+
+
+                    if (
+                        val &&
+                        val !== 'null' &&
+                        val !== 'undefined'
+                    ) {
+
+                        if (c.fecha) {
+
+                            val =
+                                formatearFechaLatina(
+                                    val
+                                );
+
+                        }
+
+
+                        if (elTarget) {
+
+                            elTarget.innerText =
+                                val;
+
+                        }
+
+
+                        if (elSec) {
+
+                            elSec.style.display =
+                                'block';
+
+                        }
+
+                    } else {
+
+                        if (elSec) {
+
+                            elSec.style.display =
+                                'none';
+
+                        }
+
+                    }
+
                 }
-            });
+            );
+
         };
 
+
+        /* =========================================
+           DESCARGAR PDF
+        ========================================== */
+
+        function descargarPDF() {
+
+            window.print();
+
+        }
+
+
+        /* =========================================
+           DESCARGAR WORD
+        ========================================== */
+
         function descargarWord() {
-            var datos = (typeof p !== 'undefined') ? p : {};
 
-            var paciente = datos['Nombre y Apellido'] || '';
-            var edad = datos['Edad'] || '';
-            var ci = datos['Cedula'] || '';
-            var fn = datos['F / N'] || '';
-            var telf = datos['Telefono'] || '';
-            var ocupacion = datos['Ocupacion'] || '';
-            var aseguradora = datos['Aseguradora'] || '';
+            var datos =
+                (typeof p !== 'undefined')
+                    ? p
+                    : {};
 
-            var titulo = datos['Titulo'] || 'MEDICINA FÍSICA Y REHABILITACIÓN';
-            var subtitulo = datos['Subtitulo'] || '';
-            var medico = datos['Medico tratante'] || '';
-            var especialidad = datos['Especialidad Medica'] || '';
-            var direccion = datos['Direccion'] || '';
-            var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
-            var logoURL = 'https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu';
 
-            var node = document.getElementById("informe-content");
+            var paciente =
+                datos['Nombre y Apellido'] || '';
+
+            var edad =
+                datos['Edad'] || '';
+
+            var ci =
+                datos['Cedula'] || '';
+
+            var fn =
+                datos['F / N'] || '';
+
+            var telf =
+                datos['Telefono'] || '';
+
+            var ocupacion =
+                datos['Ocupacion'] || '';
+
+            var aseguradora =
+                datos['Aseguradora'] || '';
+
+
+            var titulo =
+                datos['Titulo'] ||
+                'MEDICINA FÍSICA Y REHABILITACIÓN';
+
+            var subtitulo =
+                datos['Subtitulo'] || '';
+
+            var medico =
+                datos['Medico tratante'] || '';
+
+            var especialidad =
+                datos['Especialidad Medica'] || '';
+
+            var direccion =
+                datos['Direccion'] || '';
+
+
+            var medicoEsp =
+                medico +
+                (
+                    especialidad
+                        ? ' - ' + especialidad
+                        : ''
+                );
+
+
+            var logoURL =
+                'https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu';
+
+
+            var node =
+                document.getElementById(
+                    "informe-content"
+                );
+
+
             var cuerpoHTML = '';
 
+
             if (node) {
-                var clone = node.cloneNode(true);
-                clone.querySelectorAll('.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr').forEach(function(el) { el.remove(); });
-                var reportBody = clone.querySelector('.report-body');
-                if (reportBody) cuerpoHTML = reportBody.innerHTML;
+
+                var clone =
+                    node.cloneNode(true);
+
+
+                clone
+                    .querySelectorAll(
+                        '.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr'
+                    )
+                    .forEach(
+                        function(el) {
+
+                            el.remove();
+
+                        }
+                    );
+
+
+                var reportBody =
+                    clone.querySelector(
+                        '.report-body'
+                    );
+
+
+                if (reportBody) {
+
+                    cuerpoHTML =
+                        reportBody.innerHTML;
+
+                }
+
             }
 
-           var headerHTML = `
-    <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0; padding:0;">
-        <tr>
-            <td style="width:35%; vertical-align:middle; text-align:left; padding:0;">
-                <img src="${logoURL}" width="180" height="80" style="width:180px; height:80px; display:block; object-fit:contain;" alt="Logo">
-            </td>
-            <td style="width:65%; vertical-align:middle; text-align:center; padding:0 0 0 10pt;">
-                <div style="font-family:'Times New Roman', serif; font-size:12pt; font-weight:bold; line-height:1.1; margin:0; padding:0;">${titulo}</div>
-                <div style="font-family:'Times New Roman', serif; font-size:10pt; line-height:1.1; margin:2pt 0 0 0; padding:0;">${subtitulo}</div>
-                <div style="font-family:'Times New Roman', serif; font-size:9.5pt; font-weight:bold; line-height:1.1; margin:3pt 0 0 0; padding:0;">${medicoEsp}</div>
-            </td>
-        </tr>
-    </table>
-    <div style="border-bottom:1.5pt solid #000000; margin-top:4pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
-`;
+
+            var headerHTML = `
+
+                <table
+                    style="
+                        width:100%;
+                        border-collapse:collapse;
+                        table-layout:fixed;
+                        margin:0;
+                        padding:0;
+                    "
+                >
+
+                    <tr>
+
+                        <td
+                            style="
+                                width:35%;
+                                vertical-align:middle;
+                                text-align:left;
+                                padding:0;
+                            "
+                        >
+
+                            <img
+                                src="${logoURL}"
+                                width="180"
+                                height="80"
+                                style="
+                                    width:180px;
+                                    height:80px;
+                                    display:block;
+                                    object-fit:contain;
+                                "
+                                alt="Logo"
+                            >
+
+                        </td>
+
+
+                        <td
+                            style="
+                                width:65%;
+                                vertical-align:middle;
+                                text-align:center;
+                                padding:0 0 0 10pt;
+                            "
+                        >
+
+                            <div
+                                style="
+                                    font-family:'Times New Roman', serif;
+                                    font-size:12pt;
+                                    font-weight:bold;
+                                    line-height:1.1;
+                                    margin:0;
+                                    padding:0;
+                                "
+                            >
+                                ${titulo}
+                            </div>
+
+
+                            <div
+                                style="
+                                    font-family:'Times New Roman', serif;
+                                    font-size:10pt;
+                                    line-height:1.1;
+                                    margin:2pt 0 0 0;
+                                    padding:0;
+                                "
+                            >
+                                ${subtitulo}
+                            </div>
+
+
+                            <div
+                                style="
+                                    font-family:'Times New Roman', serif;
+                                    font-size:9.5pt;
+                                    font-weight:bold;
+                                    line-height:1.1;
+                                    margin:3pt 0 0 0;
+                                    padding:0;
+                                "
+                            >
+                                ${medicoEsp}
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </table>
+
+
+                <div
+                    style="
+                        border-bottom:1.5pt solid #000000;
+                        margin-top:4pt;
+                        margin-bottom:0pt;
+                        height:1pt;
+                        line-height:1pt;
+                    "
+                ></div>
+
+            `;
+
 
             var espaciadorMembreteFecha = `
-                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+
+                <p
+                    style="
+                        margin:0;
+                        padding:0;
+                        line-height:1.15;
+                        font-size:10.5pt;
+                    "
+                >
+                    &nbsp;
+                </p>
+
             `;
+
 
             var espaciadorFechaPaciente = `
-                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+
+                <p
+                    style="
+                        margin:0;
+                        padding:0;
+                        line-height:1.15;
+                        font-size:10.5pt;
+                    "
+                >
+                    &nbsp;
+                </p>
+
             `;
+
 
             var espaciadorDatosTitulo = `
-                <p style="margin:0; padding:0; line-height:1.15; font-size:10.5pt;">&nbsp;</p>
+
+                <p
+                    style="
+                        margin:0;
+                        padding:0;
+                        line-height:1.15;
+                        font-size:10.5pt;
+                    "
+                >
+                    &nbsp;
+                </p>
+
             `;
+
 
             var patientHTML = `
+
                 ${espaciadorMembreteFecha}
-                <table style="width:100%; border-collapse:collapse; font-family:'Times New Roman', serif; font-size:10pt; line-height:1; margin:0;">
-                    <tr><td style="width:100%; text-align:right; padding:0; line-height:1;"><strong>Fecha:</strong> ${datos['Fecha'] ? formatearFechaLatina(datos['Fecha']) : ''}</td></tr>
+
+                <table
+                    style="
+                        width:100%;
+                        border-collapse:collapse;
+                        font-family:'Times New Roman', serif;
+                        font-size:10pt;
+                        line-height:1;
+                        margin:0;
+                    "
+                >
+
+                    <tr>
+
+                        <td
+                            style="
+                                width:100%;
+                                text-align:right;
+                                padding:0;
+                                line-height:1;
+                            "
+                        >
+
+                            <strong>Fecha:</strong>
+
+                            ${
+                                datos['Fecha']
+                                    ? formatearFechaLatina(
+                                        datos['Fecha']
+                                    )
+                                    : ''
+                            }
+
+                        </td>
+
+                    </tr>
+
                 </table>
-                
+
+
                 ${espaciadorFechaPaciente}
-                
-                <table style="width:100%; border-collapse:collapse; table-layout:fixed; font-family:'Times New Roman', serif; font-size:10pt; line-height:1; margin:0; padding:0;">
+
+
+                <table
+                    style="
+                        width:100%;
+                        border-collapse:collapse;
+                        table-layout:fixed;
+                        font-family:'Times New Roman', serif;
+                        font-size:10pt;
+                        line-height:1;
+                        margin:0;
+                        padding:0;
+                    "
+                >
+
                     <tr>
-                        <td style="width:55%; padding:1.5pt 0;"><strong>Paciente:</strong> ${paciente}</td>
-                        <td style="width:45%; padding:1.5pt 0;"><strong>Edad:</strong> ${edad}</td>
+
+                        <td
+                            style="
+                                width:55%;
+                                padding:1.5pt 0;
+                            "
+                        >
+                            <strong>Paciente:</strong>
+                            ${paciente}
+                        </td>
+
+
+                        <td
+                            style="
+                                width:45%;
+                                padding:1.5pt 0;
+                            "
+                        >
+                            <strong>Edad:</strong>
+                            ${edad}
+                        </td>
+
                     </tr>
+
+
                     <tr>
-                        <td style="padding:1.5pt 0;"><strong>C.I:</strong> ${ci}</td>
-                        <td style="padding:1.5pt 0;"><strong>F / N:</strong> ${fn}</td>
+
+                        <td style="padding:1.5pt 0;">
+                            <strong>C.I:</strong>
+                            ${ci}
+                        </td>
+
+
+                        <td style="padding:1.5pt 0;">
+                            <strong>F / N:</strong>
+                            ${fn}
+                        </td>
+
                     </tr>
+
+
                     <tr>
-                        <td style="padding:1.5pt 0;"><strong>Telf:</strong> ${telf}</td>
-                        <td style="padding:1.5pt 0;"><strong>Ocupación:</strong> ${ocupacion}</td>
+
+                        <td style="padding:1.5pt 0;">
+                            <strong>Telf:</strong>
+                            ${telf}
+                        </td>
+
+
+                        <td style="padding:1.5pt 0;">
+                            <strong>Ocupación:</strong>
+                            ${ocupacion}
+                        </td>
+
                     </tr>
-                    ${aseguradora ? `<tr><td style="padding:1.5pt 0;"><strong>Aseguradora:</strong> ${aseguradora}</td><td style="padding:1.5pt 0;">&nbsp;</td></tr>` : ''}
+
+
+                    ${
+                        aseguradora
+                            ? `
+                                <tr>
+
+                                    <td style="padding:1.5pt 0;">
+
+                                        <strong>
+                                            Aseguradora:
+                                        </strong>
+
+                                        ${aseguradora}
+
+                                    </td>
+
+                                    <td style="padding:1.5pt 0;">
+                                        &nbsp;
+                                    </td>
+
+                                </tr>
+                            `
+                            : ''
+                    }
+
                 </table>
-                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:6pt; margin-bottom:0pt; height:1pt; line-height:1pt;"></div>
-                
+
+
+                <div
+                    style="
+                        border-bottom:0.75pt solid #BFBFBF;
+                        margin-top:6pt;
+                        margin-bottom:0pt;
+                        height:1pt;
+                        line-height:1pt;
+                    "
+                ></div>
+
+
                 ${espaciadorDatosTitulo}
+
             `;
 
-            var footerDireccion = direccion ? `<p style="margin:0; padding:0; line-height:1;">📍 ${direccion}</p>` : '';
-            var tel1 = datos['Numero de telefono principal'] || '';
-            var tel2 = datos['Numero secundario'] || '';
-            var telfs = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
-            var wa = datos['Whatsapp'] || '';
-            var redes = datos['Redes sociales'] || '';
-            var correo = datos['Correo electronico'] || '';
+
+            /* =====================================
+               PIE DE PÁGINA PARA WORD
+            ===================================== */
+
+            var footerDireccion =
+                direccion
+                    ? `<p style="margin:0; padding:0; line-height:1;">
+                        📍 ${direccion}
+                       </p>`
+                    : '';
+
+
+            var tel1 =
+                datos['Numero de telefono principal'] || '';
+
+            var tel2 =
+                datos['Numero secundario'] || '';
+
+
+            var telfs =
+                (tel1 && tel2)
+                    ? `${tel1} / ${tel2}`
+                    : (tel1 || tel2);
+
+
+            var wa =
+                datos['Whatsapp'] || '';
+
+            var redes =
+                datos['Redes sociales'] || '';
+
+            var correo =
+                datos['Correo electronico'] || '';
+
 
             var footerTexto = `
+
                 ${footerDireccion}
-                <p style="margin:2pt 0 0 0; padding:0; line-height:1;">
-                    ${telfs ? `📞 <strong>Telfs:</strong> ${telfs}` : ''} 
-                    ${wa ? ` | 💬 <strong>WhatsApp:</strong> ${wa}` : ''}
+
+
+                <p
+                    style="
+                        margin:2pt 0 0 0;
+                        padding:0;
+                        line-height:1;
+                    "
+                >
+
+                    ${
+                        telfs
+                            ? `📞 <strong>Telfs:</strong> ${telfs}`
+                            : ''
+                    }
+
+
+                    ${
+                        wa
+                            ? ` | 💬 <strong>WhatsApp:</strong> ${wa}`
+                            : ''
+                    }
+
                 </p>
-                <p style="margin:2pt 0 0 0; padding:0; line-height:1;">
-                    ${redes ? `🌐 ${redes}` : ''} 
-                    ${correo ? ` | ✉️ ${correo}` : ''}
+
+
+                <p
+                    style="
+                        margin:2pt 0 0 0;
+                        padding:0;
+                        line-height:1;
+                    "
+                >
+
+                    ${
+                        redes
+                            ? `🌐 ${redes}`
+                            : ''
+                    }
+
+
+                    ${
+                        correo
+                            ? ` | ✉️ ${correo}`
+                            : ''
+                    }
+
                 </p>
+
             `;
+
+
+            /* =====================================
+               DOCUMENTO WORD
+            ===================================== */
 
             var preHtml = `
-                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+
+                <html
+                    xmlns:o="urn:schemas-microsoft-com:office:office"
+                    xmlns:w="urn:schemas-microsoft-com:office:word"
+                    xmlns="http://www.w3.org/TR/REC-html40"
+                >
+
                 <head>
+
                     <meta charset="utf-8">
-                    <title>Informe Médico</title>
+
+                    <title>
+                        Informe Médico
+                    </title>
+
+
                     <style>
+
                         @page Section1 {
+
                             size:595.3pt 841.9pt;
-                            margin: 0.65in 0.75in 0.80in 0.75in;
-                            mso-header-margin:0.3in;
-                            mso-footer-margin:0.30in;
+
+                            margin:
+                                0.65in
+                                0.75in
+                                0.80in
+                                0.75in;
+
+                            mso-header-margin:
+                                0.3in;
+
+                            mso-footer-margin:
+                                0.30in;
+
                             mso-footer:f1;
                         }
-                        div.Section1 { page:Section1; }
-                        table#hrdftrtbl { margin: 0in 0in 0in 900in; width:1px; height:1px; overflow:hidden; }
-                        body { font-family:'Times New Roman', serif; font-size:10.5pt; color:#000000; line-height:1.12; margin:0; padding:0; }
-                        .doc-title { font-family:'Times New Roman', serif; text-align:center; font-size:12.5pt; font-weight:bold; text-decoration:underline; line-height:1; margin-top:0pt; margin-bottom:9pt; }
-                        .report-body { font-family:'Times New Roman', serif; font-size:10.5pt; line-height:1.15; text-align:justify; margin:0; padding:0; }
-                        .section-item { margin-top:0pt; margin-bottom:6pt; line-height:1.15; }
-                        .multiline-text { white-space:pre-wrap; }
-                        p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }
-                        div.MsoFooter { font-family:Arial, sans-serif; font-size:8.5pt; color:#333333; text-align:center; border-top:0.75pt solid #555555; padding-top:3pt; line-height:1.05; }
+
+
+                        div.Section1 {
+                            page:Section1;
+                        }
+
+
+                        table#hrdftrtbl {
+
+                            margin:
+                                0in
+                                0in
+                                0in
+                                900in;
+
+                            width:1px;
+
+                            height:1px;
+
+                            overflow:hidden;
+
+                        }
+
+
+                        body {
+
+                            font-family:
+                                'Times New Roman',
+                                serif;
+
+                            font-size:10.5pt;
+
+                            color:#000000;
+
+                            line-height:1.12;
+
+                            margin:0;
+
+                            padding:0;
+
+                        }
+
+
+                        .doc-title {
+
+                            font-family:
+                                'Times New Roman',
+                                serif;
+
+                            text-align:center;
+
+                            font-size:12.5pt;
+
+                            font-weight:bold;
+
+                            text-decoration:underline;
+
+                            line-height:1;
+
+                            margin-top:0pt;
+
+                            margin-bottom:9pt;
+
+                        }
+
+
+                        .report-body {
+
+                            font-family:
+                                'Times New Roman',
+                                serif;
+
+                            font-size:10.5pt;
+
+                            line-height:1.15;
+
+                            text-align:justify;
+
+                            margin:0;
+
+                            padding:0;
+
+                        }
+
+
+                        .section-item {
+
+                            margin-top:0pt;
+
+                            margin-bottom:6pt;
+
+                            line-height:1.15;
+
+                        }
+
+
+                        .multiline-text {
+
+                            white-space:pre-wrap;
+
+                        }
+
+
+                        p {
+
+                            margin-top:0pt;
+
+                            margin-bottom:3pt;
+
+                            line-height:1.15;
+
+                        }
+
+
+                        div.MsoFooter {
+
+                            font-family:
+                                Arial,
+                                sans-serif;
+
+                            font-size:8.5pt;
+
+                            color:#333333;
+
+                            text-align:center;
+
+                            border-top:
+                                0.75pt solid #555555;
+
+                            padding-top:3pt;
+
+                            line-height:1.05;
+
+                        }
+
                     </style>
+
                 </head>
+
+
                 <body>
+
                     <div class="Section1">
+
                         ${headerHTML}
+
                         ${patientHTML}
-                        <div class="doc-title" align="center"><u><b>Informe Médico</b></u></div>
-                        <div class="report-body">${cuerpoHTML}</div>
+
+
+                        <div
+                            class="doc-title"
+                            align="center"
+                        >
+                            <u>
+                                <b>
+                                    Informe Médico
+                                </b>
+                            </u>
+                        </div>
+
+
+                        <div class="report-body">
+
+                            ${cuerpoHTML}
+
+                        </div>
+
                     </div>
-                    <table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
-                        <tr><td>
-                            <div style="mso-element:footer" id="f1">
-                                <div class="MsoFooter">${footerTexto}</div>
-                            </div>
-                        </td></tr>
+
+
+                    <table
+                        id="hrdftrtbl"
+                        border="0"
+                        cellspacing="0"
+                        cellpadding="0"
+                    >
+
+                        <tr>
+
+                            <td>
+
+                                <div
+                                    style="mso-element:footer"
+                                    id="f1"
+                                >
+
+                                    <div class="MsoFooter">
+
+                                        ${footerTexto}
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
                     </table>
+
                 </body>
+
                 </html>
+
             `;
 
-            var blob = new Blob(['\ufeff', preHtml], { type:'application/msword' });
-            var url = URL.createObjectURL(blob);
-            var a = document.createElement("a");
-            a.href = url;
-            a.download = 'Informe_Medico_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';
+
+            var blob =
+                new Blob(
+                    [
+                        '\ufeff',
+                        preHtml
+                    ],
+                    {
+                        type:
+                            'application/msword'
+                    }
+                );
+
+
+            var url =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            var a =
+                document.createElement(
+                    "a"
+                );
+
+
+            a.href =
+                url;
+
+
+            a.download =
+                'Informe_Medico_' +
+                (
+                    paciente
+                        ? paciente.replace(
+                            /\s+/g,
+                            '_'
+                        )
+                        : 'Paciente'
+                ) +
+                '.doc';
+
+
             document.body.appendChild(a);
+
             a.click();
+
             document.body.removeChild(a);
+
             URL.revokeObjectURL(url);
+
         }
+
     </script>
+
 </body>
+
 </html>
+```

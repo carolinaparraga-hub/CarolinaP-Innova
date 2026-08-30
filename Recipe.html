@@ -130,44 +130,27 @@
             border-right: 1px dashed #cbd5e1;
         }
 
-        /* MEMBRETE SUPERIOR */
+        /* MEMBRETE SUPERIOR (SOLO LOGO CENTRADO) */
         .header-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 5mm;
         }
 
-        .header-title-cell {
-            vertical-align: middle;
-            text-align: left;
-        }
-
         .header-logo-cell {
             vertical-align: middle;
-            text-align: right;
-            width: 100px;
-        }
-
-        .main-title {
-            font-size: 13pt;
-            font-weight: 800;
-            color: #0f172a;
-            margin: 0;
-            line-height: 1.1;
-            text-transform: uppercase;
-        }
-
-        .subtitle {
-            font-size: 9pt;
-            color: #475569;
-            margin-top: 3px;
-            font-weight: 600;
+            text-align: center;
+            width: 100%;
+            padding: 5px 0;
         }
 
         .logo-img {
-            max-width: 95px;
-            max-height: 48px;
+            max-width: 280px;
+            max-height: 85px;
+            width: auto;
+            height: auto;
             object-fit: contain;
+            display: inline-block;
         }
 
         /* FICHA PACIENTE Y MÉDICO */
@@ -303,10 +286,6 @@
             <div class="recipe-column left">
                 <table class="header-table">
                     <tr>
-                        <td class="header-title-cell">
-                            <div class="main-title" id="param-titulo-1">CENTRO MÉDICO</div>
-                            <div class="subtitle" id="param-subtitulo-1">-</div>
-                        </td>
                         <td class="header-logo-cell">
                             <img src="https://drive.google.com/thumbnail?id=1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq&sz=w500" class="logo-img" alt="Logo">
                         </td>
@@ -354,10 +333,6 @@
             <div class="recipe-column right">
                 <table class="header-table">
                     <tr>
-                        <td class="header-title-cell">
-                            <div class="main-title" id="param-titulo-2">CENTRO MÉDICO</div>
-                            <div class="subtitle" id="param-subtitulo-2">-</div>
-                        </td>
                         <td class="header-logo-cell">
                             <img src="https://drive.google.com/thumbnail?id=1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq&sz=w500" class="logo-img" alt="Logo">
                         </td>
@@ -433,14 +408,9 @@
                 if (el) el.innerText = text && text.trim() !== '' ? text : '-';
             };
 
-            // Membretes
-            setText('param-titulo-1', titulo || 'CENTRO MÉDICO');
-            setText('param-titulo-2', titulo || 'CENTRO MÉDICO');
+            // Pie de página (Nombre comercial si se requiere)
             setText('param-foot-titulo-1', titulo || '');
             setText('param-foot-titulo-2', titulo || '');
-
-            setText('param-subtitulo-1', subtitulo);
-            setText('param-subtitulo-2', subtitulo);
 
             // Ficha Paciente / Médico
             setText('param-medico-1', medico);

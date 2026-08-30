@@ -68,17 +68,18 @@
         .print-table { width: 100%; border-collapse: collapse; }
         .print-table td { padding: 0; vertical-align: top; }
 
+        .footer-spacer { height: 18mm; display: block; }
+
         @media print {
             body { background: none; padding: 0; margin: 0; }
             .page { box-shadow: none; width: 100%; padding: 0; min-height: auto; }
             .action-buttons { display: none !important; }
             
-            /* Reserva de espacio inferior en tfoot para que el texto no se monte sobre el footer */
             .footer-spacer {
-                height: 15mm;
+                height: 18mm !important;
+                display: block !important;
             }
 
-            /* Fijar pie de página al final físico de cada página impresa */
             .footer { 
                 position: fixed !important; 
                 bottom: 0 !important; 
@@ -86,13 +87,14 @@
                 right: 0 !important; 
                 width: 100% !important;
                 background: #ffffff !important;
-                padding-top: 4px;
-                padding-bottom: 4px;
+                padding-top: 6px !important;
+                padding-bottom: 6px !important;
+                z-index: 9999;
             }
             
             @page { 
                 size: A4; 
-                margin: 10mm 15mm 10mm 15mm; 
+                margin: 10mm 15mm 12mm 15mm; 
             }
         }
     </style>

@@ -10,13 +10,14 @@
         .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 10mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
         .content-area { flex-grow: 1; }
         
-        /* Membrete Web / PDF (Estilo Flexible según presencia de Logo/Texto) */
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 6px; width: 100%; }
+        /* Membrete Web / PDF */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px; width: 100%; gap: 15px; }
         .header-logo-container { display: flex; align-items: center; }
-        .header-logo { max-width: 200px; max-height: 180px; width: auto; height: auto; object-fit: contain; display: block; }
+        .header-logo { max-width: 180px; max-height: 120px; width: auto; height: auto; object-fit: contain; display: block; }
         .header-info { text-align: center; flex-grow: 1; }
-        .header-info h2 { margin: 0; font-size: 14pt; font-weight: bold; text-transform: uppercase; }
-        .header-info h3 { margin: 4px 0 0 0; font-size: 11pt; font-weight: normal; }
+        .header-info h2 { margin: 0; font-size: 13pt; font-weight: bold; text-transform: uppercase; }
+        .header-info h3 { margin: 3px 0; font-size: 10pt; font-weight: normal; color: #333; }
+        .header-info p { margin: 2px 0; font-size: 8.5pt; color: #444; line-height: 1.2; }
         
         /* Datos Paciente Compactos */
         .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.2; }
@@ -31,7 +32,6 @@
         
         /* Cuerpo del Informe */
         .report-body { font-size: 10.5pt; line-height: 1.35; text-align: justify; font-weight: normal; }
-        .section-item { margin-bottom: 6px; }
         
         /* Estilos para Viñetas Redondas */
         .bullet-list { margin: 0; padding-left: 24px; list-style-type: disc; }
@@ -48,8 +48,8 @@
         .doctor-signature .doc-spec { display: block; font-weight: normal; }
 
         /* Pie de página */
-        .footer { border-top: 1px solid #000; padding-top: 10px; margin-top: 10px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
-        .footer p { margin: 3px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .footer { border-top: 1px solid #000; padding-top: 8px; margin-top: 10px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
+        .footer p { margin: 2px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .footer-item { display: inline-flex; align-items: center; gap: 4px; }
         .icon { width: 11px; height: 11px; fill: #333; vertical-align: middle; display: inline-block; }
         
@@ -72,12 +72,14 @@
         <div class="content-area">
             <!-- MEMBRETE DINÁMICO -->
             <div class="header" id="sec-Header">
-                <div class="header-logo-container" id="sec-Logo-Container" style="display: none;">
-                    <img src="" alt="Logo" class="header-logo" id="logo-centro">
+                <div class="header-logo-container" id="sec-Logo-Container">
+                    <img src="https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu" alt="Logo" class="header-logo" id="logo-centro">
                 </div>
-                <div class="header-info" id="sec-Header-Info" style="display: none;">
-                    <h2 id="field-Titulo"></h2>
-                    <h3 id="field-Subtitulo"></h3>
+                <div class="header-info" id="sec-Header-Info">
+                    <h2 id="field-Titulo">INNOVA MED</h2>
+                    <h3 id="field-Subtitulo">Centro de Especialidades Médicas</h3>
+                    <p id="header-direccion-line"></p>
+                    <p id="header-contacto-line"></p>
                 </div>
             </div>
 
@@ -175,7 +177,6 @@
     <script>
         function convertirUrlDrive(url) {
             if (!url) return '';
-            // Si es un enlace de vista previa de Drive, extrae el ID y convierte a formato directo uc
             const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
                 return `https://lh3.googleusercontent.com/d/${match[1]}`;
@@ -230,54 +231,59 @@
         window.onload = function() {
             p = obtenerParametros();
 
-            // LÓGICA DEL MEMBRETE (LOGO Y TEXTO)
+            // LÓGICA DEL MEMBRETE
             const defaultLogo = "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
             const rawLogoURL = p['LogoCentro'] || p['Logo'] || p['Logo URL'] || defaultLogo;
             const logoURL = convertirUrlDrive(rawLogoURL);
 
-            const tituloText = p['Titulo'] || p['Título'] || '';
-            const subtituloText = p['Subtítulo'] || p['Subtitulo'] || '';
+            const tituloText = p['Titulo'] || p['Título'] || 'INNOVA MED';
+            const subtituloText = p['Subtítulo'] || p['Subtitulo'] || 'Centro de Especialidades Médicas';
+            const direccionText = p['Dirección'] || p['Direccion'] || '';
+            
+            const tel1 = p['Numero de telefono principal'] || '';
+            const tel2 = p['Numero secundario'] || '';
+            let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+            const waText = p['Whatsapp'] || '';
+            const correoText = p['Correo electronico'] || '';
+            const redesText = p['Redes sociales'] || '';
 
             const secLogo = document.getElementById('sec-Logo-Container');
             const imgLogo = document.getElementById('logo-centro');
             const secHeaderInfo = document.getElementById('sec-Header-Info');
             const elTitulo = document.getElementById('field-Titulo');
             const elSubtitulo = document.getElementById('field-Subtitulo');
-            const secHeader = document.getElementById('sec-Header');
-
-            let tieneLogo = false;
-            let tieneTexto = false;
+            const elHeaderDireccion = document.getElementById('header-direccion-line');
+            const elHeaderContacto = document.getElementById('header-contacto-line');
 
             if (logoURL) {
                 imgLogo.src = logoURL;
                 secLogo.style.display = 'flex';
-                tieneLogo = true;
             } else {
                 secLogo.style.display = 'none';
             }
 
-            if (tituloText || subtituloText) {
-                elTitulo.innerText = tituloText;
-                elSubtitulo.innerText = subtituloText;
-                secHeaderInfo.style.display = 'block';
-                tieneTexto = true;
+            elTitulo.innerText = tituloText;
+            elSubtitulo.innerText = subtituloText;
+
+            // Rellenar líneas adicionales del membrete si existen datos
+            if (direccionText) {
+                elHeaderDireccion.innerText = direccionText;
+                elHeaderDireccion.style.display = 'block';
             } else {
-                secHeaderInfo.style.display = 'none';
+                elHeaderDireccion.style.display = 'none';
             }
 
-            if (!tieneLogo && !tieneTexto) {
-                secHeader.style.display = 'none';
+            let partesContacto = [];
+            if (telfsFinal) partesContacto.push(`Telfs: ${telfsFinal}`);
+            if (waText) partesContacto.push(`WA: ${waText}`);
+            if (correoText) partesContacto.push(correoText);
+            if (redesText) partesContacto.push(redesText);
+
+            if (partesContacto.length > 0) {
+                elHeaderContacto.innerText = partesContacto.join(' | ');
+                elHeaderContacto.style.display = 'block';
             } else {
-                secHeader.style.display = 'flex';
-                if (tieneLogo && !tieneTexto) {
-                    secHeader.style.justifyContent = 'center';
-                } else if (!tieneLogo && tieneTexto) {
-                    secHeader.style.justifyContent = 'center';
-                    secHeaderInfo.style.textAlign = 'center';
-                } else {
-                    secHeader.style.justifyContent = 'space-between';
-                    secHeaderInfo.style.textAlign = 'center';
-                }
+                elHeaderContacto.style.display = 'none';
             }
 
             // FIRMA Y MÉDICO
@@ -293,29 +299,27 @@
                 document.getElementById('sec-Firma-Medico').style.display = 'block';
             }
 
-            // PIE DE PÁGINA
-            if (p['Dirección'] || p['Direccion']) document.getElementById('field-Direccion').innerText = p['Dirección'] || p['Direccion'];
+            // PIE DE PÁGINA (Reserva en caso de extender datos)
+            if (direccionText) document.getElementById('field-Direccion').innerText = direccionText;
             else document.getElementById('sec-Direccion').style.display = 'none';
 
-            const tel1 = p['Numero de telefono principal'] || '';
-            const tel2 = p['Numero secundario'] || '';
-            let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
             if (telfsFinal) {
                 document.getElementById('field-Telefonos').innerText = telfsFinal;
                 document.getElementById('sec-Telefonos').style.display = 'inline-flex';
             }
 
-            if (p['Whatsapp']) {
-                document.getElementById('field-Whatsapp').innerText = p['Whatsapp'];
+            if (waText) {
+                document.getElementById('field-Whatsapp').innerText = waText;
                 document.getElementById('sec-Whatsapp').style.display = 'inline-flex';
             }
 
-            if (p['Redes sociales']) {
-                document.getElementById('field-Redes').innerText = p['Redes sociales'];
+            if (redesText) {
+                document.getElementById('field-Redes').innerText = redesText;
                 document.getElementById('sec-Redes').style.display = 'inline-flex';
             }
-            if (p['Correo electronico']) {
-                document.getElementById('field-Correo').innerText = p['Correo electronico'];
+
+            if (correoText) {
+                document.getElementById('field-Correo').innerText = correoText;
                 document.getElementById('sec-Correo').style.display = 'inline-flex';
             }
 
@@ -367,7 +371,7 @@
                 }
             });
 
-            // CAMPOS CON CAMPOS / ESTRUCTURA DE INFORME
+            // CAMPOS DE LA PRUEBA DE ESFUERZO
             const mapaInforme = [
                 { keys: ['Fc máxima y sub máxima según edad y sexo:'], target: 'val-Fc-maxima-y-sub-maxima', sec: 'sec-Fc-maxima-y-sub-maxima' },
                 { keys: ['EKG en reposo'], target: 'val-EKG-en-reposo', sec: 'sec-EKG-en-reposo' },
@@ -424,14 +428,21 @@
             var edad = datos['Edad'] || datos['Edad Paciente'] || '';
             var ci = datos['Cedula'] || datos['Cedula Paciente'] || datos['C.I'] || '';
 
-            var titulo = datos['Titulo'] || datos['Título'] || '';
-            var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
+            var titulo = datos['Titulo'] || datos['Título'] || 'INNOVA MED';
+            var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || 'Centro de Especialidades Médicas';
             var rawLogoURL = datos['LogoCentro'] || datos['Logo'] || datos['Logo URL'] || "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
             var logoURL = convertirUrlDrive(rawLogoURL);
             
             var medico = obtenerMedico(datos);
             var especialidad = datos['Especialidad Medico'] || datos['Especialidad'] || datos['Especialidad Medica'] || '';
             var direccion = datos['Dirección'] || datos['Direccion'] || '';
+
+            var tel1 = datos['Numero de telefono principal'] || '';
+            var tel2 = datos['Numero secundario'] || '';
+            var telfs = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+            var wa = datos['Whatsapp'] || '';
+            var redes = datos['Redes sociales'] || '';
+            var correo = datos['Correo electronico'] || '';
 
             var node = document.getElementById("informe-content");
             var cuerpoHTML = '';
@@ -443,45 +454,37 @@
                 if (reportBody) cuerpoHTML = reportBody.innerHTML;
             }
 
-            // Construcción dinámica del membrete para Word
-            var headerHTML = '';
-            var tieneLogo = !!logoURL;
-            var tieneTexto = !!(titulo || subtitulo);
+            // Membrete en tabla para compatibilidad con Word
+            var lineasInfoMembrete = [];
+            if (direccion) lineasInfoMembrete.push(direccion);
+            
+            let contactParts = [];
+            if (telfs) contactParts.push(`Telfs: ${telfs}`);
+            if (wa) contactParts.push(`WA: ${wa}`);
+            if (correo) contactParts.push(correo);
+            if (redes) contactParts.push(redes);
+            if (contactParts.length > 0) lineasInfoMembrete.push(contactParts.join(' | '));
 
-            if (tieneLogo || tieneTexto) {
-                headerHTML = '<table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse;"><tr>';
-                
-                if (tieneLogo && tieneTexto) {
-                    headerHTML += `
-                        <td style="width:170pt; vertical-align:middle; text-align:left; padding:0;">
-                            <img src="${logoURL}" width="200" height="160" style="width:200pt; height:160pt; display:block;" alt="Logo">
+            var extraInfoHTML = lineasInfoMembrete.map(l => `<p style="font-family:Arial, sans-serif; font-size:8.5pt; color:#444444; margin:2pt 0 0 0;">${l}</p>`).join('');
+
+            var headerHTML = `
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:140pt; vertical-align:middle; text-align:left; padding:0;">
+                            <img src="${logoURL}" width="160" height="110" style="width:160pt; height:110pt; display:block;" alt="Logo">
                         </td>
                         <td style="vertical-align:middle; text-align:center; padding:0 0 0 10pt;">
                             <p style="font-family:Arial, sans-serif; font-size:13pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>
-                            <p style="font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.15; margin:3pt 0 0 0;">${subtitulo}</p>
+                            <p style="font-family:Arial, sans-serif; font-size:10pt; line-height:1.15; margin:2pt 0 0 0; color:#333333;">${subtitulo}</p>
+                            ${extraInfoHTML}
                         </td>
-                    `;
-                } else if (tieneLogo && !tieneTexto) {
-                    headerHTML += `
-                        <td style="vertical-align:middle; text-align:center; padding:0;">
-                            <img src="${logoURL}" width="200" height="160" style="width:200pt; height:160pt; display:inline-block;" alt="Logo">
-                        </td>
-                    `;
-                } else if (!tieneLogo && tieneTexto) {
-                    headerHTML += `
-                        <td style="vertical-align:middle; text-align:center; padding:0;">
-                            <p style="font-family:Arial, sans-serif; font-size:13pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>
-                            <p style="font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.15; margin:3pt 0 0 0;">${subtitulo}</p>
-                        </td>
-                    `;
-                }
-                
-                headerHTML += '</tr></table><div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:10pt;"></div>';
-            }
+                    </tr>
+                </table>
+                <div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:10pt;"></div>
+            `;
 
             var fechaInforme = datos['Fecha'] || datos['Fecha Informe'] || '';
 
-            /* Datos de Paciente estandarizados para MS Word */
             var patientHTML = `
                 <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:10pt; line-height:1.2;">
                     <tr>
@@ -513,26 +516,6 @@
                 </p>
             ` : '';
 
-            var footerDireccion = direccion ? `<p style="margin:0; padding:0; line-height:1;">📍 ${direccion}</p>` : '';
-            var tel1 = datos['Numero de telefono principal'] || '';
-            var tel2 = datos['Numero secundario'] || '';
-            var telfs = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
-            var wa = datos['Whatsapp'] || '';
-            var redes = datos['Redes sociales'] || '';
-            var correo = datos['Correo electronico'] || '';
-
-            var footerTexto = `
-                ${footerDireccion}
-                <p style="margin:2pt 0 0 0; padding:0; line-height:1;">
-                    ${telfs ? `📞 <strong>Telfs:</strong> ${telfs}` : ''} 
-                    ${wa ? ` | 💬 <strong>WhatsApp:</strong> ${wa}` : ''}
-                </p>
-                <p style="margin:2pt 0 0 0; padding:0; line-height:1;">
-                    ${redes ? `🌐 ${redes}` : ''} 
-                    ${correo ? ` | ✉️ ${correo}` : ''}
-                </p>
-            `;
-
             var preHtml = `
                 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
                 <head>
@@ -551,12 +534,8 @@
                         @page Section1 {
                             size:595.3pt 841.9pt;
                             margin: 0.65in 0.75in 0.80in 0.75in;
-                            mso-header-margin:0.3in;
-                            mso-footer-margin:0.30in;
-                            mso-footer:f1;
                         }
                         div.Section1 { page:Section1; }
-                        table#hrdftrtbl { margin: 0in 0in 0in 900in; width:1px; height:1px; overflow:hidden; }
                         body { font-family:Arial, sans-serif; font-size:10.5pt; color:#000000; line-height:1.15; margin:0; padding:0; }
                         .doc-title { font-family:Arial, sans-serif; text-align:center; font-size:13pt; font-weight:bold; text-decoration:underline; line-height:1.1; margin-top:0pt; margin-bottom:3pt; }
                         .doc-subtitle { font-family:Arial, sans-serif; text-align:center; font-size:10.5pt; font-style:italic; line-height:1.1; margin-top:0pt; margin-bottom:12pt; }
@@ -565,7 +544,6 @@
                         li { margin-bottom:3pt; font-weight:normal; }
                         span { font-weight:normal; }
                         p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }
-                        div.MsoFooter { font-family:Arial, sans-serif; font-size:8.5pt; color:#333333; text-align:center; border-top:0.75pt solid #555555; padding-top:3pt; line-height:1.05; }
                     </style>
                 </head>
                 <body>
@@ -577,13 +555,6 @@
                         <div class="report-body">${cuerpoHTML}</div>
                         ${docFirmaWordHTML}
                     </div>
-                    <table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
-                        <tr><td>
-                            <div style="mso-element:footer" id="f1">
-                                <div class="MsoFooter">${footerTexto}</div>
-                            </div>
-                        </td></tr>
-                    </table>
                 </body>
                 </html>
             `;

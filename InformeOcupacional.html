@@ -118,13 +118,13 @@ body {
 }
 
 /* =========================================================
-   TÍTULO DEL INFORME
+   TÍTULO DEL INFORME (Con más espacio superior e inferior)
 ========================================================= */
 
 .doc-title-container {
     text-align: center;
-    margin-top: 8px;
-    margin-bottom: 10px;
+    margin-top: 22px;      /* Antes: 8px */
+    margin-bottom: 20px;   /* Antes: 10px */
 }
 
 .doc-title-main {
@@ -140,36 +140,26 @@ body {
     font-weight: bold;
     text-transform: uppercase;
     text-decoration: underline;
-    margin-top: 2px;
+    margin-top: 4px;      /* Antes: 2px */
 }
 
 /* =========================================================
-   TIPO DE EXAMEN Y NORMA TÉCNICA
+   TIPO DE EXAMEN (Separado del título y la norma)
 ========================================================= */
 
 .exam-type {
     width: 100%;
-    margin-top: 4px;
-    margin-bottom: 6px;
+    margin-top: 10px;     /* Antes: 4px */
+    margin-bottom: 14px;  /* Antes: 6px */
     font-size: 10pt;
-}
-
-.exam-type-title {
-    font-weight: bold;
-    margin-right: 12px;
-}
-
-.exam-option {
-    margin-right: 13px;
-    white-space: nowrap;
 }
 
 .norma-tecnica {
     font-size: 8.5pt;
     font-style: italic;
-    line-height: 1.2;
+    line-height: 1.25;
     text-align: justify;
-    margin-bottom: 12px;
+    margin-bottom: 18px;  /* Antes: 12px */
     color: #111;
 }
 
@@ -838,14 +828,14 @@ function descargarWord() {
     `;
 
     const docTitleHTML = `
-        <div style="text-align:center; margin-top:8pt; margin-bottom:8pt; font-family:Arial,sans-serif;">
+        <div style="text-align:center; margin-top:18pt; margin-bottom:16pt; font-family:Arial,sans-serif;">
             <div style="font-size:11pt; font-weight:bold; text-transform:uppercase;">SERVICIO DE SEGURIDAD Y SALUD EN EL TRABAJO</div>
-            <div style="font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline; margin-top:2pt;">INFORME MEDICO</div>
+            <div style="font-size:12pt; font-weight:bold; text-transform:uppercase; text-decoration:underline; margin-top:4pt;">INFORME MEDICO</div>
         </div>
     `;
 
     const examenHTML = `
-        <div style="font-family:Arial,sans-serif; font-size:10pt; margin-top:8pt; margin-bottom:4pt;">
+        <div style="font-family:Arial,sans-serif; font-size:10pt; margin-top:12pt; margin-bottom:10pt;">
             <strong>Examen de salud:</strong> &nbsp;&nbsp;
             ${circulo("ingreso")} Ingreso &nbsp;&nbsp;
             ${circulo("egreso")} Egreso &nbsp;&nbsp;
@@ -853,11 +843,10 @@ function descargarWord() {
             ${circulo("post")} Post-vacacional &nbsp;&nbsp;
             ${circulo("anual")} Anual
         </div>
-        <div style="font-family:Arial,sans-serif; font-size:8.5pt; font-style:italic; line-height:1.2; text-align:justify; margin-bottom:8pt;">
+        <div style="font-family:Arial,sans-serif; font-size:8.5pt; font-style:italic; line-height:1.2; text-align:justify; margin-bottom:14pt;">
             <strong>NORMA TÉCNICA DE LOS SERVICIOS DE SEGURIDAD Y SALUD EN EL TRABAJO</strong> Artículo 33. Al término de cualquier evaluación de salud que se practique al trabajador o trabajadora, el médico o médica ocupacional o el profesional que haya realizado la evaluación, debe redactar un informe, que contenga como mínimo lo siguiente:
         </div>
     `;
-
     const workerHTML = `
         <table style="width:100%; border-collapse:collapse; font-family:Arial,sans-serif; font-size:9.5pt; margin-top:8pt;">
             <tr>

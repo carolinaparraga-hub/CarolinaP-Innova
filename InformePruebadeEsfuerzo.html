@@ -43,15 +43,9 @@
         .conclusion-header { font-weight: bold; font-size: 11pt; margin-bottom: 4px; }
 
         /* Firma del Médico */
-        .doctor-signature { text-align: center; margin-top: 30px; margin-bottom: 10px; font-size: 11pt; line-height: 1.3; }
+        .doctor-signature { text-align: center; margin-top: 40px; margin-bottom: 10px; font-size: 11pt; line-height: 1.3; }
         .doctor-signature .doc-name { font-weight: bold; display: block; }
         .doctor-signature .doc-spec { display: block; font-weight: normal; }
-
-        /* Pie de página */
-        .footer { border-top: 1px solid #000; padding-top: 8px; margin-top: 10px; text-align: center; font-size: 8.5pt; line-height: 1.4; color: #222; }
-        .footer p { margin: 2px 0; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .footer-item { display: inline-flex; align-items: center; gap: 4px; }
-        .icon { width: 11px; height: 11px; fill: #333; vertical-align: middle; display: inline-block; }
         
         /* Botones Acción */
         .action-buttons { margin-top: 25px; margin-bottom: 30px; display: flex; gap: 15px; justify-content: center; }
@@ -77,7 +71,7 @@
                 </div>
                 <div class="header-info" id="sec-Header-Info">
                     <h2 id="field-Titulo">INNOVA MED</h2>
-                    <h3 id="field-Subtitulo">Centro de Especialidades Médicas</h3>
+                    <h3 id="field-Subtitulo" style="display: none;"></h3>
                     <p id="header-direccion-line"></p>
                     <p id="header-contacto-line"></p>
                 </div>
@@ -136,36 +130,6 @@
         <div class="doctor-signature" id="sec-Firma-Medico">
             <span class="doc-name" id="field-Medico-tratante"></span>
             <span class="doc-spec" id="field-Especialidad-Medica"></span>
-        </div>
-
-        <!-- PIE DE PÁGINA -->
-        <div class="footer">
-            <p id="sec-Direccion">
-                <span class="footer-item">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                    <span id="field-Direccion"></span>
-                </span>
-            </p>
-            <p id="sec-Contactos-Tel">
-                <span id="sec-Telefonos" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-                    <strong>Telfs:</strong> <span id="field-Telefonos"></span>
-                </span>
-                <span id="sec-Whatsapp" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 16.5c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.188 8.188 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.183 8.183 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.22 8.24z"/></svg>
-                    <strong>WhatsApp:</strong> <span id="field-Whatsapp"></span>
-                </span>
-            </p>
-            <p id="sec-Contactos-Digital">
-                <span id="sec-Redes" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5.02 3.66 9.17 8.44 9.9v-7 h-3v-2.88h3v-2.2c0-2.97 1.77-4.6 4.47-4.6 1.29 0 2.64.23 2.64.23v2.91h-1.49c-1.47 0-1.93.91-1.93 1.85v1.81h3.28l-.52 2.88h-2.76v7c4.78-.73 8.44-4.88 8.44-9.9 0-5.53-4.5-10.02-10-10.02z"/></svg>
-                    <span id="field-Redes"></span>
-                </span>
-                <span id="sec-Correo" class="footer-item" style="display:none;">
-                    <svg class="icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                    <span id="field-Correo"></span>
-                </span>
-            </p>
         </div>
     </div>
 
@@ -236,8 +200,8 @@
             const rawLogoURL = p['LogoCentro'] || p['Logo'] || p['Logo URL'] || defaultLogo;
             const logoURL = convertirUrlDrive(rawLogoURL);
 
-            const tituloText = p['Titulo'] || p['Título'] || 'INNOVA MED';
-            const subtituloText = p['Subtítulo'] || p['Subtitulo'] || 'Centro de Especialidades Médicas';
+            const tituloText = p['Titulo'] || p['Título'] || '';
+            const subtituloText = p['Subtítulo'] || p['Subtitulo'] || '';
             const direccionText = p['Dirección'] || p['Direccion'] || '';
             
             const tel1 = p['Numero de telefono principal'] || '';
@@ -249,7 +213,6 @@
 
             const secLogo = document.getElementById('sec-Logo-Container');
             const imgLogo = document.getElementById('logo-centro');
-            const secHeaderInfo = document.getElementById('sec-Header-Info');
             const elTitulo = document.getElementById('field-Titulo');
             const elSubtitulo = document.getElementById('field-Subtitulo');
             const elHeaderDireccion = document.getElementById('header-direccion-line');
@@ -262,10 +225,20 @@
                 secLogo.style.display = 'none';
             }
 
-            elTitulo.innerText = tituloText;
-            elSubtitulo.innerText = subtituloText;
+            if (tituloText) {
+                elTitulo.innerText = tituloText;
+                elTitulo.style.display = 'block';
+            } else {
+                elTitulo.style.display = 'none';
+            }
 
-            // Rellenar líneas adicionales del membrete si existen datos
+            if (subtituloText) {
+                elSubtitulo.innerText = subtituloText;
+                elSubtitulo.style.display = 'block';
+            } else {
+                elSubtitulo.style.display = 'none';
+            }
+
             if (direccionText) {
                 elHeaderDireccion.innerText = direccionText;
                 elHeaderDireccion.style.display = 'block';
@@ -297,30 +270,6 @@
                 document.getElementById('sec-Firma-Medico').style.display = 'none';
             } else {
                 document.getElementById('sec-Firma-Medico').style.display = 'block';
-            }
-
-            // PIE DE PÁGINA (Reserva en caso de extender datos)
-            if (direccionText) document.getElementById('field-Direccion').innerText = direccionText;
-            else document.getElementById('sec-Direccion').style.display = 'none';
-
-            if (telfsFinal) {
-                document.getElementById('field-Telefonos').innerText = telfsFinal;
-                document.getElementById('sec-Telefonos').style.display = 'inline-flex';
-            }
-
-            if (waText) {
-                document.getElementById('field-Whatsapp').innerText = waText;
-                document.getElementById('sec-Whatsapp').style.display = 'inline-flex';
-            }
-
-            if (redesText) {
-                document.getElementById('field-Redes').innerText = redesText;
-                document.getElementById('sec-Redes').style.display = 'inline-flex';
-            }
-
-            if (correoText) {
-                document.getElementById('field-Correo').innerText = correoText;
-                document.getElementById('sec-Correo').style.display = 'inline-flex';
             }
 
             // DATOS DEL PACIENTE
@@ -428,8 +377,8 @@
             var edad = datos['Edad'] || datos['Edad Paciente'] || '';
             var ci = datos['Cedula'] || datos['Cedula Paciente'] || datos['C.I'] || '';
 
-            var titulo = datos['Titulo'] || datos['Título'] || 'INNOVA MED';
-            var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || 'Centro de Especialidades Médicas';
+            var titulo = datos['Titulo'] || datos['Título'] || '';
+            var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
             var rawLogoURL = datos['LogoCentro'] || datos['Logo'] || datos['Logo URL'] || "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
             var logoURL = convertirUrlDrive(rawLogoURL);
             
@@ -449,12 +398,12 @@
 
             if (node) {
                 var clone = node.cloneNode(true);
-                clone.querySelectorAll('.header, .footer, #footer, footer, .patient-info, .patient-grid, .divider, hr, .doctor-signature').forEach(function(el) { el.remove(); });
+                clone.querySelectorAll('.header, .patient-info, .patient-grid, .divider, hr, .doctor-signature').forEach(function(el) { el.remove(); });
                 var reportBody = clone.querySelector('.report-body');
                 if (reportBody) cuerpoHTML = reportBody.innerHTML;
             }
 
-            // Membrete en tabla para compatibilidad con Word
+            // Membrete en tabla para MS Word
             var lineasInfoMembrete = [];
             if (direccion) lineasInfoMembrete.push(direccion);
             
@@ -474,8 +423,8 @@
                             <img src="${logoURL}" width="160" height="110" style="width:160pt; height:110pt; display:block;" alt="Logo">
                         </td>
                         <td style="vertical-align:middle; text-align:center; padding:0 0 0 10pt;">
-                            <p style="font-family:Arial, sans-serif; font-size:13pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>
-                            <p style="font-family:Arial, sans-serif; font-size:10pt; line-height:1.15; margin:2pt 0 0 0; color:#333333;">${subtitulo}</p>
+                            ${titulo ? `<p style="font-family:Arial, sans-serif; font-size:13pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>` : ''}
+                            ${subtitulo ? `<p style="font-family:Arial, sans-serif; font-size:10pt; line-height:1.15; margin:2pt 0 0 0; color:#333333;">${subtitulo}</p>` : ''}
                             ${extraInfoHTML}
                         </td>
                     </tr>
@@ -510,7 +459,7 @@
             `;
 
             var docFirmaWordHTML = medico ? `
-                <p style="text-align:center; margin-top:25pt; margin-bottom:15pt; font-family:Arial, sans-serif; font-size:11pt; line-height:1.2;">
+                <p style="text-align:center; margin-top:35pt; margin-bottom:15pt; font-family:Arial, sans-serif; font-size:11pt; line-height:1.2;">
                     <strong>${medico}</strong><br>
                     <span>${especialidad}</span>
                 </p>

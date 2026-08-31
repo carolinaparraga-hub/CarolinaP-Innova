@@ -10,10 +10,11 @@
         .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 10mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
         .content-area { flex-grow: 1; }
         
-        /* Membrete Web / PDF (Ajustado espacio con la línea) */
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 6px; }
+        /* Membrete Web / PDF (Estilo Flexible según presencia de Logo/Texto) */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 6px; width: 100%; }
+        .header-logo-container { display: flex; align-items: center; }
         .header-logo { max-width: 200px; max-height: 180px; width: auto; height: auto; object-fit: contain; display: block; }
-        .header-info { text-align: center; flex-grow: 1; padding-left: 10px; }
+        .header-info { text-align: center; flex-grow: 1; }
         .header-info h2 { margin: 0; font-size: 14pt; font-weight: bold; text-transform: uppercase; }
         .header-info h3 { margin: 4px 0 0 0; font-size: 11pt; font-weight: normal; }
         
@@ -69,12 +70,12 @@
 
     <div class="page" id="informe-content">
         <div class="content-area">
-            <!-- MEMBRETE -->
-            <div class="header">
-                <div>
-                    <img src="https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq" alt="Logo" class="header-logo" id="logo-centro">
+            <!-- MEMBRETE DINÁMICO -->
+            <div class="header" id="sec-Header">
+                <div class="header-logo-container" id="sec-Logo-Container" style="display: none;">
+                    <img src="" alt="Logo" class="header-logo" id="logo-centro">
                 </div>
-                <div class="header-info">
+                <div class="header-info" id="sec-Header-Info" style="display: none;">
                     <h2 id="field-Titulo"></h2>
                     <h3 id="field-Subtitulo"></h3>
                 </div>
@@ -172,6 +173,16 @@
     </div>
 
     <script>
+        function convertirUrlDrive(url) {
+            if (!url) return '';
+            // Si es un enlace de vista previa de Drive, extrae el ID y convierte a formato directo uc
+            const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+            }
+            return url;
+        }
+
         function obtenerParametros() {
             const params = {};
             const queryString = window.location.search.substring(1);
@@ -219,9 +230,57 @@
         window.onload = function() {
             p = obtenerParametros();
 
-            document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
-            document.getElementById('field-Subtitulo').innerText = p['Subtítulo'] || p['Subtitulo'] || '';
-            
+            // LÓGICA DEL MEMBRETE (LOGO Y TEXTO)
+            const defaultLogo = "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
+            const rawLogoURL = p['LogoCentro'] || p['Logo'] || p['Logo URL'] || defaultLogo;
+            const logoURL = convertirUrlDrive(rawLogoURL);
+
+            const tituloText = p['Titulo'] || p['Título'] || '';
+            const subtituloText = p['Subtítulo'] || p['Subtitulo'] || '';
+
+            const secLogo = document.getElementById('sec-Logo-Container');
+            const imgLogo = document.getElementById('logo-centro');
+            const secHeaderInfo = document.getElementById('sec-Header-Info');
+            const elTitulo = document.getElementById('field-Titulo');
+            const elSubtitulo = document.getElementById('field-Subtitulo');
+            const secHeader = document.getElementById('sec-Header');
+
+            let tieneLogo = false;
+            let tieneTexto = false;
+
+            if (logoURL) {
+                imgLogo.src = logoURL;
+                secLogo.style.display = 'flex';
+                tieneLogo = true;
+            } else {
+                secLogo.style.display = 'none';
+            }
+
+            if (tituloText || subtituloText) {
+                elTitulo.innerText = tituloText;
+                elSubtitulo.innerText = subtituloText;
+                secHeaderInfo.style.display = 'block';
+                tieneTexto = true;
+            } else {
+                secHeaderInfo.style.display = 'none';
+            }
+
+            if (!tieneLogo && !tieneTexto) {
+                secHeader.style.display = 'none';
+            } else {
+                secHeader.style.display = 'flex';
+                if (tieneLogo && !tieneTexto) {
+                    secHeader.style.justifyContent = 'center';
+                } else if (!tieneLogo && tieneTexto) {
+                    secHeader.style.justifyContent = 'center';
+                    secHeaderInfo.style.textAlign = 'center';
+                } else {
+                    secHeader.style.justifyContent = 'space-between';
+                    secHeaderInfo.style.textAlign = 'center';
+                }
+            }
+
+            // FIRMA Y MÉDICO
             let nombreMedico = obtenerMedico(p);
             let especialidad = p['Especialidad Medico'] || p['Especialidad'] || p['Especialidad Medica'] || p['Especialidad medica'] || '';
 
@@ -234,6 +293,7 @@
                 document.getElementById('sec-Firma-Medico').style.display = 'block';
             }
 
+            // PIE DE PÁGINA
             if (p['Dirección'] || p['Direccion']) document.getElementById('field-Direccion').innerText = p['Dirección'] || p['Direccion'];
             else document.getElementById('sec-Direccion').style.display = 'none';
 
@@ -259,6 +319,7 @@
                 document.getElementById('sec-Correo').style.display = 'inline-flex';
             }
 
+            // DATOS DEL PACIENTE
             const mapaPaciente = [
                 { keys: ['Fecha'], target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
                 { keys: ['Nombre y Apellido', 'Nombre Paciente', 'Paciente'], target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
@@ -284,6 +345,7 @@
                 }
             });
 
+            // RENDER SECCIONES SIN TÍTULO FIJO
             const renderDirectoSinTitulo = [
                 { keys: ['Consideraciones'], sec: 'sec-Consideraciones' },
                 { keys: ['Registro'], sec: 'sec-Registro' }
@@ -305,6 +367,7 @@
                 }
             });
 
+            // CAMPOS CON CAMPOS / ESTRUCTURA DE INFORME
             const mapaInforme = [
                 { keys: ['Fc máxima y sub máxima según edad y sexo:'], target: 'val-Fc-maxima-y-sub-maxima', sec: 'sec-Fc-maxima-y-sub-maxima' },
                 { keys: ['EKG en reposo'], target: 'val-EKG-en-reposo', sec: 'sec-EKG-en-reposo' },
@@ -337,6 +400,7 @@
                 }
             });
 
+            // CONCLUSIÓN
             const valConclusion = p['Conslusión'] || p['Conclusion'] || p['Conclusión'] || '';
             const secConclusion = document.getElementById('sec-Conclusion-Container');
             const elConclusion = document.getElementById('val-Conclusion');
@@ -360,14 +424,14 @@
             var edad = datos['Edad'] || datos['Edad Paciente'] || '';
             var ci = datos['Cedula'] || datos['Cedula Paciente'] || datos['C.I'] || '';
 
-            var titulo = datos['Titulo'] || '';
+            var titulo = datos['Titulo'] || datos['Título'] || '';
             var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
+            var rawLogoURL = datos['LogoCentro'] || datos['Logo'] || datos['Logo URL'] || "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
+            var logoURL = convertirUrlDrive(rawLogoURL);
             
             var medico = obtenerMedico(datos);
             var especialidad = datos['Especialidad Medico'] || datos['Especialidad'] || datos['Especialidad Medica'] || '';
-
             var direccion = datos['Dirección'] || datos['Direccion'] || '';
-            var logoURL = 'https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq';
 
             var node = document.getElementById("informe-content");
             var cuerpoHTML = '';
@@ -379,10 +443,16 @@
                 if (reportBody) cuerpoHTML = reportBody.innerHTML;
             }
 
-            /* Membrete estricto para Word fijando dimensiones en la imagen */
-            var headerHTML = `
-                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse;">
-                    <tr>
+            // Construcción dinámica del membrete para Word
+            var headerHTML = '';
+            var tieneLogo = !!logoURL;
+            var tieneTexto = !!(titulo || subtitulo);
+
+            if (tieneLogo || tieneTexto) {
+                headerHTML = '<table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse;"><tr>';
+                
+                if (tieneLogo && tieneTexto) {
+                    headerHTML += `
                         <td style="width:170pt; vertical-align:middle; text-align:left; padding:0;">
                             <img src="${logoURL}" width="200" height="160" style="width:200pt; height:160pt; display:block;" alt="Logo">
                         </td>
@@ -390,10 +460,24 @@
                             <p style="font-family:Arial, sans-serif; font-size:13pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>
                             <p style="font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.15; margin:3pt 0 0 0;">${subtitulo}</p>
                         </td>
-                    </tr>
-                </table>
-                <div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:10pt;"></div>
-            `;
+                    `;
+                } else if (tieneLogo && !tieneTexto) {
+                    headerHTML += `
+                        <td style="vertical-align:middle; text-align:center; padding:0;">
+                            <img src="${logoURL}" width="200" height="160" style="width:200pt; height:160pt; display:inline-block;" alt="Logo">
+                        </td>
+                    `;
+                } else if (!tieneLogo && tieneTexto) {
+                    headerHTML += `
+                        <td style="vertical-align:middle; text-align:center; padding:0;">
+                            <p style="font-family:Arial, sans-serif; font-size:13pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>
+                            <p style="font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.15; margin:3pt 0 0 0;">${subtitulo}</p>
+                        </td>
+                    `;
+                }
+                
+                headerHTML += '</tr></table><div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:10pt;"></div>';
+            }
 
             var fechaInforme = datos['Fecha'] || datos['Fecha Informe'] || '';
 

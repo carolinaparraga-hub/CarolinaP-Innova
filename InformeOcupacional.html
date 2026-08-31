@@ -40,51 +40,73 @@ body {
 }
 
 /* =========================================================
-   MEMBRETE
+   MEMBRETE UNIFICADO
 ========================================================= */
 
 .header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    border-bottom: 1.5px solid #000;
     padding-bottom: 2px;
     margin-bottom: 8px;
 }
 
 .header-logo-container {
-    width: 150px;
-    min-width: 150px;
-    text-align: left;
+    width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .header-logo {
-    max-width: 260px;
-    max-height: 160px;
+    max-width: 100%;
+    height: auto;
     object-fit: contain;
 }
 
 .header-info {
-    flex-grow: 1;
     text-align: center;
+    flex-grow: 1;
+    padding-left: 15px;
 }
 
 .header-info h2 {
     margin: 0;
-    font-size: 14pt;
+    font-size: 12pt;
     font-weight: bold;
     text-transform: uppercase;
+    line-height: 1.1;
 }
 
 .header-info h3 {
-    margin: 3px 0;
-    font-size: 10.5pt;
+    margin: 2px 0 2px 0;
+    font-size: 10pt;
     font-weight: normal;
+    line-height: 1.1;
 }
 
-.header-info p {
-    margin: 2px 0;
-    font-size: 9.5pt;
-    font-weight: bold;
+.header-divider {
+    border-bottom: 1.5px solid #000;
+    margin: 4px 0 4px 0;
+}
+
+.header-info .address-line {
+    margin: 3px 0 2px 0;
+    font-size: 8.5pt;
+    font-weight: normal;
+    line-height: 1.1;
+}
+
+.header-info .contact-line {
+    margin: 0;
+    font-size: 8.5pt;
+    font-weight: normal;
+    line-height: 1.1;
+}
+
+.contact-item {
+    display: inline-block;
+    margin: 0 4px;
 }
 
 /* =========================================================
@@ -252,24 +274,6 @@ body {
 }
 
 /* =========================================================
-   PIE DE PÁGINA
-========================================================= */
-
-.footer {
-    border-top: 1px solid #000;
-    padding-top: 7px;
-    margin-top: 15px;
-    text-align: center;
-    font-size: 8pt;
-    line-height: 1.3;
-    color: #222;
-}
-
-.footer p {
-    margin: 2px 0;
-}
-
-/* =========================================================
    BOTONES
 ========================================================= */
 
@@ -332,7 +336,7 @@ body {
 <div class="content-area">
 
 <!-- =====================================================
-     MEMBRETE
+     MEMBRETE CON CONTACTO INTEGRADO
 ===================================================== -->
 
 <div class="header">
@@ -347,6 +351,27 @@ body {
     <div class="header-info">
         <h2 id="field-Titulo"></h2>
         <h3 id="field-Subtitulo"></h3>
+
+        <div class="header-divider"></div>
+
+        <div class="address-line" id="sec-Direccion" style="display:none;">
+            <span id="field-Direccion"></span>
+        </div>
+
+        <div class="contact-line">
+            <span id="sec-Telefonos" class="contact-item" style="display:none;">
+                <strong>Telfs:</strong> <span id="field-Telefonos"></span>
+            </span>
+            <span id="sec-Whatsapp" class="contact-item" style="display:none;">
+                | <strong>WhatsApp:</strong> <span id="field-Whatsapp"></span>
+            </span>
+            <span id="sec-Redes" class="contact-item" style="display:none;">
+                | <span id="field-Redes"></span>
+            </span>
+            <span id="sec-Correo" class="contact-item" style="display:none;">
+                | <span id="field-Correo"></span>
+            </span>
+        </div>
     </div>
 </div>
 
@@ -594,16 +619,6 @@ body {
 
 </div>
 
-<!-- =====================================================
-     PIE DE PÁGINA
-===================================================== -->
-
-<div class="footer">
-    <p id="footer-direccion"></p>
-    <p id="footer-contactos"></p>
-    <p id="footer-digital"></p>
-</div>
-
 </div>
 
 <!-- =====================================================
@@ -733,6 +748,70 @@ window.onload = function() {
     colocarValor("field-Titulo", p["Titulo"]);
     colocarValor("field-Subtitulo", p["Subtítulo"] || p["Subtitulo"]);
 
+    /* DIRECCIÓN */
+    const direccion = p["Dirección"] || p["Direccion"] || "";
+    const secDireccion = document.getElementById("sec-Direccion");
+    const fieldDireccion = document.getElementById("field-Direccion");
+    if (direccion) {
+        fieldDireccion.innerText = direccion;
+        secDireccion.style.display = "block";
+    } else {
+        secDireccion.style.display = "none";
+    }
+
+    /* TELÉFONOS */
+    const tel1 = p["Numero de telefono principal"] || "";
+    const tel2 = p["Numero secundario"] || "";
+    let telefonos = "";
+    if (tel1 && tel2) {
+        telefonos = `${tel1} / ${tel2}`;
+    } else if (tel1) {
+        telefonos = tel1;
+    } else if (tel2) {
+        telefonos = tel2;
+    }
+    const secTelefonos = document.getElementById("sec-Telefonos");
+    const fieldTelefonos = document.getElementById("field-Telefonos");
+    if (telefonos) {
+        fieldTelefonos.innerText = telefonos;
+        secTelefonos.style.display = "inline-block";
+    } else {
+        secTelefonos.style.display = "none";
+    }
+
+    /* WHATSAPP */
+    const whatsapp = p["Whatsapp"] || "";
+    const secWhatsapp = document.getElementById("sec-Whatsapp");
+    const fieldWhatsapp = document.getElementById("field-Whatsapp");
+    if (whatsapp) {
+        fieldWhatsapp.innerText = whatsapp;
+        secWhatsapp.style.display = "inline-block";
+    } else {
+        secWhatsapp.style.display = "none";
+    }
+
+    /* REDES SOCIALES */
+    const redes = p["Redes sociales"] || "";
+    const secRedes = document.getElementById("sec-Redes");
+    const fieldRedes = document.getElementById("field-Redes");
+    if (redes) {
+        fieldRedes.innerText = redes;
+        secRedes.style.display = "inline-block";
+    } else {
+        secRedes.style.display = "none";
+    }
+
+    /* CORREO ELECTRÓNICO */
+    const correo = p["Correo electronico"] || "";
+    const secCorreo = document.getElementById("sec-Correo");
+    const fieldCorreo = document.getElementById("field-Correo");
+    if (correo) {
+        fieldCorreo.innerText = correo;
+        secCorreo.style.display = "inline-block";
+    } else {
+        secCorreo.style.display = "none";
+    }
+
     marcarExamen(p["Examen de Salud"]);
 
     colocarValor("val-Cedula", p["Cedula"]);
@@ -796,38 +875,10 @@ window.onload = function() {
     } else {
         document.getElementById("sec-medidas").style.display = "none";
     }
-
-    let direccion = p["Dirección"] || "";
-    let telefono1 = p["Numero de telefono principal"] || "";
-    let telefono2 = p["Numero secundario"] || "";
-    let whatsapp = p["Whatsapp"] || "";
-    let redes = p["Redes sociales"] || "";
-    let correo = p["Correo electronico"] || "";
-
-    if (direccion) {
-        document.getElementById("footer-direccion").innerText = "📍 " + direccion;
-    }
-
-    let telefonos = (telefono1 && telefono2) ? telefono1 + " / " + telefono2 : (telefono1 || telefono2);
-    let contactos = "";
-    if (telefonos) contactos = "📞 Telfs: " + telefonos;
-    if (whatsapp) {
-        if (contactos) contactos += "   |   ";
-        contactos += "💬 WhatsApp: " + whatsapp;
-    }
-    document.getElementById("footer-contactos").innerText = contactos;
-
-    let digital = "";
-    if (redes) digital = "🌐 " + redes;
-    if (correo) {
-        if (digital) digital += "   |   ";
-        digital += "✉ " + correo;
-    }
-    document.getElementById("footer-digital").innerText = digital;
 };
 
 /* =========================================================
-   DESCARGAR WORD CON PIE DE PÁGINA NATIVO Y NORMA TÉCNICA
+   DESCARGAR WORD CON MEMBRETE UNIFICADO
 ========================================================= */
 
 function descargarWord() {
@@ -835,13 +886,21 @@ function descargarWord() {
     const paciente = datos["Nombre y Apellido"] || "Trabajador";
     const titulo = datos["Titulo"] || "CENTRO MÉDICO";
     const subtitulo = datos["Subtítulo"] || datos["Subtitulo"] || "";
-    const direccion = datos["Dirección"] || "";
+    const direccion = datos["Dirección"] || datos["Direccion"] || "";
     const telefono1 = datos["Numero de telefono principal"] || "";
     const telefono2 = datos["Numero secundario"] || "";
     const whatsapp = datos["Whatsapp"] || "";
     const redes = datos["Redes sociales"] || "";
     const correo = datos["Correo electronico"] || "";
     const logoURL = "https://lh3.googleusercontent.com/d/1Sb0tOHFslGT7s1nRgAl45rmd--Q5NFoq";
+
+    const telfs = (telefono1 && telefono2) ? `${telefono1} / ${telefono2}` : (telefono1 || telefono2);
+
+    let contactoLinea2 = "";
+    if (telfs) contactoLinea2 += `Telfs: ${telfs}`;
+    if (whatsapp) contactoLinea2 += (contactoLinea2 ? " | " : "") + `WhatsApp: ${whatsapp}`;
+    if (redes) contactoLinea2 += (contactoLinea2 ? " | " : "") + `${redes}`;
+    if (correo) contactoLinea2 += (contactoLinea2 ? " | " : "") + `${correo}`;
 
     const examen = datos["Examen de Salud"] || "";
     function circulo(tipo) {
@@ -874,23 +933,20 @@ function descargarWord() {
     `;
 
     const headerHTML = `
-        <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0;">
+        <table style="width:100%; border-collapse:collapse; table-layout:fixed; margin:0; padding:0;">
             <tr>
-                <td style="width:125px; vertical-align:middle; text-align:left; padding:0;">
-                    <img src="${logoURL}" width="220" height="160" style="width:220px; height:160px; display:block; object-fit:contain;">
+                <td style="width:30%; vertical-align:middle; text-align:left; padding:0;">
+                    <img src="${logoURL}" width="150" height="70" style="width:150px; height:70px; display:block; object-fit:contain;" alt="Logo">
                 </td>
-                <td style="vertical-align:middle; text-align:center; padding:0 10px;">
-                    <div style="font-family:Arial,sans-serif; font-size:13pt; font-weight:bold; line-height:1.1;">
-                        ${titulo}
-                    </div>
-                    <div style="font-family:Arial,sans-serif; font-size:10.5pt; margin-top:3pt;">
-                        ${subtitulo}
-                    </div>
+                <td style="width:70%; vertical-align:middle; text-align:center; padding:0;">
+                    <div style="font-family:Arial, sans-serif; font-size:12pt; font-weight:bold; line-height:1.1; margin:0;">${titulo}</div>
+                    ${subtitulo ? `<div style="font-family:Arial, sans-serif; font-size:10pt; line-height:1.1; margin:2pt 0 0 0;">${subtitulo}</div>` : ''}
+                    <div style="border-bottom:1.5pt solid #000000; margin-top:3pt; margin-bottom:3pt; height:1pt; line-height:1pt;"></div>
+                    ${direccion ? `<div style="font-family:Arial, sans-serif; font-size:8.5pt; line-height:1.1; margin:0;">${direccion}</div>` : ''}
+                    ${contactoLinea2 ? `<div style="font-family:Arial, sans-serif; font-size:8.5pt; line-height:1.1; margin:1pt 0 0 0;">${contactoLinea2}</div>` : ''}
                 </td>
-                <td style="width:50px;">&nbsp;</td>
             </tr>
         </table>
-        <div style="border-bottom:1.5pt solid #000; margin-top:5pt;"></div>
     `;
 
     const workerHTML = `
@@ -1008,27 +1064,6 @@ function descargarWord() {
         </table>
     `;
 
-    let telefonos = (telefono1 && telefono2) ? telefono1 + " / " + telefono2 : (telefono1 || telefono2);
-    let footerDireccion = direccion ? `📍 ${direccion}` : "";
-    let footerContactos = telefonos ? `📞 Telfs: ${telefonos}` : "";
-    if (whatsapp) {
-        if (footerContactos) footerContactos += "   |   ";
-        footerContactos += `💬 WhatsApp: ${whatsapp}`;
-    }
-    let footerDigital = redes ? `🌐 ${redes}` : "";
-    if (correo) {
-        if (footerDigital) footerDigital += "   |   ";
-        footerDigital += `✉ ${correo}`;
-    }
-
-    const footerHTML = `
-        <div class="MsoFooter" style="font-family:Arial,sans-serif; font-size:8pt; color:#333; text-align:center; border-top:0.75pt solid #555; padding-top:4pt; line-height:1.1;">
-            ${footerDireccion ? `<p>${footerDireccion}</p>` : ""}
-            ${footerContactos ? `<p>${footerContactos}</p>` : ""}
-            ${footerDigital ? `<p>${footerDigital}</p>` : ""}
-        </div>
-    `;
-
     const preHtml = `
 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
 <head>
@@ -1038,12 +1073,8 @@ function descargarWord() {
 @page Section1 {
     size:595.3pt 841.9pt;
     margin: 0.55in 0.65in 0.75in 0.65in;
-    mso-header-margin:0.3in;
-    mso-footer-margin:0.30in;
-    mso-footer:f1;
 }
 div.Section1 { page:Section1; }
-table#hrdftrtbl { margin:0in 0in 0in 900in; width:1px; height:1px; overflow:hidden; }
 body { font-family:Arial, sans-serif; font-size:9.5pt; color:#000000; line-height:1.15; margin:0; padding:0; }
 p { margin-top:0; margin-bottom:3pt; line-height:1.15; }
 </style>
@@ -1060,15 +1091,6 @@ ${conclusionHTML}
 ${medidasHTML}
 ${firmaHTML}
 </div>
-<table id="hrdftrtbl" border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td>
-<div style="mso-element:footer" id="f1">
-${footerHTML}
-</div>
-</td>
-</tr>
-</table>
 </body>
 </html>
 `;

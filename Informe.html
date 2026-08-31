@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informe Médico</title>
+    <title id="doc-page-title">Informe Médico</title>
 
     <style>
         /* =====================================================
@@ -302,8 +302,8 @@
 
         <div class="divider"></div>
 
-        <!-- TÍTULO DE INFORME -->
-        <div class="report-title">
+        <!-- TÍTULO DE INFORME DINÁMICO -->
+        <div class="report-title" id="report-main-title">
             Informe Médico
         </div>
 
@@ -383,6 +383,11 @@
 
         window.onload = function() {
             p = obtenerParametros();
+
+            /* TÍTULO DEL INFORME DINÁMICO */
+            const tipoInforme = p['Tipo de informe'] || p['Tipo de Informe'] || 'Informe Médico';
+            document.getElementById('report-main-title').innerText = tipoInforme;
+            document.getElementById('doc-page-title').innerText = tipoInforme;
 
             document.getElementById('field-Titulo').innerText = p['Titulo'] || '';
             document.getElementById('field-Subtitulo').innerText = p['Subtitulo'] || '';
@@ -490,6 +495,7 @@
         function descargarWord() {
             var datos = (typeof p !== 'undefined') ? p : {};
 
+            var tipoInforme = datos['Tipo de informe'] || datos['Tipo de Informe'] || 'Informe Médico';
             var paciente = datos['Nombre y Apellido'] || '';
             var edad = datos['Edad'] || '';
             var ci = datos['Cedula'] || '';
@@ -574,7 +580,7 @@
                 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
                 <head>
                     <meta charset="utf-8">
-                    <title>Informe Médico</title>
+                    <title>${tipoInforme}</title>
                     <style>
                         @page Section1 {
                             size:595.3pt 841.9pt;
@@ -593,18 +599,20 @@
                     <div class="Section1">
                         ${headerHTML}
                         ${patientHTML}
-                        <div class="doc-title" align="center"><u><b>Informe Médico</b></u></div>
+                        <div class="doc-title" align="center"><u><b>${tipoInforme}</b></u></div>
                         <div class="report-body">${cuerpoHTML}</div>
                     </div>
                 </body>
                 </html>
             `;
 
+            var nombreArchivo = tipoInforme.replace(/\s+/g, '_') + '_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';
+
             var blob = new Blob(['\ufeff', preHtml], { type:'application/msword' });
             var url = URL.createObjectURL(blob);
             var a = document.createElement("a");
             a.href = url;
-            a.download = 'Informe_Medico_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';
+            a.download = nombreArchivo;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

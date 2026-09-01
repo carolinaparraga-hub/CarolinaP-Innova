@@ -581,17 +581,29 @@ function obtenerParametros() {
 }
 
 function formatearFechaLatina(fechaStr) {
-    if (!fechaStr) return "";
-    let fecha = fechaStr.trim();
+    if (!fechaStr || fechaStr === "null" || fechaStr === "undefined") return "";
+    const cleanDate = fechaStr.trim();
+    if (!cleanDate) return "";
 
-    if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
-        const partes = fecha.split("-");
-        return partes[2] + "/" + partes[1] + "/" + partes[0];
+    if (cleanDate.includes('-')) {
+        const parts = cleanDate.split('-');
+        if (parts.length === 3) {
+            if (parts[0].length === 4) return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+            return `${parts[0].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[2]}`;
+        }
     }
-    if (/^\d{2}\/\d{2}\/\d{4}$/.test(fecha)) {
-        return fecha;
+
+    if (cleanDate.includes('/')) {
+        const parts = cleanDate.split('/');
+        if (parts.length === 3) {
+            if (parts[0].length === 4) {
+                return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+            }
+            return `${parts[1].padStart(2, '0')}/${parts[0].padStart(2, '0')}/${parts[2]}`;
+        }
     }
-    return fecha;
+
+    return cleanDate;
 }
 
 function colocarValorOcultar(idVal, idWrap, valor) {
@@ -854,7 +866,7 @@ function descargarWord() {
                     <strong>Número de cédula del trabajador:</strong><br>${datos["Cedula"] || ""}
                 </td>
                 <td style="width:50%; border:1px solid #777; padding:5pt; vertical-align:top;">
-                    <strong>Fecha de emisión del informe:</strong><br>${datos["Fecha de emisión del informe"] ? formatearFechaLatina(datos["Fecha de emisión del informe"]) : ""}
+                    <strong>Fecha de emisión del informe:</strong><br>${formatearFechaLatina(datos["Fecha de emisión del informe"])}
                 </td>
             </tr>
             <tr>
@@ -870,7 +882,7 @@ function descargarWord() {
                     <strong>Área donde labora y ha laborado el trabajador:</strong><br>${datos["Área donde labora y ha laborado el trabajador"] || ""}
                 </td>
                 <td style="border:1px solid #777; padding:5pt; vertical-align:top;">
-                    <strong>Fecha:</strong><br>${datos["Fecha"] ? formatearFechaLatina(datos["Fecha"]) : ""}
+                    <strong>Fecha:</strong><br>${formatearFechaLatina(datos["Fecha"])}
                 </td>
             </tr>
         </table>

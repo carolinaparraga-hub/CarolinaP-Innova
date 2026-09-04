@@ -164,11 +164,17 @@
         }
 
         function obtenerMedico(p) {
-            return p['Medico Tratante'] || p['Medico tratante'] || p['Medico+tratante'] || p['Medico'] || p['Doctor'] || p['MedicoTratante'] || '';
+            return p['Medico Tratante'] || p['Médico Tratante'] || 
+                   p['Medico tratante'] || p['Médico tratante'] || 
+                   p['Medico'] || p['Médico'] || 
+                   p['Doctor'] || p['MedicoTratante'] || '';
         }
 
         function obtenerEspecialidad(p) {
-            return p['Especialidad Medica'] || p['Especialidad+Medica'] || p['Especialidad medica'] || p['Especialidad Medico'] || p['Especialidad'] || '';
+            return p['Especialidad Medica'] || p['Especialidad Médica'] || 
+                   p['Especialidad medica'] || p['Especialidad médica'] || 
+                   p['Especialidad Medico'] || p['Especialidad Médico'] || 
+                   p['Especialidad'] || '';
         }
 
         function procesarTextoConViñetas(texto) {
@@ -195,11 +201,11 @@
             const subtituloText = p['Subtítulo'] || p['Subtitulo'] || '';
             const direccionText = p['Dirección'] || p['Direccion'] || '';
             
-            const tel1 = p['Numero de telefono principal'] || '';
-            const tel2 = p['Numero secundario'] || '';
+            const tel1 = p['Numero de telefono principal'] || p['Número de teléfono principal'] || '';
+            const tel2 = p['Numero secundario'] || p['Número secundario'] || '';
             let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
-            const waText = p['Whatsapp'] || '';
-            const correoText = p['Correo electronico'] || '';
+            const waText = p['Whatsapp'] || p['WhatsApp'] || '';
+            const correoText = p['Correo electronico'] || p['Correo electrónico'] || '';
             const redesText = p['Redes sociales'] || '';
 
             const secLogo = document.getElementById('sec-Logo-Container');
@@ -267,7 +273,7 @@
             const mapaPaciente = [
                 { keys: ['Fecha'], target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
                 { keys: ['Nombre y Apellido', 'Nombre Paciente', 'Paciente'], target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
-                { keys: ['Cedula', 'Cedula Paciente', 'C.I', 'IDPaciente'], target: 'val-Cedula', sec: 'sec-Cedula' },
+                { keys: ['Cedula', 'Cédula', 'Cedula Paciente', 'Cédula Paciente', 'C.I', 'IDPaciente'], target: 'val-Cedula', sec: 'sec-Cedula' },
                 { keys: ['Edad', 'Edad Paciente'], target: 'val-Edad', sec: 'sec-Edad' }
             ];
 
@@ -301,16 +307,16 @@
 
             // CAMPOS DEL ECOCARDIOGRAMA
             const mapaInforme = [
-                { keys: ['Ventriculo Izquierdo'], target: 'val-Ventriculo-Izquierdo', sec: 'sec-Ventriculo-Izquierdo' },
-                { keys: ['Funcion Sistolica y Contractilidad'], target: 'val-Funcion-Sistolica-y-Contractilidad', sec: 'sec-Funcion-Sistolica-y-Contractilidad' },
-                { keys: ['Auricula Izquierda'], target: 'val-Auricula-Izquierda', sec: 'sec-Auricula-Izquierda' },
-                { keys: ['Funcion Diastolica'], target: 'val-Funcion-Diastolica', sec: 'sec-Funcion-Diastolica' },
-                { keys: ['Ventriculo Derecho y Auricula Derecha'], target: 'val-Ventriculo-Derecho-y-Auricula-Derecha', sec: 'sec-Ventriculo-Derecho-y-Auricula-Derecha' },
-                { keys: ['Valvula Mitral'], target: 'val-Valvula-Mitral', sec: 'sec-Valvula-Mitral' },
-                { keys: ['Valvula Aortica'], target: 'val-Valvula-Aortica', sec: 'sec-Valvula-Aortica' },
-                { keys: ['Valvula Pulmonar'], target: 'val-Valvula-Pulmonar', sec: 'sec-Valvula-Pulmonar' },
-                { keys: ['Valvula Tricuspide'], target: 'val-Valvula-Tricuspide', sec: 'sec-Valvula-Tricuspide' },
-                { keys: ['PSP Presion Sistolica Pulmonar'], target: 'val-PSP-Presion-Sistolica-Pulmonar', sec: 'sec-PSP-Presion-Sistolica-Pulmonar' },
+                { keys: ['Ventriculo Izquierdo', 'Ventricular Izquierdo'], target: 'val-Ventriculo-Izquierdo', sec: 'sec-Ventriculo-Izquierdo' },
+                { keys: ['Funcion Sistolica y Contractilidad', 'Función Sistólica y Contractilidad'], target: 'val-Funcion-Sistolica-y-Contractilidad', sec: 'sec-Funcion-Sistolica-y-Contractilidad' },
+                { keys: ['Auricula Izquierda', 'Aurícula Izquierda'], target: 'val-Auricula-Izquierda', sec: 'sec-Auricula-Izquierda' },
+                { keys: ['Funcion Diastolica', 'Función Diastólica'], target: 'val-Funcion-Diastolica', sec: 'sec-Funcion-Diastolica' },
+                { keys: ['Ventriculo Derecho y Auricula Derecha', 'Ventricular Derecho y Aurícula Derecha'], target: 'val-Ventriculo-Derecho-y-Auricula-Derecha', sec: 'sec-Ventriculo-Derecho-y-Auricula-Derecha' },
+                { keys: ['Valvula Mitral', 'Válvula Mitral'], target: 'val-Valvula-Mitral', sec: 'sec-Valvula-Mitral' },
+                { keys: ['Valvula Aortica', 'Válvula Aórtica'], target: 'val-Valvula-Aortica', sec: 'sec-Valvula-Aortica' },
+                { keys: ['Valvula Pulmonar', 'Válvula Pulmonar'], target: 'val-Valvula-Pulmonar', sec: 'sec-Valvula-Pulmonar' },
+                { keys: ['Valvula Tricuspide', 'Válvula Tricúspide'], target: 'val-Valvula-Tricuspide', sec: 'sec-Valvula-Tricuspide' },
+                { keys: ['PSP Presion Sistolica Pulmonar', 'PSP Presión Sistólica Pulmonar'], target: 'val-PSP-Presion-Sistolica-Pulmonar', sec: 'sec-PSP-Presion-Sistolica-Pulmonar' },
                 { keys: ['Pericardio'], target: 'val-Pericardio', sec: 'sec-Pericardio' }
             ];
 
@@ -355,7 +361,7 @@
 
             var paciente = datos['Nombre y Apellido'] || datos['Nombre Paciente'] || datos['Paciente'] || '';
             var edad = datos['Edad'] || datos['Edad Paciente'] || '';
-            var ci = datos['Cedula'] || datos['Cedula Paciente'] || datos['C.I'] || '';
+            var ci = datos['Cedula'] || datos['Cédula'] || datos['Cedula Paciente'] || datos['C.I'] || '';
 
             var titulo = datos['Titulo'] || datos['Título'] || '';
             var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
@@ -366,12 +372,12 @@
             var especialidad = obtenerEspecialidad(datos);
             var direccion = datos['Dirección'] || datos['Direccion'] || '';
 
-            var tel1 = datos['Numero de telefono principal'] || '';
-            var tel2 = datos['Numero secundario'] || '';
+            var tel1 = datos['Numero de telefono principal'] || datos['Número de teléfono principal'] || '';
+            var tel2 = datos['Numero secundario'] || datos['Número secundario'] || '';
             var telfs = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
-            var wa = datos['Whatsapp'] || '';
+            var wa = datos['Whatsapp'] || datos['WhatsApp'] || '';
             var redes = datos['Redes sociales'] || '';
-            var correo = datos['Correo electronico'] || '';
+            var correo = datos['Correo electronico'] || datos['Correo electrónico'] || '';
 
             var equipoUtilizado = datos['Equipo Utilizado'] || datos['Equipo'] || '';
 

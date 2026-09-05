@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe de Holter de Ritmo</title>
+    <style>
+        * { box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #f2f2f2; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; color: #000; }
+        .page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 10mm 20mm 15mm 20mm; box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); position: relative; display: flex; flex-direction: column; justify-content: space-between; }
+        .content-area { flex-grow: 1; }
+        
+        /* Membrete Web / PDF */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px; width: 100%; gap: 15px; }
+        .header-logo-container { display: flex; align-items: center; }
+        .header-logo { max-width: 180px; max-height: 120px; width: auto; height: auto; object-fit: contain; display: block; }
+        .header-info { text-align: center; flex-grow: 1; }
+        .header-info h2 { margin: 0; font-size: 13pt; font-weight: bold; text-transform: uppercase; }
+        .header-info h3 { margin: 3px 0; font-size: 10pt; font-weight: normal; color: #333; }
+        .header-info p { margin: 2px 0; font-size: 8.5pt; color: #444; line-height: 1.2; }
+        
+        /* Datos Paciente Compactos */
+        .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.2; }
+        .patient-info .date-row { text-align: right; font-weight: normal; margin-bottom: 6px; }
+        .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 4px; column-gap: 20px; }
+        .patient-grid .full-width { grid-column: span 2; }
+        .divider { border-bottom: 1px solid #ccc; margin: 8px 0 12px 0; }
+        
+        /* Título y Subtítulo Dinámico */
+        .report-title { text-align: center; font-size: 13.5pt; font-weight: bold; text-decoration: underline; margin: 14px 0 4px 0; text-transform: uppercase; }
+        .report-subtitle-equipment { text-align: center; font-size: 9.5pt; color: #555555; margin-bottom: 16px; font-weight: normal; }
+        
+        /* Cuerpo del Informe */
+        .report-body { font-size: 10.5pt; line-height: 1.35; text-align: justify; font-weight: normal; }
+        
+        /* Estilos para Viñetas Redondas Sin Negrita */
+        .bullet-list { margin: 0; padding-left: 24px; list-style-type: disc; }
+        .bullet-list li { margin-bottom: 6px; line-height: 1.35; font-weight: normal; }
+        .bullet-list span { font-weight: normal !important; }
+        
+        /* Estilo Conclusión */
+        .conclusion-container { margin-top: 14px; margin-bottom: 6px; }
+        .conclusion-header { font-weight: normal; font-size: 11pt; margin-bottom: 4px; }
+
+        /* Firma del Médico */
+        .doctor-signature { text-align: center; margin-top: 40px; margin-bottom: 10px; font-size: 11pt; line-height: 1.3; }
+        .doctor-signature .doc-name { font-weight: bold; display: block; }
+        .doctor-signature .doc-spec { display: block; font-weight: normal; }
+        
+        /* Botones Acción */
+        .action-buttons { margin-top: 25px; margin-bottom: 30px; display: flex; gap: 15px; justify-content: center; }
+        .btn { background-color: #1d5f99; color: #ffffff; border: none; padding: 10px 22px; font-size: 11pt; font-weight: bold; border-radius: 4px; cursor: pointer; font-family: Arial, sans-serif; }
+        .btn:hover { background-color: #14436d; }
+        
+        @media print {
+            body { background: none; padding: 0; }
+            .page { box-shadow: none; width: 100%; padding: 0; min-height: 100vh; }
+            .action-buttons { display: none !important; }
+            @page { size: A4; margin: 15mm; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page" id="informe-content">
+        <div class="content-area">
+            <!-- MEMBRETE DINÁMICO -->
+            <div class="header" id="sec-Header">
+                <div class="header-logo-container" id="sec-Logo-Container">
+                    <img src="https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu" alt="Logo" class="header-logo" id="logo-centro">
+                </div>
+                <div class="header-info" id="sec-Header-Info">
+                    <h2 id="field-Titulo">INNOVA MED</h2>
+                    <h3 id="field-Subtitulo" style="display: none;"></h3>
+                    <p id="header-direccion-line"></p>
+                    <p id="header-contacto-line"></p>
+                </div>
+            </div>
+
+            <!-- DATOS DEL PACIENTE -->
+            <div class="patient-info">
+                <div class="date-row" id="sec-Fecha">Fecha <span id="val-Fecha" style="font-weight: normal;"></span></div>
+                <div class="patient-grid">
+                    <div id="sec-Nombre-y-Apellido" class="full-width">Nombre y Apellido <span id="val-Nombre-y-Apellido" style="font-weight: normal;"></span></div>
+                    <div id="sec-Cedula">C.I <span id="val-Cedula" style="font-weight: normal;"></span></div>
+                    <div id="sec-Edad">Edad <span id="val-Edad" style="font-weight: normal;"></span></div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+            
+            <!-- TÍTULO Y EQUIPO UTILIZADO -->
+            <div class="report-title">INFORME DE HOLTER DE RITMO DE 24 HORAS</div>
+            <div class="report-subtitle-equipment" id="sec-Equipo-Utilizado"><span id="val-Equipo-Utilizado"></span></div>
+
+            <!-- CUERPO DEL INFORME (SOLO RESULTADOS CON VIÑETAS) -->
+            <div class="report-body">
+                <ul class="bullet-list">
+                    <li id="sec-Ritmo-Basal"><span id="val-Ritmo-Basal"></span></li>
+                    <li id="sec-Frecuencia-Cardiaca"><span id="val-Frecuencia-Cardiaca"></span></li>
+                    <li id="sec-Extrasistoles-Ventriculares"><span id="val-Extrasistoles-Ventriculares"></span></li>
+                    <li id="sec-Extrasistoles-Supraventriculares"><span id="val-Extrasistoles-Supraventriculares"></span></li>
+                    <li id="sec-Pausas-y-Segmento-ST"><span id="val-Pausas-y-Segmento-ST"></span></li>
+                </ul>
+
+                <!-- CONCLUSIÓN -->
+                <div class="conclusion-container" id="sec-Conclusion-Container" style="display: none;">
+                    <div class="conclusion-header">Conclusión</div>
+                    <ul class="bullet-list" style="padding-left: 20px;">
+                        <li id="val-Conclusion" style="font-weight: normal;"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- FIRMA / DATOS DEL MÉDICO -->
+        <div class="doctor-signature" id="sec-Firma-Medico">
+            <span class="doc-name" id="field-Medico-tratante"></span>
+            <span class="doc-spec" id="field-Especialidad-Medica"></span>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="btn" onclick="window.print()">Imprimir PDF</button>
+        <button class="btn" onclick="descargarWord()">Descargar Word</button>
+    </div>
+
+    <script>
+        function convertirUrlDrive(url) {
+            if (!url) return '';
+            const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                return `https://lh3.googleusercontent.com/d/${match[1]}`;
+            }
+            return url;
+        }
+
+        function obtenerParametros() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const pairs = queryString.split("&");
+            for (let i = 0; i < pairs.length; i++) {
+                if (!pairs[i]) continue;
+                const pair = pairs[i].split("=");
+                const key = decodeURIComponent(pair[0].replace(/\+/g, " ")).trim();
+                const value = decodeURIComponent((pair[1] || "").replace(/\+/g, " ")).trim();
+                params[key] = value;
+            }
+            return params;
+        }
+
+        function formatearFechaLatina(fechaStr) {
+            if (!fechaStr) return '';
+            let partes = fechaStr.split(/[-/]/);
+            if (partes[0].length === 4) return `${partes[2].padStart(2, '0')}/${partes[1].padStart(2, '0')}/${partes[0]}`;
+            if (partes.length === 3 && partes[2].length === 4) return `${partes[1].padStart(2, '0')}/${partes[0].padStart(2, '0')}/${partes[2]}`;
+            return fechaStr;
+        }
+
+        function obtenerMedico(p) {
+            return p['Medico Tratante'] || p['Médico Tratante'] || 
+                   p['Medico tratante'] || p['Médico tratante'] || 
+                   p['Medico'] || p['Médico'] || 
+                   p['Doctor'] || p['MedicoTratante'] || '';
+        }
+
+        function obtenerEspecialidad(p) {
+            return p['Especialidad Medica'] || p['Especialidad Médica'] || 
+                   p['Especialidad medica'] || p['Especialidad médica'] || 
+                   p['Especialidad Medico'] || p['Especialidad Médico'] || 
+                   p['Especialidad'] || '';
+        }
+
+        function procesarTextoConViñetas(texto) {
+            if (!texto) return '';
+            const lineas = texto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            if (lineas.length <= 1) return texto;
+            
+            return lineas.shift() + '<ul style="margin: 4px 0 0 0; padding-left: 18px; list-style-type: disc;">' + 
+                   lineas.map(linea => `<li style="font-weight: normal;">${linea}</li>`).join('') + 
+                   '</ul>';
+        }
+
+        let p = {};
+
+        window.onload = function() {
+            p = obtenerParametros();
+
+            // LÓGICA DEL MEMBRETE
+            const defaultLogo = "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
+            const rawLogoURL = p['LogoCentro'] || p['Logo'] || p['Logo URL'] || defaultLogo;
+            const logoURL = convertirUrlDrive(rawLogoURL);
+
+            const tituloText = p['Titulo'] || p['Título'] || '';
+            const subtituloText = p['Subtítulo'] || p['Subtitulo'] || '';
+            const direccionText = p['Dirección'] || p['Direccion'] || '';
+            
+            const tel1 = p['Numero de telefono principal'] || p['Número de teléfono principal'] || '';
+            const tel2 = p['Numero secundario'] || p['Número secundario'] || '';
+            let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+            const waText = p['Whatsapp'] || p['WhatsApp'] || '';
+            const correoText = p['Correo electronico'] || p['Correo electrónico'] || '';
+            const redesText = p['Redes sociales'] || '';
+
+            const secLogo = document.getElementById('sec-Logo-Container');
+            const imgLogo = document.getElementById('logo-centro');
+            const elTitulo = document.getElementById('field-Titulo');
+            const elSubtitulo = document.getElementById('field-Subtitulo');
+            const elHeaderDireccion = document.getElementById('header-direccion-line');
+            const elHeaderContacto = document.getElementById('header-contacto-line');
+
+            if (logoURL) {
+                imgLogo.src = logoURL;
+                secLogo.style.display = 'flex';
+            } else {
+                secLogo.style.display = 'none';
+            }
+
+            if (tituloText) {
+                elTitulo.innerText = tituloText;
+                elTitulo.style.display = 'block';
+            } else {
+                elTitulo.style.display = 'none';
+            }
+
+            if (subtituloText) {
+                elSubtitulo.innerText = subtituloText;
+                elSubtitulo.style.display = 'block';
+            } else {
+                elSubtitulo.style.display = 'none';
+            }
+
+            if (direccionText) {
+                elHeaderDireccion.innerText = direccionText;
+                elHeaderDireccion.style.display = 'block';
+            } else {
+                elHeaderDireccion.style.display = 'none';
+            }
+
+            let partesContacto = [];
+            if (telfsFinal) partesContacto.push(`Telfs: ${telfsFinal}`);
+            if (waText) partesContacto.push(`WA: ${waText}`);
+            if (correoText) partesContacto.push(correoText);
+            if (redesText) partesContacto.push(redesText);
+
+            if (partesContacto.length > 0) {
+                elHeaderContacto.innerText = partesContacto.join(' | ');
+                elHeaderContacto.style.display = 'block';
+            } else {
+                elHeaderContacto.style.display = 'none';
+            }
+
+            // FIRMA Y MÉDICO
+            let nombreMedico = obtenerMedico(p);
+            let especialidad = obtenerEspecialidad(p);
+
+            document.getElementById('field-Medico-tratante').innerText = nombreMedico;
+            document.getElementById('field-Especialidad-Medica').innerText = especialidad;
+
+            if (!nombreMedico) {
+                document.getElementById('sec-Firma-Medico').style.display = 'none';
+            } else {
+                document.getElementById('sec-Firma-Medico').style.display = 'block';
+            }
+
+            // DATOS DEL PACIENTE
+            const mapaPaciente = [
+                { keys: ['Fecha'], target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
+                { keys: ['Nombre y Apellido', 'Nombre Paciente', 'Paciente'], target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
+                { keys: ['Cedula', 'Cédula', 'Cedula Paciente', 'Cédula Paciente', 'C.I', 'IDPaciente'], target: 'val-Cedula', sec: 'sec-Cedula' },
+                { keys: ['Edad', 'Edad Paciente'], target: 'val-Edad', sec: 'sec-Edad' }
+            ];
+
+            mapaPaciente.forEach(c => {
+                let val = null;
+                for (let k of c.keys) {
+                    if (p[k] !== undefined && p[k] !== null && p[k] !== 'null' && p[k] !== 'undefined') {
+                        val = p[k];
+                        break;
+                    }
+                }
+                const elTarget = document.getElementById(c.target);
+                const elSec = document.getElementById(c.sec);
+                if (val && val !== '') {
+                    if (c.fecha) val = formatearFechaLatina(val);
+                    if (elTarget) elTarget.innerText = val;
+                } else if (elSec) {
+                    elSec.style.display = 'none';
+                }
+            });
+
+            // EQUIPO UTILIZADO
+            const valEquipo = p['Equipo Utilizado'] || p['Equipo'] || '';
+            const secEquipo = document.getElementById('sec-Equipo-Utilizado');
+            const elEquipo = document.getElementById('val-Equipo-Utilizado');
+            if (valEquipo && valEquipo !== '') {
+                elEquipo.innerText = valEquipo;
+            } else if (secEquipo) {
+                secEquipo.style.display = 'none';
+            }
+
+            // CAMPOS DEL HOLTER DE RITMO (SOLO RESULTADOS)
+            const mapaInforme = [
+                { keys: ['Ritmo Basal', 'Ritmo basal'], target: 'val-Ritmo-Basal', sec: 'sec-Ritmo-Basal' },
+                { keys: ['Frecuencia Cardiaca', 'Frecuencia Cardíaca'], target: 'val-Frecuencia-Cardiaca', sec: 'sec-Frecuencia-Cardiaca' },
+                { keys: ['Extrasistoles Ventriculares', 'Extrasístoles Ventriculares'], target: 'val-Extrasistoles-Ventriculares', sec: 'sec-Extrasistoles-Ventriculares' },
+                { keys: ['Extrasistoles Supraventriculares', 'Extrasístoles Supraventriculares'], target: 'val-Extrasistoles-Supraventriculares', sec: 'sec-Extrasistoles-Supraventriculares' },
+                { keys: ['Pausas y Segmento ST', 'Pausas y segmento ST'], target: 'val-Pausas-y-Segmento-ST', sec: 'sec-Pausas-y-Segmento-ST' }
+            ];
+
+            mapaInforme.forEach(c => {
+                let val = null;
+                for (let k of c.keys) {
+                    if (p[k] !== undefined && p[k] !== null && p[k] !== 'null' && p[k] !== 'undefined') {
+                        val = p[k];
+                        break;
+                    }
+                }
+                const elTarget = document.getElementById(c.target);
+                const elSec = document.getElementById(c.sec);
+
+                if (val && val !== '') {
+                    if (elTarget) elTarget.innerHTML = procesarTextoConViñetas(val);
+                } else if (elSec) {
+                    elSec.style.display = 'none';
+                }
+            });
+
+            // CONCLUSIÓN
+            const valConclusion = p['Conslusión'] || p['Conclusion'] || p['Conclusión'] || '';
+            const secConclusion = document.getElementById('sec-Conclusion-Container');
+            const elConclusion = document.getElementById('val-Conclusion');
+
+            if (valConclusion && valConclusion !== '') {
+                secConclusion.style.display = 'block';
+                const lineasConclusion = valConclusion.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                if (lineasConclusion.length > 1) {
+                    elConclusion.parentElement.innerHTML = lineasConclusion.map(l => `<li style="font-weight: normal;">${l}</li>`).join('');
+                } else {
+                    elConclusion.innerHTML = valConclusion;
+                }
+            } else {
+                secConclusion.style.display = 'none';
+            }
+        };
+
+        function descargarWord() {
+            var datos = (typeof p !== 'undefined') ? p : {};
+
+            var paciente = datos['Nombre y Apellido'] || datos['Nombre Paciente'] || datos['Paciente'] || '';
+            var edad = datos['Edad'] || datos['Edad Paciente'] || '';
+            var ci = datos['Cedula'] || datos['Cédula'] || datos['Cedula Paciente'] || datos['C.I'] || '';
+
+            var titulo = datos['Titulo'] || datos['Título'] || '';
+            var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
+            var rawLogoURL = datos['LogoCentro'] || datos['Logo'] || datos['Logo URL'] || "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
+            var logoURL = convertirUrlDrive(rawLogoURL);
+            
+            var medico = obtenerMedico(datos);
+            var especialidad = obtenerEspecialidad(datos);
+            var direccion = datos['Dirección'] || datos['Direccion'] || '';
+
+            var tel1 = datos['Numero de telefono principal'] || datos['Número de teléfono principal'] || '';
+            var tel2 = datos['Numero secundario'] || datos['Número secundario'] || '';
+            var telfs = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+            var wa = datos['Whatsapp'] || datos['WhatsApp'] || '';
+            var redes = datos['Redes sociales'] || '';
+            var correo = datos['Correo electronico'] || datos['Correo electrónico'] || '';
+
+            var equipoUtilizado = datos['Equipo Utilizado'] || datos['Equipo'] || '';
+
+            var node = document.getElementById("informe-content");
+            var cuerpoHTML = '';
+
+            if (node) {
+                var clone = node.cloneNode(true);
+                clone.querySelectorAll('.header, .patient-info, .patient-grid, .divider, hr, .doctor-signature').forEach(function(el) { el.remove(); });
+                var reportBody = clone.querySelector('.report-body');
+                if (reportBody) cuerpoHTML = reportBody.innerHTML;
+            }
+
+            var lineasInfoMembrete = [];
+            if (direccion) lineasInfoMembrete.push(direccion);
+            
+            let contactParts = [];
+            if (telfs) contactParts.push(`Telfs: ${telfs}`);
+            if (wa) contactParts.push(`WA: ${wa}`);
+            if (correo) contactParts.push(correo);
+            if (redes) contactParts.push(redes);
+            if (contactParts.length > 0) lineasInfoMembrete.push(contactParts.join(' | '));
+
+            var extraInfoHTML = lineasInfoMembrete.map(l => `<p style="font-family:Arial, sans-serif; font-size:8.5pt; color:#444444; margin:2pt 0 0 0;">${l}</p>`).join('');
+
+            var headerHTML = `
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:140pt; vertical-align:middle; text-align:left; padding:0;">
+                            <img src="${logoURL}" width="160" height="80" style="width:160pt; height:80pt; display:block;" alt="Logo">
+                        </td>
+                        <td style="vertical-align:middle; text-align:center; padding:0 0 0 10pt;">
+                            ${titulo ? `<p style="font-family:Arial, sans-serif; font-size:13pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>` : ''}
+                            ${subtitulo ? `<p style="font-family:Arial, sans-serif; font-size:10pt; line-height:1.15; margin:2pt 0 0 0; color:#333333;">${subtitulo}</p>` : ''}
+                            ${extraInfoHTML}
+                        </td>
+                    </tr>
+                </table>
+                <div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:10pt;"></div>
+            `;
+
+            var fechaInforme = datos['Fecha'] || datos['Fecha Informe'] || '';
+
+            var patientHTML = `
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:10pt; line-height:1.2;">
+                    <tr>
+                        <td colspan="2" style="text-align:right; padding-bottom:4pt;">
+                            Fecha <span style="font-weight:normal;">${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding:2pt 0;">
+                            Nombre y Apellido <span style="font-weight:normal;">${paciente}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:50%; padding:2pt 0;">
+                            C.I <span style="font-weight:normal;">${ci}</span>
+                        </td>
+                        <td style="width:50%; padding:2pt 0;">
+                            Edad <span style="font-weight:normal;">${edad}</span>
+                        </td>
+                    </tr>
+                </table>
+                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:6pt; margin-bottom:12pt;"></div>
+            `;
+
+            var docFirmaWordHTML = medico ? `
+                <p style="text-align:center; margin-top:35pt; margin-bottom:15pt; font-family:Arial, sans-serif; font-size:11pt; line-height:1.3;">
+                    <b>${medico}</b><br>
+                    <span>${especialidad}</span>
+                </p>
+            ` : '';
+
+            var preHtml = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="utf-8">
+                    <title>Informe de Holter de Ritmo</title>
+                    <!--[if gte mso 9]>
+                    <xml>
+                        <w:WordDocument>
+                            <w:View>Print</w:View>
+                            <w:Zoom>100</w:Zoom>
+                            <w:DoNotOptimizeForBrowser/>
+                        </w:WordDocument>
+                    </xml>
+                    <![endif]-->
+                    <style>
+                        @page Section1 {
+                            size:595.3pt 841.9pt;
+                            margin: 0.65in 0.75in 0.80in 0.75in;
+                        }
+                        div.Section1 { page:Section1; }
+                        body { font-family:Arial, sans-serif; font-size:10.5pt; color:#000000; line-height:1.15; margin:0; padding:0; }
+                        .doc-title { font-family:Arial, sans-serif; text-align:center; font-size:13.5pt; font-weight:bold; text-decoration:underline; line-height:1.1; margin-top:0pt; margin-bottom:3pt; }
+                        .doc-subtitle-equipment { font-family:Arial, sans-serif; text-align:center; font-size:9.5pt; color:#555555; line-height:1.1; margin-top:0pt; margin-bottom:12pt; font-weight:normal; }
+                        .report-body { font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.2; text-align:justify; margin:0; padding:0; font-weight:normal; }
+                        ul { margin-top:0pt; margin-bottom:6pt; padding-left:18pt; }
+                        li { margin-bottom:3pt; font-weight:normal; }
+                        span { font-weight:normal; }
+                        p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }
+                    </style>
+                </head>
+                <body>
+                    <div class="Section1">
+                        ${headerHTML}
+                        ${patientHTML}
+                        <div class="doc-title" align="center"><u><b>INFORME DE HOLTER DE RITMO DE 24 HORAS</b></u></div>
+                        ${equipoUtilizado ? `<div class="doc-subtitle-equipment" align="center">${equipoUtilizado}</div>` : ''}
+                        <div class="report-body">${cuerpoHTML}</div>
+                        ${docFirmaWordHTML}
+                    </div>
+                </body>
+                </html>
+            `;
+
+            var blob = new Blob(['\ufeff', preHtml], { type:'application/msword' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = 'Holter_Ritmo_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

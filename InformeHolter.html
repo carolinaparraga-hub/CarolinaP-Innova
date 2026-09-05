@@ -26,20 +26,20 @@
         .patient-grid .full-width { grid-column: span 2; }
         .divider { border-bottom: 1px solid #ccc; margin: 8px 0 12px 0; }
         
-        /* Título y Subtítulo Dinámico */
-        .report-title { text-align: center; font-size: 13.5pt; font-weight: bold; text-decoration: underline; margin: 14px 0 4px 0; text-transform: uppercase; }
-        .report-subtitle-equipment { text-align: center; font-size: 9.5pt; color: #555555; margin-bottom: 16px; font-weight: normal; }
+        /* Título y Subtítulo Dinámico (AUMENTADO EL MARGEN INFERIOR) */
+        .report-title { text-align: center; font-size: 13.5pt; font-weight: bold; text-decoration: underline; margin: 18px 0 24px 0; text-transform: uppercase; }
+        .report-subtitle-equipment { text-align: center; font-size: 9.5pt; color: #555555; margin-bottom: 20px; font-weight: normal; }
         
-        /* Cuerpo del Informe */
-        .report-body { font-size: 10.5pt; line-height: 1.35; text-align: justify; font-weight: normal; }
+        /* Cuerpo del Informe (ESPACIADO SUPERIOR) */
+        .report-body { font-size: 10.5pt; line-height: 1.35; text-align: justify; font-weight: normal; margin-top: 10px; }
         
         /* Estilos para Viñetas Redondas Sin Negrita */
         .bullet-list { margin: 0; padding-left: 24px; list-style-type: disc; }
-        .bullet-list li { margin-bottom: 6px; line-height: 1.35; font-weight: normal; }
+        .bullet-list li { margin-bottom: 8px; line-height: 1.35; font-weight: normal; }
         .bullet-list span { font-weight: normal !important; }
         
         /* Estilo Conclusión */
-        .conclusion-container { margin-top: 14px; margin-bottom: 6px; }
+        .conclusion-container { margin-top: 20px; margin-bottom: 6px; }
         .conclusion-header { font-weight: normal; font-size: 11pt; margin-bottom: 4px; }
 
         /* Firma del Médico */
@@ -93,7 +93,7 @@
             <div class="report-title">INFORME DE HOLTER DE RITMO DE 24 HORAS</div>
             <div class="report-subtitle-equipment" id="sec-Equipo-Utilizado"><span id="val-Equipo-Utilizado"></span></div>
 
-            <!-- CUERPO DEL INFORME (SOLO RESULTADOS CON VIÑETAS) -->
+            <!-- CUERPO DEL INFORME -->
             <div class="report-body">
                 <ul class="bullet-list">
                     <li id="sec-Ritmo-Basal"><span id="val-Ritmo-Basal"></span></li>
@@ -299,7 +299,7 @@
                 secEquipo.style.display = 'none';
             }
 
-            // CAMPOS DEL HOLTER DE RITMO (SOLO RESULTADOS)
+            // CAMPOS DEL HOLTER DE RITMO
             const mapaInforme = [
                 { keys: ['Ritmo Basal', 'Ritmo basal'], target: 'val-Ritmo-Basal', sec: 'sec-Ritmo-Basal' },
                 { keys: ['Frecuencia Cardiaca', 'Frecuencia Cardíaca'], target: 'val-Frecuencia-Cardiaca', sec: 'sec-Frecuencia-Cardiaca' },
@@ -461,11 +461,11 @@
                         }
                         div.Section1 { page:Section1; }
                         body { font-family:Arial, sans-serif; font-size:10.5pt; color:#000000; line-height:1.15; margin:0; padding:0; }
-                        .doc-title { font-family:Arial, sans-serif; text-align:center; font-size:13.5pt; font-weight:bold; text-decoration:underline; line-height:1.1; margin-top:0pt; margin-bottom:3pt; }
-                        .doc-subtitle-equipment { font-family:Arial, sans-serif; text-align:center; font-size:9.5pt; color:#555555; line-height:1.1; margin-top:0pt; margin-bottom:12pt; font-weight:normal; }
-                        .report-body { font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.2; text-align:justify; margin:0; padding:0; font-weight:normal; }
+                        .doc-title { font-family:Arial, sans-serif; text-align:center; font-size:13.5pt; font-weight:bold; text-decoration:underline; line-height:1.1; margin-top:10pt; margin-bottom:18pt; }
+                        .doc-subtitle-equipment { font-family:Arial, sans-serif; text-align:center; font-size:9.5pt; color:#555555; line-height:1.1; margin-top:0pt; margin-bottom:14pt; font-weight:normal; }
+                        .report-body { font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.2; text-align:justify; margin-top:10pt; padding:0; font-weight:normal; }
                         ul { margin-top:0pt; margin-bottom:6pt; padding-left:18pt; }
-                        li { margin-bottom:3pt; font-weight:normal; }
+                        li { margin-bottom:4pt; font-weight:normal; }
                         span { font-weight:normal; }
                         p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }
                     </style>

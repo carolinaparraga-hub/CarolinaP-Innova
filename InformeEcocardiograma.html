@@ -364,4 +364,155 @@
             var paciente = datos['Nombre y Apellido'] || datos['Nombre Paciente'] || datos['Paciente'] || '';
             var edad = datos['Edad'] || datos['Edad Paciente'] || '';
             var ci = datos['Cedula'] || datos['Cédula'] || datos['Cedula Paciente'] || datos['C.I'] || '';
-     
+            var telefono = datos['Telefono'] || datos['Teléfono'] || datos['Telefono Paciente'] || datos['Teléfono Paciente'] || '';
+
+            var titulo = datos['Titulo'] || datos['Título'] || '';
+            var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
+            var rawLogoURL = datos['LogoCentro'] || datos['Logo'] || datos['Logo URL'] || "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
+            var logoURL = convertirUrlDrive(rawLogoURL);
+            
+            var medico = obtenerMedico(datos);
+            var especialidad = obtenerEspecialidad(datos);
+            var direccion = datos['Dirección'] || datos['Direccion'] || '';
+
+            var tel1 = datos['Numero de telefono principal'] || datos['Número de teléfono principal'] || '';
+            var tel2 = datos['Numero secundario'] || datos['Número secundario'] || '';
+            var telfs = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
+            var wa = datos['Whatsapp'] || datos['WhatsApp'] || '';
+            var redes = datos['Redes sociales'] || '';
+            var correo = datos['Correo electronico'] || datos['Correo electrónico'] || '';
+
+            var equipoUtilizado = datos['Equipo Utilizado'] || datos['Equipo'] || '';
+
+            var node = document.getElementById("informe-content");
+            var cuerpoHTML = '';
+
+            if (node) {
+                var clone = node.cloneNode(true);
+                clone.querySelectorAll('.header, .patient-info, .patient-grid, .divider, hr, .doctor-signature').forEach(function(el) { el.remove(); });
+                var reportBody = clone.querySelector('.report-body');
+                if (reportBody) cuerpoHTML = reportBody.innerHTML;
+            }
+
+            var lineasInfoMembrete = [];
+            if (direccion) lineasInfoMembrete.push(direccion);
+            
+            let contactParts = [];
+            if (telfs) contactParts.push(`Telfs: ${telfs}`);
+            if (wa) contactParts.push(`WA: ${wa}`);
+            if (correo) contactParts.push(correo);
+            if (redes) contactParts.push(redes);
+            if (contactParts.length > 0) lineasInfoMembrete.push(contactParts.join(' | '));
+
+            var extraInfoHTML = lineasInfoMembrete.map(l => `<p style="font-family:Arial, sans-serif; font-size:8.5pt; color:#444444; margin:2pt 0 0 0;">${l}</p>`).join('');
+
+            var headerHTML = `
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse;">
+                    <tr>
+                        <td style="width:140pt; vertical-align:middle; text-align:left; padding:0;">
+                            <img src="${logoURL}" width="160" height="80" style="width:160pt; height:80pt; display:block;" alt="Logo">
+                        </td>
+                        <td style="vertical-align:middle; text-align:center; padding:0 0 0 10pt;">
+                            ${titulo ? `<p style="font-family:Arial, sans-serif; font-size:13pt; font-weight:bold; line-height:1.15; margin:0; text-transform:uppercase;">${titulo}</p>` : ''}
+                            ${subtitulo ? `<p style="font-family:Arial, sans-serif; font-size:10pt; line-height:1.15; margin:2pt 0 0 0; color:#333333;">${subtitulo}</p>` : ''}
+                            ${extraInfoHTML}
+                        </td>
+                    </tr>
+                </table>
+                <div style="border-bottom:1.5pt solid #000000; margin-top:6pt; margin-bottom:10pt;"></div>
+            `;
+
+            var fechaInforme = datos['Fecha'] || datos['Fecha Informe'] || '';
+
+            var patientHTML = `
+                <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:10pt; line-height:1.2;">
+                    <tr>
+                        <td colspan="2" style="text-align:right; padding-bottom:4pt;">
+                            Fecha <span style="font-weight:normal;">${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding:2pt 0;">
+                            Nombre y Apellido <span style="font-weight:normal;">${paciente}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:50%; padding:2pt 0;">
+                            C.I <span style="font-weight:normal;">${ci}</span>
+                        </td>
+                        <td style="width:50%; padding:2pt 0;">
+                            Edad <span style="font-weight:normal;">${edad}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding:2pt 0;">
+                            Teléfono <span style="font-weight:normal;">${telefono}</span>
+                        </td>
+                    </tr>
+                </table>
+                <div style="border-bottom:0.75pt solid #BFBFBF; margin-top:6pt; margin-bottom:12pt;"></div>
+            `;
+
+            var docFirmaWordHTML = medico ? `
+                <p style="text-align:center; margin-top:35pt; margin-bottom:15pt; font-family:Arial, sans-serif; font-size:11pt; line-height:1.3;">
+                    <b>${medico}</b><br>
+                    <span>${especialidad}</span>
+                </p>
+            ` : '';
+
+            var preHtml = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="utf-8">
+                    <title>Informe de Ecocardiograma</title>
+                    <!--[if gte mso 9]>
+                    <xml>
+                        <w:WordDocument>
+                            <w:View>Print</w:View>
+                            <w:Zoom>100</w:Zoom>
+                            <w:DoNotOptimizeForBrowser/>
+                        </w:WordDocument>
+                    </xml>
+                    <![endif]-->
+                    <style>
+                        @page Section1 {
+                            size:595.3pt 841.9pt;
+                            margin: 0.65in 0.75in 0.80in 0.75in;
+                        }
+                        div.Section1 { page:Section1; }
+                        body { font-family:Arial, sans-serif; font-size:10.5pt; color:#000000; line-height:1.15; margin:0; padding:0; }
+                        .doc-title { font-family:Arial, sans-serif; text-align:center; font-size:13.5pt; font-weight:bold; text-decoration:underline; line-height:1.1; margin-top:0pt; margin-bottom:3pt; }
+                        .doc-subtitle-equipment { font-family:Arial, sans-serif; text-align:center; font-size:9.5pt; color:#555555; line-height:1.1; margin-top:0pt; margin-bottom:12pt; font-weight:normal; }
+                        .report-body { font-family:Arial, sans-serif; font-size:10.5pt; line-height:1.2; text-align:justify; margin:0; padding:0; font-weight:normal; }
+                        ul { margin-top:0pt; margin-bottom:6pt; padding-left:18pt; }
+                        li { margin-bottom:3pt; font-weight:normal; }
+                        span { font-weight:normal; }
+                        p { margin-top:0pt; margin-bottom:3pt; line-height:1.15; }
+                    </style>
+                </head>
+                <body>
+                    <div class="Section1">
+                        ${headerHTML}
+                        ${patientHTML}
+                        <div class="doc-title" align="center"><u><b>INFORME DE ECOCARDIOGRAMA</b></u></div>
+                        ${equipoUtilizado ? `<div class="doc-subtitle-equipment" align="center">${equipoUtilizado}</div>` : ''}
+                        <div class="report-body">${cuerpoHTML}</div>
+                        ${docFirmaWordHTML}
+                    </div>
+                </body>
+                </html>
+            `;
+
+            var blob = new Blob(['\ufeff', preHtml], { type:'application/msword' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = 'Ecocardiograma_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

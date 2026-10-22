@@ -21,16 +21,16 @@
         
         /* Datos Paciente Compactos */
         .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.2; }
-        .patient-info .date-row { text-align: right; font-weight: normal; margin-bottom: 6px; }
+        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 6px; }
         .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 4px; column-gap: 20px; }
         .patient-grid .full-width { grid-column: span 2; }
         .divider { border-bottom: 1px solid #ccc; margin: 8px 0 12px 0; }
         
-        /* Título y Subtítulo Dinámico (AUMENTADO EL MARGEN INFERIOR) */
+        /* Título y Subtítulo Dinámico */
         .report-title { text-align: center; font-size: 13.5pt; font-weight: bold; text-decoration: underline; margin: 18px 0 24px 0; text-transform: uppercase; }
         .report-subtitle-equipment { text-align: center; font-size: 9.5pt; color: #555555; margin-bottom: 20px; font-weight: normal; }
         
-        /* Cuerpo del Informe (ESPACIADO SUPERIOR) */
+        /* Cuerpo del Informe */
         .report-body { font-size: 10.5pt; line-height: 1.35; text-align: justify; font-weight: normal; margin-top: 10px; }
         
         /* Estilos para Viñetas Redondas Sin Negrita */
@@ -67,7 +67,7 @@
             <!-- MEMBRETE DINÁMICO -->
             <div class="header" id="sec-Header">
                 <div class="header-logo-container" id="sec-Logo-Container">
-                    <img src="https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu" alt="Logo" class="header-logo" id="logo-centro">
+                    <img src="https://lh3.googleusercontent.com/d/10JVZWozZ5EWZCTaukKq8E0xfohMe_j7p" alt="Logo" class="header-logo" id="logo-centro">
                 </div>
                 <div class="header-info" id="sec-Header-Info">
                     <h2 id="field-Titulo">INNOVA MED</h2>
@@ -79,11 +79,12 @@
 
             <!-- DATOS DEL PACIENTE -->
             <div class="patient-info">
-                <div class="date-row" id="sec-Fecha">Fecha <span id="val-Fecha" style="font-weight: normal;"></span></div>
+                <div class="date-row" id="sec-Fecha"><b>Fecha:</b> <span id="val-Fecha" style="font-weight: normal;"></span></div>
                 <div class="patient-grid">
-                    <div id="sec-Nombre-y-Apellido" class="full-width">Nombre y Apellido <span id="val-Nombre-y-Apellido" style="font-weight: normal;"></span></div>
-                    <div id="sec-Cedula">C.I <span id="val-Cedula" style="font-weight: normal;"></span></div>
-                    <div id="sec-Edad">Edad <span id="val-Edad" style="font-weight: normal;"></span></div>
+                    <div id="sec-Nombre-y-Apellido" class="full-width"><b>Nombre y Apellido:</b> <span id="val-Nombre-y-Apellido" style="font-weight: normal;"></span></div>
+                    <div id="sec-Cedula"><b>C.I:</b> <span id="val-Cedula" style="font-weight: normal;"></span></div>
+                    <div id="sec-Edad"><b>Edad:</b> <span id="val-Edad" style="font-weight: normal;"></span></div>
+                    <div id="sec-Telefono" class="full-width"><b>Teléfono:</b> <span id="val-Telefono" style="font-weight: normal;"></span></div>
                 </div>
             </div>
 
@@ -187,7 +188,7 @@
             p = obtenerParametros();
 
             // LÓGICA DEL MEMBRETE
-            const defaultLogo = "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
+            const defaultLogo = "https://lh3.googleusercontent.com/d/10JVZWozZ5EWZCTaukKq8E0xfohMe_j7p";
             const rawLogoURL = p['LogoCentro'] || p['Logo'] || p['Logo URL'] || defaultLogo;
             const logoURL = convertirUrlDrive(rawLogoURL);
 
@@ -268,7 +269,8 @@
                 { keys: ['Fecha'], target: 'val-Fecha', sec: 'sec-Fecha', fecha: true },
                 { keys: ['Nombre y Apellido', 'Nombre Paciente', 'Paciente'], target: 'val-Nombre-y-Apellido', sec: 'sec-Nombre-y-Apellido' },
                 { keys: ['Cedula', 'Cédula', 'Cedula Paciente', 'Cédula Paciente', 'C.I', 'IDPaciente'], target: 'val-Cedula', sec: 'sec-Cedula' },
-                { keys: ['Edad', 'Edad Paciente'], target: 'val-Edad', sec: 'sec-Edad' }
+                { keys: ['Edad', 'Edad Paciente'], target: 'val-Edad', sec: 'sec-Edad' },
+                { keys: ['Telefono', 'Teléfono', 'Telefono Paciente', 'Teléfono Paciente', 'Numero de telefono'], target: 'val-Telefono', sec: 'sec-Telefono' }
             ];
 
             mapaPaciente.forEach(c => {
@@ -350,17 +352,18 @@
             var paciente = datos['Nombre y Apellido'] || datos['Nombre Paciente'] || datos['Paciente'] || '';
             var edad = datos['Edad'] || datos['Edad Paciente'] || '';
             var ci = datos['Cedula'] || datos['Cédula'] || datos['Cedula Paciente'] || datos['C.I'] || '';
+            var telefono = datos['Telefono'] || datos['Teléfono'] || datos['Telefono Paciente'] || datos['Teléfono Paciente'] || '';
 
             var titulo = datos['Titulo'] || datos['Título'] || '';
             var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
-            var rawLogoURL = datos['LogoCentro'] || datos['Logo'] || datos['Logo URL'] || "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
+            var rawLogoURL = datos['LogoCentro'] || datos['Logo'] || datos['Logo URL'] || "https://lh3.googleusercontent.com/d/10JVZWozZ5EWZCTaukKq8E0xfohMe_j7p";
             var logoURL = convertirUrlDrive(rawLogoURL);
             
             var medico = obtenerMedico(datos);
             var especialidad = obtenerEspecialidad(datos);
             var direccion = datos['Dirección'] || datos['Direccion'] || '';
 
-            var tel1 = datos['Numero de telefono principal'] || datos['Número de teléfono principal'] || '';
+            var tel1 = datos['Numero de telefono principal'] || datos['Número de telefono principal'] || '';
             var tel2 = datos['Numero secundario'] || datos['Número secundario'] || '';
             var telfs = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
             var wa = datos['Whatsapp'] || datos['WhatsApp'] || '';
@@ -413,20 +416,25 @@
                 <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:10pt; line-height:1.2;">
                     <tr>
                         <td colspan="2" style="text-align:right; padding-bottom:4pt;">
-                            Fecha <span style="font-weight:normal;">${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</span>
+                            <b>Fecha:</b> <span style="font-weight:normal;">${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</span>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" style="padding:2pt 0;">
-                            Nombre y Apellido <span style="font-weight:normal;">${paciente}</span>
+                            <b>Nombre y Apellido:</b> <span style="font-weight:normal;">${paciente}</span>
                         </td>
                     </tr>
                     <tr>
                         <td style="width:50%; padding:2pt 0;">
-                            C.I <span style="font-weight:normal;">${ci}</span>
+                            <b>C.I:</b> <span style="font-weight:normal;">${ci}</span>
                         </td>
                         <td style="width:50%; padding:2pt 0;">
-                            Edad <span style="font-weight:normal;">${edad}</span>
+                            <b>Edad:</b> <span style="font-weight:normal;">${edad}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding:2pt 0;">
+                            <b>Teléfono:</b> <span style="font-weight:normal;">${telefono}</span>
                         </td>
                     </tr>
                 </table>
@@ -474,7 +482,7 @@
                     <div class="Section1">
                         ${headerHTML}
                         ${patientHTML}
-                        <div class="doc-title" align="center"><u><b>INFORME DE HOLTER DE RITMO DE 24 HORAS</b></u></div>
+                        <div class="doc-title" align="center"><u><b>INFORME MEDICO DE HOLTER DE RITMO</b></u></div>
                         ${equipoUtilizado ? `<div class="doc-subtitle-equipment" align="center">${equipoUtilizado}</div>` : ''}
                         <div class="report-body">${cuerpoHTML}</div>
                         ${docFirmaWordHTML}

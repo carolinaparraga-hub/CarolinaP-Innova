@@ -19,9 +19,9 @@
         .header-info h3 { margin: 3px 0; font-size: 10pt; font-weight: normal; color: #333; }
         .header-info p { margin: 2px 0; font-size: 8.5pt; color: #444; line-height: 1.2; }
         
-        /* Datos Paciente Compactos (Texto Normal) */
+        /* Datos Paciente Compactos */
         .patient-info { width: 100%; margin-bottom: 10px; font-size: 10pt; line-height: 1.2; }
-        .patient-info .date-row { text-align: right; font-weight: normal; margin-bottom: 6px; }
+        .patient-info .date-row { text-align: right; font-weight: bold; margin-bottom: 6px; }
         .patient-grid { display: grid; grid-template-columns: 1.2fr 1fr; row-gap: 4px; column-gap: 20px; }
         .patient-grid .full-width { grid-column: span 2; }
         .divider { border-bottom: 1px solid #ccc; margin: 8px 0 12px 0; }
@@ -77,14 +77,14 @@
                 </div>
             </div>
 
-            <!-- DATOS DEL PACIENTE -->
+            <!-- DATOS DEL PACIENTE (Títulos en Negrita) -->
             <div class="patient-info">
-                <div class="date-row" id="sec-Fecha">Fecha <span id="val-Fecha" style="font-weight: normal;"></span></div>
+                <div class="date-row" id="sec-Fecha"><b>Fecha:</b> <span id="val-Fecha" style="font-weight: normal;"></span></div>
                 <div class="patient-grid">
-                    <div id="sec-Nombre-y-Apellido" class="full-width">Nombre y Apellido <span id="val-Nombre-y-Apellido" style="font-weight: normal;"></span></div>
-                    <div id="sec-Cedula">C.I <span id="val-Cedula" style="font-weight: normal;"></span></div>
-                    <div id="sec-Edad">Edad <span id="val-Edad" style="font-weight: normal;"></span></div>
-                    <div id="sec-Telefono" class="full-width">Teléfono <span id="val-Telefono" style="font-weight: normal;"></span></div>
+                    <div id="sec-Nombre-y-Apellido" class="full-width"><b>Nombre y Apellido:</b> <span id="val-Nombre-y-Apellido" style="font-weight: normal;"></span></div>
+                    <div id="sec-Cedula"><b>C.I:</b> <span id="val-Cedula" style="font-weight: normal;"></span></div>
+                    <div id="sec-Edad"><b>Edad:</b> <span id="val-Edad" style="font-weight: normal;"></span></div>
+                    <div id="sec-Telefono" class="full-width"><b>Teléfono:</b> <span id="val-Telefono" style="font-weight: normal;"></span></div>
                 </div>
             </div>
 
@@ -202,7 +202,7 @@
             const subtituloText = p['Subtítulo'] || p['Subtitulo'] || '';
             const direccionText = p['Dirección'] || p['Direccion'] || '';
             
-            const tel1 = p['Numero de telefono principal'] || p['Número de telefono principal'] || '';
+            const tel1 = p['Numero de telefono principal'] || p['Número de teléfono principal'] || '';
             const tel2 = p['Numero secundario'] || p['Número secundario'] || '';
             let telfsFinal = (tel1 && tel2) ? `${tel1} / ${tel2}` : (tel1 || tel2);
             const waText = p['Whatsapp'] || p['WhatsApp'] || '';
@@ -428,25 +428,25 @@
                 <table border="0" cellspacing="0" cellpadding="0" style="width:100%; border-collapse:collapse; font-family:Arial, sans-serif; font-size:10pt; line-height:1.2;">
                     <tr>
                         <td colspan="2" style="text-align:right; padding-bottom:4pt;">
-                            Fecha <span style="font-weight:normal;">${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</span>
+                            <b>Fecha:</b> <span style="font-weight:normal;">${fechaInforme ? formatearFechaLatina(fechaInforme) : ''}</span>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" style="padding:2pt 0;">
-                            Nombre y Apellido <span style="font-weight:normal;">${paciente}</span>
+                            <b>Nombre y Apellido:</b> <span style="font-weight:normal;">${paciente}</span>
                         </td>
                     </tr>
                     <tr>
                         <td style="width:50%; padding:2pt 0;">
-                            C.I <span style="font-weight:normal;">${ci}</span>
+                            <b>C.I:</b> <span style="font-weight:normal;">${ci}</span>
                         </td>
                         <td style="width:50%; padding:2pt 0;">
-                            Edad <span style="font-weight:normal;">${edad}</span>
+                            <b>Edad:</b> <span style="font-weight:normal;">${edad}</span>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" style="padding:2pt 0;">
-                            Teléfono <span style="font-weight:normal;">${telefono}</span>
+                            <b>Teléfono:</b> <span style="font-weight:normal;">${telefono}</span>
                         </td>
                     </tr>
                 </table>

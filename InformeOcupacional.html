@@ -118,13 +118,13 @@ body {
 }
 
 /* =========================================================
-   TÍTULO DEL INFORME (Con más espacio superior e inferior)
+   TÍTULO DEL INFORME
 ========================================================= */
 
 .doc-title-container {
     text-align: center;
-    margin-top: 26px;      /* Antes: 8px */
-    margin-bottom: 22px;   /* Antes: 10px */
+    margin-top: 26px;
+    margin-bottom: 22px;
 }
 
 .doc-title-main {
@@ -140,17 +140,17 @@ body {
     font-weight: bold;
     text-transform: uppercase;
     text-decoration: underline;
-    margin-top: 8px;      /* Antes: 2px */
+    margin-top: 8px;
 }
 
 /* =========================================================
-   TIPO DE EXAMEN (Separado del título y la norma)
+   TIPO DE EXAMEN
 ========================================================= */
 
 .exam-type {
     width: 100%;
-    margin-top: 10px;     /* Antes: 4px */
-    margin-bottom: 14px;  /* Antes: 6px */
+    margin-top: 10px;
+    margin-bottom: 14px;
     font-size: 10pt;
 }
 
@@ -159,7 +159,7 @@ body {
     font-style: italic;
     line-height: 1.25;
     text-align: justify;
-    margin-bottom: 18px;  /* Antes: 12px */
+    margin-bottom: 18px;
     color: #111;
 }
 
@@ -320,7 +320,7 @@ body {
 <div class="header">
     <div class="header-logo-container">
         <img
-            src="https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu"
+            src="https://lh3.googleusercontent.com/d/10JVZWozZ5EWZCTaukKq8E0xfohMe_j7p"
             alt="Logo"
             class="header-logo"
         >
@@ -461,6 +461,16 @@ body {
         </span>
         <br>
         <span id="val-Fecha"></span>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <span class="label">
+            Teléfono del trabajador:
+        </span>
+        <br>
+        <span id="val-Telefono"></span>
     </td>
 </tr>
 </table>
@@ -721,6 +731,7 @@ window.onload = function() {
     colocarValor("val-Area", p["Área donde labora y ha laborado el trabajador"]);
     colocarValor("val-Fecha", formatearFechaLatina(p["Fecha"]));
     colocarValor("val-Fecha-emision", formatearFechaLatina(p["Fecha de emisión del informe"]));
+    colocarValor("val-Telefono", p["Telefono"] || p["Teléfono"] || p["Numero de telefono"]);
 
     // Evaluación física
     let hasPeso = colocarValorOcultar("val-Peso", "wrap-Peso", p["Peso"]);
@@ -802,7 +813,7 @@ function descargarWord() {
     const whatsapp = datos["Whatsapp"] || "";
     const redes = datos["Redes sociales"] || "";
     const correo = datos["Correo electronico"] || "";
-    const logoURL = "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
+    const logoURL = "https://lh3.googleusercontent.com/d/10JVZWozZ5EWZCTaukKq8E0xfohMe_j7p";
 
     const telfs = (telefono1 && telefono2) ? `${telefono1} / ${telefono2}` : (telefono1 || telefono2);
 
@@ -883,6 +894,11 @@ function descargarWord() {
                 </td>
                 <td style="border:1px solid #777; padding:5pt; vertical-align:top;">
                     <strong>Fecha:</strong><br>${formatearFechaLatina(datos["Fecha"])}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border:1px solid #777; padding:5pt; vertical-align:top;">
+                    <strong>Teléfono del trabajador:</strong><br>${datos["Telefono"] || datos["Teléfono"] || datos["Numero de telefono"] || ""}
                 </td>
             </tr>
         </table>

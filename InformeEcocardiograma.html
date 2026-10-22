@@ -67,7 +67,7 @@
             <!-- MEMBRETE DINÁMICO -->
             <div class="header" id="sec-Header">
                 <div class="header-logo-container" id="sec-Logo-Container">
-                    <img src="https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu" alt="Logo" class="header-logo" id="logo-centro">
+                    <img src="https://lh3.googleusercontent.com/d/10JVZWozZ5EWZCTaukKq8E0xfohMe_j7p" alt="Logo" class="header-logo" id="logo-centro">
                 </div>
                 <div class="header-info" id="sec-Header-Info">
                     <h2 id="field-Titulo">INNOVA MED</h2>
@@ -194,7 +194,7 @@
             p = obtenerParametros();
 
             // LÓGICA DEL MEMBRETE
-            const defaultLogo = "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
+            const defaultLogo = "https://lh3.googleusercontent.com/d/10JVZWozZ5EWZCTaukKq8E0xfohMe_j7p";
             const rawLogoURL = p['LogoCentro'] || p['Logo'] || p['Logo URL'] || defaultLogo;
             const logoURL = convertirUrlDrive(rawLogoURL);
 
@@ -368,7 +368,7 @@
 
             var titulo = datos['Titulo'] || datos['Título'] || '';
             var subtitulo = datos['Subtítulo'] || datos['Subtitulo'] || '';
-            var rawLogoURL = datos['LogoCentro'] || datos['Logo'] || datos['Logo URL'] || "https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu";
+            var rawLogoURL = datos['LogoCentro'] || datos['Logo'] || datos['Logo URL'] || "https://lh3.googleusercontent.com/d/10JVZWozZ5EWZCTaukKq8E0xfohMe_j7p";
             var logoURL = convertirUrlDrive(rawLogoURL);
             
             var medico = obtenerMedico(datos);
@@ -497,6 +497,7 @@
                         <div class="doc-title" align="center"><u><b>INFORME DE ECOCARDIOGRAMA</b></u></div>
                         ${equipoUtilizado ? `<div class="doc-subtitle-equipment" align="center">${equipoUtilizado}</div>` : ''}
                         <div class="report-body">${cuerpoHTML}</div>
+                        ${docFNaNirmaWordHTML = ''}
                         ${docFirmaWordHTML}
                     </div>
                 </body>
@@ -504,7 +505,7 @@
             `;
 
             var blob = new Blob(['\ufeff', preHtml], { type:'application/msword' });
-            var url = URL.createObjectURL(blob);
+            var url = URL.createObjectURL(blob); tanto
             var a = document.createElement("a");
             a.href = url;
             a.download = 'Ecocardiograma_' + (paciente ? paciente.replace(/\s+/g, '_') : 'Paciente') + '.doc';

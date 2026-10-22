@@ -8,7 +8,7 @@
 
     <style>
         /* =====================================================
-           CONFIGURACIÓN GENERAL
+            CONFIGURACIÓN GENERAL
         ===================================================== */
         * {
             box-sizing: border-box;
@@ -26,7 +26,7 @@
         }
 
         /* =====================================================
-           PÁGINA
+            PÁGINA
         ===================================================== */
         .page {
             background: #ffffff;
@@ -38,7 +38,7 @@
         }
 
         /* =====================================================
-           MEMBRETE UNIFICADO
+            MEMBRETE UNIFICADO
         ===================================================== */
         .header {
             display: flex;
@@ -114,7 +114,7 @@
         }
 
         /* =====================================================
-           DATOS DEL PACIENTE
+            DATOS DEL PACIENTE
         ===================================================== */
         .patient-info {
             width: 100%;
@@ -142,7 +142,7 @@
         }
 
         /* =====================================================
-           CUERPO DEL INFORME
+            CUERPO DEL INFORME
         ===================================================== */
         .report-title {
             text-align: center;
@@ -168,7 +168,7 @@
         }
 
         /* =====================================================
-           BOTONES
+            BOTONES
         ===================================================== */
         .action-buttons {
             margin-top: 25px;
@@ -195,7 +195,7 @@
         }
 
         /* =====================================================
-           IMPRESIÓN / PDF
+            IMPRESIÓN / PDF
         ===================================================== */
         @media print {
             body {
@@ -230,13 +230,13 @@
 
     <!-- =====================================================
          CONTENIDO DEL INFORME
-    ====================================================== -->
+    ===================================================== -->
     <div class="page" id="informe-content">
 
         <!-- MEMBRETE CON CONTACTO INTEGRADO -->
         <div class="header">
             <div class="header-logo-container">
-                <img src="https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu" alt="Logo" class="header-logo" id="logo-centro">
+                <img src="https://lh3.googleusercontent.com/d/10JVZWozZ5EWZCTaukKq8E0xfohMe_j7p" alt="Logo" class="header-logo" id="logo-centro">
             </div>
 
             <div class="header-info">
@@ -343,7 +343,7 @@
 
     <!-- =====================================================
          BOTONES
-    ====================================================== -->
+    ===================================================== -->
     <div class="action-buttons">
         <button class="btn" onclick="window.print()">Imprimir PDF</button>
         <button class="btn" onclick="descargarWord()">Descargar Word</button>
@@ -351,7 +351,7 @@
 
     <!-- =====================================================
          JAVASCRIPT
-    ====================================================== -->
+    ===================================================== -->
     <script>
         function obtenerParametros() {
             const params = {};
@@ -510,7 +510,7 @@
             var especialidad = datos['Especialidad Medica'] || '';
             var direccion = datos['Direccion'] || '';
             var medicoEsp = medico + (especialidad ? ' - ' + especialidad : '');
-            var logoURL = 'https://lh3.googleusercontent.com/d/1-QlsVpbVlm8ZVGJYyqSaYmkUzxMzyoUu';
+            var logoURL = 'https://lh3.googleusercontent.com/d/10JVZWozZ5EWZCTaukKq8E0xfohMe_j7p';
 
             var tel1 = datos['Numero de telefono principal'] || '';
             var tel2 = datos['Numero secundario'] || '';
